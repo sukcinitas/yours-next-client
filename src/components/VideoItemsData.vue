@@ -2,8 +2,10 @@
   <div>
       <div
         :class="{active: item.id === playlist[activeIndex]}"
-        v-for="item in items"
-        :key="item.id"
+        v-for="(item, index) in items"
+        @click="changeIndex(index)"
+        :key="index"
+        :index="index"
       >
         <h3>{{item.snippet.title}}</h3>
         <img :src="item.snippet.thumbnails.medium.url" :alt="item.snippet.title">
@@ -37,9 +39,10 @@ export default {
   methods: {
     async getData(list) {
       const data = await DataService.getVideos(list);
-      // eslint-disable-next-line no-console
-      console.log(data);
       this.items = data.data.data.items;
+    },
+    changeIndex(index) {
+      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
     },
   },
   mounted() {

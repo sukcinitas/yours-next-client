@@ -34,7 +34,11 @@
     </div>
 
     <div v-else-if="picked === 'searchPlaylistItems'">
-      <div  v-for="item in items" :key="item.id" @click="add(item.id.videoId)">
+      <div
+        v-for="item in items"
+        :key="item.snippet.resourceId.videoId"
+        @click="add(item.snippet.resourceId.videoId)"
+      >
         <h1>{{item.snippet.title}}</h1>
         <img :src="item.snippet.thumbnails.medium.url" :alt="item.snippet.title">
         <hr>
@@ -79,9 +83,9 @@ export default {
       this.$store.commit('mainplaylist/addId', videoId);
     },
     async explorePlaylist(id) {
-      this.picked = 'searchPlaylistItems';
       const data = await DataService.getPlaylistItems(id);
       this.items = data.data.data.items;
+      this.picked = 'searchPlaylistItems';
     },
     async getNextPage() {
       let data;

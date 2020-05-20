@@ -11,6 +11,9 @@ const mutations = {
     state.nowPlayingVideoIndex = index;
   },
   addId(state, videoId) {
+    if (state.idsArray.includes(videoId)) {
+      return;
+    }
     state.idsArray.push(videoId);
   },
 };
