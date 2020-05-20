@@ -3,13 +3,14 @@ import Router from 'vue-router';
 import MainPage from '../components/MainPage';
 import MainPlaylist from '../components/MainPlaylist';
 import SearchField from '../components/SearchField';
+import EntrancePage from '../components/EntrancePage';
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/main',
       name: 'MainPage',
       component: MainPage,
     },
@@ -22,6 +23,11 @@ export default new Router({
       path: '/search',
       name: 'SearchField',
       component: SearchField,
+    },
+    {
+      path: '/',
+      name: 'EntrancePage',
+      component: EntrancePage,
     },
   ],
 });

@@ -64,16 +64,16 @@ export default {
       let data;
       if (this.picked === 'searchAll') {
         data = await DataService.search(this.queryOrId);
-        this.items = data.data.items;
+        this.items = data.data.data.items;
       } else if (this.picked === 'searchPlaylists') {
         data = await DataService.getPlaylists(this.queryOrId);
-        this.playlists = data.data.items;
+        this.playlists = data.data.data.items;
       } else if (this.picked === 'searchPlaylistItems') {
         data = await DataService.getPlaylistItems(this.queryOrId);
-        this.items = data.data.items;
+        this.items = data.data.data.items;
       }
-      this.prevPageToken = data.data.prevPageToken || '';
-      this.nextPageToken = data.data.nextPageToken || '';
+      this.prevPageToken = data.data.data.prevPageToken || '';
+      this.nextPageToken = data.data.data.nextPageToken || '';
     },
     add(videoId) {
       this.$store.commit('mainplaylist/addId', videoId);
@@ -81,37 +81,37 @@ export default {
     async explorePlaylist(id) {
       this.picked = 'searchPlaylistItems';
       const data = await DataService.getPlaylistItems(id);
-      this.items = data.data.items;
+      this.items = data.data.data.items;
     },
     async getNextPage() {
       let data;
       if (this.picked === 'searchAll') {
         data = await DataService.search(this.queryOrId, this.nextPageToken);
-        this.items = data.data.items;
+        this.items = data.data.data.items;
       } else if (this.picked === 'searchPlaylists') {
         data = await DataService.getPlaylists(this.queryOrId, this.nextPageToken);
-        this.playlists = data.data.items;
+        this.playlists = data.data.data.items;
       } else if (this.picked === 'searchPlaylistItems') {
         data = await DataService.getPlaylistItems(this.queryOrId, this.nextPageToken);
-        this.items = data.data.items;
+        this.items = data.data.data.items;
       }
-      this.prevPageToken = data.data.prevPageToken || '';
-      this.nextPageToken = data.data.nextPageToken || '';
+      this.prevPageToken = data.data.data.prevPageToken || '';
+      this.nextPageToken = data.data.data.nextPageToken || '';
     },
     async getPrevPage() {
       let data;
       if (this.picked === 'searchAll') {
         data = await DataService.search(this.queryOrId, this.prevPageToken);
-        this.items = data.data.items;
+        this.items = data.data.data.items;
       } else if (this.picked === 'searchPlaylists') {
         data = await DataService.getPlaylists(this.queryOrId, this.prevPageToken);
-        this.playlists = data.data.items;
+        this.playlists = data.data.data.items;
       } else if (this.picked === 'searchPlaylistItems') {
         data = await DataService.getPlaylistItems(this.queryOrId, this.prevPageToken);
-        this.items = data.data.items;
+        this.items = data.data.data.items;
       }
-      this.prevPageToken = data.data.prevPageToken || '';
-      this.nextPageToken = data.data.nextPageToken || '';
+      this.prevPageToken = data.data.data.prevPageToken || '';
+      this.nextPageToken = data.data.data.nextPageToken || '';
     },
   },
 };

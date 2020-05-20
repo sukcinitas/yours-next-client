@@ -14,6 +14,8 @@ const DataService = {
     return ApiService.get(`/api/data/playlistItems?playlisId=${playlistId}&pageToken=${pageToken}`);
   },
   getVideos(idList, prevPageToken = '', nextPageToken = '') {
+    // eslint-disable-next-line no-console
+    console.log('Hey');
     const pageToken = prevPageToken || nextPageToken;
     return ApiService.get(`/api/data/videos?idList=${idList}&pageToken=${pageToken}`);
   },

@@ -37,7 +37,9 @@ export default {
   methods: {
     async getData(list) {
       const data = await DataService.getVideos(list);
-      this.items = data.data.items;
+      // eslint-disable-next-line no-console
+      console.log(data);
+      this.items = data.data.data.items;
     },
   },
   mounted() {
