@@ -16,6 +16,9 @@ const mutations = {
     }
     state.idsArray.push(videoId);
   },
+  setPlaylist(state, playlist) {
+    state.idsArray = playlist;
+  },
 };
 
 export default {

@@ -11,8 +11,6 @@
 
 </template>
 <script>
-import axios from 'axios';
-
 export default {
   name: 'VideoPlayer',
   data() {
@@ -39,12 +37,8 @@ export default {
   },
   methods: {
     async ended() {
-      // const index = await this.$refs.youtube.player.getPlaylistIndex();
-      // await this.$refs.youtube.player.loadVideoById(this.playlist[this.index + 1], 0);
-      const data = await axios.get('/api/data/playlists?channelId=UCazpYHBPTXKy9t9E78yuWnQ');
-      // eslint-disable-next-line no-console
-      console.log(data);
-      this.items = data.items;
+      // const data = await axios.get('/api/data/playlists?channelId=UCazpYHBPTXKy9t9E78yuWnQ');
+      // this.items = data.items;
       this.end();
     },
     end() {

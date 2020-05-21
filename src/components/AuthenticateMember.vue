@@ -8,13 +8,13 @@
         v-if="isExtended"
         v-model="name"
         type="text"
-        placeholder="Enter group name"
+        placeholder="Enter the group name"
       >
       <input
         v-if="isExtended"
         v-model="passcode"
         type="password"
-        placeholder="Enter passcode"
+        placeholder="Enter the passcode"
       >
       <button @click="authenticate" v-if="isExtended">></button>
       <p v-if="errMsg">{{errMsg}}</p>
