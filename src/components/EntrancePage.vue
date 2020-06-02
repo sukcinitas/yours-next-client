@@ -12,7 +12,8 @@ import CreateGroup from './CreateGroup';
 export default {
   name: 'EntrancePage',
   data() {
-    return {};
+    return {
+    };
   },
   components: { AuthenticateMember, CreateGroup },
 };

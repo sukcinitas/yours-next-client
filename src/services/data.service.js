@@ -1,6 +1,6 @@
 import ApiService from './api.service';
 
-const DataService = {
+export default {
   search(phrase, prevPageToken = '', nextPageToken = '') {
     const pageToken = prevPageToken || nextPageToken;
     return ApiService.get(`/api/data/search?q=${phrase}&pageToken=${pageToken}`);
@@ -18,5 +18,3 @@ const DataService = {
     return ApiService.get(`/api/data/videos?idList=${idList}&pageToken=${pageToken}`);
   },
 };
-
-export default DataService;

@@ -1,7 +1,7 @@
 <template>
     <section>
       <button
-        @click="extend"
+        @click="toggleExtended"
         type="text">Join a group
       </button>
       <input
@@ -16,14 +16,12 @@
         type="password"
         placeholder="Enter the passcode"
       >
-      <button @click="authenticate" v-if="isExtended">></button>
+      <button @click="authenticate" v-if="isExtended" :disabled="!name || !passcode">></button>
       <p v-if="errMsg">{{errMsg}}</p>
     </section>
 </template>
 
 <script>
-import GroupApi from '../services/group.api';
-
 export default {
   name: 'AuthenticateMember',
   data() {
@@ -35,16 +33,18 @@ export default {
     };
   },
   methods: {
-    extend() {
+    toggleExtended() {
       this.isExtended = !this.isExtended;
     },
     async authenticate() {
-      const result = await GroupApi.authenticate(this.name, this.passcode);
-      if (result.data.success) {
-        this.$store.commit('group/setName', this.name);
-        this.$router.push({ name: 'MainPage' });
-      }
-      this.errMsg = result.data.message;
+      this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })
+        .then(() => {
+          if (this.$store.state.group.name) {
+            this.$router.push({ name: 'MainPage' });
+          } else {
+            this.errMsg = this.$store.state.group.errMsg;
+          }
+        });
     },
   },
 };

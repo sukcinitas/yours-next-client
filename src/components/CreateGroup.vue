@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import GroupApi from '../services/group.api';
-
 export default {
   name: 'CreateGroup',
   data() {
@@ -39,12 +37,14 @@ export default {
       this.isExtended = !this.isExtended;
     },
     async create() {
-      const result = await GroupApi.createGroup(this.name, this.passcode);
-      if (result.data.success) {
-        this.$store.commit('group/setName', this.name);
-        this.$router.push({ name: 'MainPage' });
-      }
-      this.errMsg = result.data.message;
+      this.$store.dispatch('group/createGroup', { name: this.name, passcode: this.passcode })
+        .then(() => {
+          if (this.$store.state.group.name) {
+            this.$router.push({ name: 'MainPage' });
+          } else {
+            this.errMsg = this.$store.state.group.errMsg;
+          }
+        });
     },
   },
 };

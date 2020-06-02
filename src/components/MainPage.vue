@@ -1,5 +1,7 @@
 <template>
   <section>
+    <p v-if="errMsg">{{errMsg}}</p>
+    <p v-if="successMsg">{{successMsg}}</p>
     <div>
       <button
         @click="goToPlaylist(playlist._id)"
@@ -7,39 +9,62 @@
         :key="playlist.title">{{playlist.title}}
       </button>
     </div>
-    <input type="text" v-model="title">
-    <button @click="addPlaylist">+</button>
+    <input type="text" v-model="title" v-if="isExtended">
+    <button
+      @click="isExtended ? addPlaylist() : toggleExtended()">{{isExtended ? 'Add' : '+'}}
+    </button>
   </section>
 </template>
 
 <script>
-import PlaylistApi from '../services/playlist.api';
-
 export default {
   name: 'MainPage',
   data() {
     return {
-      playlists: [],
+      isExtended: false,
       title: '',
+      playlists: [],
+      errMsg: '',
+      successMsg: '',
     };
   },
+  created() {
+    this.$store.dispatch('group/getPlaylists')
+      .then(() => {
+        if (this.$store.state.group.playlists.length !== 0) {
+          this.playlists = this.$store.state.group.playlists;
+        } else {
+          this.errMsg = this.$store.state.group.errMsg;
+        }
+      });
+  },
   methods: {
-    async getPlaylists() {
-      const playlists = await PlaylistApi.getPlaylists(this.$store.state.group.name);
-      this.playlists = playlists.data.playlists;
+    toggleExtended() {
+      this.isExtended = !this.isExtended;
     },
     async addPlaylist() {
-      await PlaylistApi.addPlaylist(this.title, this.$store.state.group.name);
-      this.getPlaylists();
+      this.$store.dispatch('playlist/addPlaylist', { title: this.title })
+        .then(() => {
+          if (this.$store.state.playlist.successMsg) {
+            this.successMsg = this.$store.state.playlist.successMsg;
+            setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 2000);
+          } else {
+            this.errMsg = this.$store.state.group.errMsg;
+          }
+        });
+      this.isExtended = false;
     },
     async goToPlaylist(id) {
-      const result = await PlaylistApi.getPlaylist(id);
-      await this.$store.commit('mainplaylist/setPlaylist', result.data.playlist.items);
-      this.$router.push({ name: 'MainPlaylist' });
+      await this.$store.dispatch('mainplaylist/getPlaylist', { id });
+      this.$router.push({ name: 'MainPlaylist' })
+        .then(() => {
+          if (this.$store.state.mainplaylist.errMsg) {
+            this.errMsg = this.$store.state.group.errMsg;
+            return;
+          }
+          setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 2000);
+        });
     },
-  },
-  mounted() {
-    this.getPlaylists();
   },
 };
 </script>

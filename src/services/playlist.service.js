@@ -1,15 +1,13 @@
 import axios from 'axios';
 
-const PlaylistApi = {
-  getPlaylists(name) {
+export default {
+  getAll(name) {
     return axios.get(`/api/playlists?group=${name}`);
   },
-  getPlaylist(id) {
+  get(id) {
     return axios.get(`/api/playlists/${id}`);
   },
-  addPlaylist(title, createdBy) {
+  post({ title, createdBy }) {
     return axios.post('/api/playlists', { title, createdBy });
   },
 };
-
-export default PlaylistApi;

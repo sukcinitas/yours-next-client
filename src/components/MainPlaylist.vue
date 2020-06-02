@@ -10,7 +10,12 @@
       :now-playing-video-index="index"
     >
     </video-items-data>
-    <p v-if="initialPlaylist.length === 0">Add some videos!</p>
+    <p
+      v-if="initialPlaylist.length === 0"
+      @click="gotToSearch"
+    >
+      Add some videos!
+    </p>
   </div>
 </template>
 
@@ -30,6 +35,11 @@ export default {
     },
     index() {
       return this.$store.state.mainplaylist.nowPlayingVideoIndex;
+    },
+  },
+  methods: {
+    gotToSearch() {
+      this.$router.push({ name: 'SearchField' });
     },
   },
 };
