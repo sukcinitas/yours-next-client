@@ -3,13 +3,13 @@
       <div
         :class="{active: item.id === playlist[activeIndex]}"
         v-for="(item, index) in items"
-        @click="changeIndex(index)"
-        :key="index"
+        :key="playlist[index]"
         :index="index"
       >
-        <h3>{{item.snippet.title}}</h3>
+        <h3 @click="changeIndex(index)">{{item.snippet.title}}</h3>
         <img :src="item.snippet.thumbnails.medium.url" :alt="item.snippet.title">
         <hr>
+        <button @click="removeItemFromPlaylist(item.id)">Remove</button>
       </div>
   </div>
 </template>
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       items: [],
+      errMsg: '',
     };
   },
   props: {
@@ -43,6 +44,11 @@ export default {
     },
     changeIndex(index) {
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
+    },
+    removeItemFromPlaylist(videoId) {
+      this.$store.commit('mainplaylist/addItemToPendingRemovalList', { item: videoId });
+      this.items = this.items.filter(item => item.id !== videoId);
+      this.$store.commit('mainplaylist/setPlaylist', { items: this.playlist.filter(item => item !== videoId) });
     },
   },
   mounted() {

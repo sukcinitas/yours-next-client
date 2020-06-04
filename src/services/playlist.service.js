@@ -10,4 +10,13 @@ export default {
   post({ title, createdBy }) {
     return axios.post('/api/playlists', { title, createdBy });
   },
+  add({ id, item }) {
+    return axios.put(`/api/playlists/${id}`, { item });
+  },
+  delete(id) {
+    return axios.put(`/api/playlists/${id}`);
+  },
+  removeItem({ id, item }) {
+    return axios.put(`/api/playlists/${id}/removeItem`, { item });
+  },
 };

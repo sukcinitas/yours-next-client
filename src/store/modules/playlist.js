@@ -5,6 +5,7 @@ import PlaylistService from '../../services/playlist.service';
 const state = () => ({
   successMsg: '',
   errMsg: '',
+  id: '',
 });
 
 // actions
@@ -14,10 +15,10 @@ const actions = {
       title: payload.title,
       createdBy: rootState.group.name,
     });
-    // eslint-disable-next-line no-console
-    console.log(data);
     if (data.success) {
       commit('setSuccessMsg', { message: data.message });
+      // eslint-disable-next-line no-underscore-dangle
+      commit('setId', { id: data.playlist._id });
     } else {
       commit('setErrorMsg', { error: data.error });
     }
@@ -30,6 +31,9 @@ const mutations = {
   },
   setSuccessMsg(state, payload) {
     state.successMsg = payload.message;
+  },
+  setId(state, payload) {
+    state.id = payload.id;
   },
 };
 

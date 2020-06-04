@@ -15,7 +15,6 @@ export default {
   name: 'VideoPlayer',
   data() {
     return {
-      playlist: this.initialPlaylist,
       playerVars: {
         autoplay: 1,
         color: 'white',
@@ -34,16 +33,24 @@ export default {
     videoId() {
       return this.playlist[this.index];
     },
+    playlist() {
+      return this.initialPlaylist;
+    },
   },
   methods: {
     async ended() {
-      // const data = await axios.get('/api/data/playlists?channelId=UCazpYHBPTXKy9t9E78yuWnQ');
-      // this.items = data.items;
       this.end();
     },
     end() {
+      this.$store.dispatch('mainplaylist/removeItemsFromPlaylist', { id: this.$store.state.mainplaylist.id });
+      if (this.index === this.playlist.length - 1) {
+        return;
+      }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
     },
+  },
+  beforeDestroy() {
+    this.$store.dispatch('mainplaylist/removeItemsFromPlaylist', { id: this.$store.state.mainplaylist.id });
   },
 };
 </script>

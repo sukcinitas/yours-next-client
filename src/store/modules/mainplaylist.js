@@ -5,15 +5,43 @@ const state = () => ({
   idsArray: [],
   nowPlayingVideoIndex: 0,
   errMsg: '',
+  id: '',
+  pendingRemovalList: [],
 });
 
 // actions
 const actions = {
-  async getPlaylist({ commit, state }, payload) {
+  async getPlaylist({ commit }, payload) {
     const { data } = await PlaylistService.get(payload.id);
     if (data.success) {
       commit('setPlaylist', { items: data.playlist.items });
-      state.idsArray = data.playlist.items;
+      commit('setId', { id: payload.id });
+    } else {
+      commit('setErrorMsg', { error: data.error });
+    }
+  },
+  async addItemToPlaylist({ commit, state }, payload) {
+    const { data } = await PlaylistService.add({ id: state.id, item: payload.item });
+    if (!data.success) {
+      commit('setErrorMsg', { error: data.error });
+    }
+  },
+  async removeItemsFromPlaylist({ commit, state }) {
+    for (let i = 0; i < state.pendingRemovalList.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await PlaylistService.removeItem({ id: state.id, item: state.pendingRemovalList[i] });
+    }
+    // dispatch('getPlaylist', { id: state.id });
+    const { data } = await PlaylistService.get(state.id);
+    if (data.success) {
+      const videoId = state.idsArray[state.nowPlayingVideoIndex];
+      let index = data.playlist.items.indexOf(videoId);
+      if (index === -1) {
+        index = state.nowPlayingVideoIndex;
+      }
+      commit('changeNowPlayingVideoIndex', index);
+      commit('setPlaylist', { items: data.playlist.items });
+      commit('setId', { id: state.id });
     } else {
       commit('setErrorMsg', { error: data.error });
     }
@@ -25,17 +53,17 @@ const mutations = {
   changeNowPlayingVideoIndex(state, index) {
     state.nowPlayingVideoIndex = index;
   },
-  addId(state, videoId) {
-    if (state.idsArray.includes(videoId)) {
-      return;
-    }
-    state.idsArray.push(videoId);
-  },
   setPlaylist(state, payload) {
     state.idsArray = payload.items;
   },
   setErrorMsg(state, payload) {
     state.errMsg = payload.error;
+  },
+  setId(state, payload) {
+    state.id = payload.id;
+  },
+  addItemToPendingRemovalList(state, payload) {
+    state.pendingRemovalList = [...state.pendingRemovalList, payload.item];
   },
 };
 

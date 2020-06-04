@@ -47,7 +47,9 @@ export default {
         .then(() => {
           if (this.$store.state.playlist.successMsg) {
             this.successMsg = this.$store.state.playlist.successMsg;
-            setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 2000);
+            const id = this.$store.state.playlist.id;
+            this.$store.dispatch('mainplaylist/getPlaylist', { id });
+            setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 1000);
           } else {
             this.errMsg = this.$store.state.group.errMsg;
           }
@@ -55,14 +57,13 @@ export default {
       this.isExtended = false;
     },
     async goToPlaylist(id) {
-      await this.$store.dispatch('mainplaylist/getPlaylist', { id });
-      this.$router.push({ name: 'MainPlaylist' })
+      this.$store.dispatch('mainplaylist/getPlaylist', { id })
         .then(() => {
           if (this.$store.state.mainplaylist.errMsg) {
             this.errMsg = this.$store.state.group.errMsg;
             return;
           }
-          setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 2000);
+          this.$router.push({ name: 'MainPlaylist' });
         });
     },
   },

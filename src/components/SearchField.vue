@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p v-if="message">{{message}}</p>
     <div>
       <input type="text" v-model="queryOrId">
       <button @click="search">Search</button>
@@ -61,6 +62,7 @@ export default {
       playlists: [],
       prevPageToken: '',
       nextPageToken: '',
+      message: '',
     };
   },
   methods: {
@@ -79,8 +81,18 @@ export default {
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
     },
-    add(videoId) {
-      this.$store.commit('mainplaylist/addId', videoId);
+    async add(videoId) {
+      this.$store.dispatch('mainplaylist/addItemToPlaylist', { item: videoId })
+        .then(() => {
+          if (this.$store.state.mainplaylist.errMsg) {
+            this.message = this.$store.state.group.errMsg;
+          } else {
+            this.message = 'Successfully added!';
+            setTimeout(() => {
+              this.message = '';
+            }, 1000);
+          }
+        });
     },
     async explorePlaylist(id) {
       const data = await DataService.getPlaylistItems(id);

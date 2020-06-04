@@ -27,7 +27,8 @@ export default {
   name: 'MainPlaylist',
   components: { VideoPlayer, VideoItemsData },
   data() {
-    return {};
+    return {
+    };
   },
   computed: {
     initialPlaylist() {
@@ -35,6 +36,12 @@ export default {
     },
     index() {
       return this.$store.state.mainplaylist.nowPlayingVideoIndex;
+    },
+  },
+  watch: {
+    initialPlaylist(newValue, oldValue) {
+      // eslint-disable-next-line no-console
+      console.log('changed', oldValue, newValue);
     },
   },
   methods: {
