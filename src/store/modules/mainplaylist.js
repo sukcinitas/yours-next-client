@@ -27,11 +27,7 @@ const actions = {
     }
   },
   async removeItemsFromPlaylist({ commit, state }) {
-    for (let i = 0; i < state.pendingRemovalList.length; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      await PlaylistService.removeItem({ id: state.id, item: state.pendingRemovalList[i] });
-    }
-    // dispatch('getPlaylist', { id: state.id });
+    await PlaylistService.removeItem({ id: state.id, items: state.pendingRemovalList });
     const { data } = await PlaylistService.get(state.id);
     if (data.success) {
       const videoId = state.idsArray[state.nowPlayingVideoIndex];
