@@ -2,11 +2,24 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import VueYoutube from 'vue-youtube';
+import VueSocketIO from 'vue-socket.io';
+// eslint-disable-next-line no-unused-vars
+import SocketIO from 'socket.io-client';
 import store from './store';
 import App from './App';
 import router from './router';
 
 Vue.use(VueYoutube);
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'http://localhost:8080',
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_',
+  },
+  options: { path: '/' }, // Optional options
+}));
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
