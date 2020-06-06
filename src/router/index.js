@@ -4,6 +4,7 @@ import MainPage from '../components/MainPage';
 import MainPlaylist from '../components/MainPlaylist';
 import SearchField from '../components/SearchField';
 import EntrancePage from '../components/EntrancePage';
+import MemberCreate from '../components/MemberCreate';
 
 Vue.use(Router);
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/',
       name: 'EntrancePage',
       component: EntrancePage,
+    },
+    {
+      path: '/member',
+      name: 'MemberCreate',
+      component: MemberCreate,
     },
   ],
 });

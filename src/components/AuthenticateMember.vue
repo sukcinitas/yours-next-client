@@ -40,7 +40,8 @@ export default {
       this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })
         .then(() => {
           if (this.$store.state.group.name) {
-            this.$router.push({ name: 'MainPage' });
+            this.$socket.emit('authenticate', { name: this.name });
+            this.$router.push({ name: 'MemberCreate' });
           } else {
             this.errMsg = this.$store.state.group.errMsg;
           }

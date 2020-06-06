@@ -13,6 +13,15 @@
     <button
       @click="isExtended ? addPlaylist() : toggleExtended()">{{isExtended ? 'Add' : '+'}}
     </button>
+    <div>
+      <span
+        v-for="member in activeMembers"
+        :key="member.emoji"
+        :title="member.name"
+      >
+      {{member.emoji}}
+      </span>
+    </div>
   </section>
 </template>
 
@@ -37,6 +46,11 @@ export default {
           this.errMsg = this.$store.state.group.errMsg;
         }
       });
+  },
+  computed: {
+    activeMembers() {
+      return this.$store.state.group.activeMembers;
+    },
   },
   methods: {
     toggleExtended() {

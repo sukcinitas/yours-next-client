@@ -1,3 +1,4 @@
+
 /* eslint-disable no-unreachable */
 /* eslint-disable no-shadow */
 import GroupService from '../../services/group.service';
@@ -8,10 +9,21 @@ const state = () => ({
   playlists: [],
   activeMembers: [],
   errMsg: '',
+  chosenEmojis: [],
 });
 
 // actions
 const actions = {
+  async SOCKET_joinmessage(context, payload) {
+    // eslint-disable-next-line no-console
+    console.log(payload.message);
+  },
+  async addMember({ commit }, payload) {
+    // eslint-disable-next-line no-console
+    console.log(payload);
+    commit('setChosenEmojis', { emoji: payload.emoji });
+    commit('setActiveMembers', { name: payload.name, emoji: payload.emoji });
+  },
   async authenticate({ commit }, payload) {
     const { data } = await GroupService.authenticate(payload);
     if (data.success) {
@@ -54,6 +66,12 @@ const mutations = {
   },
   setSuccessMsg(state, payload) {
     state.successMsg = payload.message;
+  },
+  setActiveMembers(state, payload) {
+    state.activeMembers = [...state.activeMembers, { name: payload.name, emoji: payload.emoji }];
+  },
+  setChosenEmojis(state, payload) {
+    state.setChosenEmojis = state.chosenEmojis.push(payload.emoji);
   },
 };
 
