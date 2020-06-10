@@ -52,7 +52,6 @@ export default {
   },
   methods: {
     checkIfMemberNameExists() {
-      // eslint-disable-next-line no-console
       if ((this.$store.state.group.activeMembers).indexOf(this.name) >= 0) {
         this.errMsg = 'Name is already in use!';
       } else {
@@ -60,10 +59,8 @@ export default {
       }
     },
     async addMember(emoji) {
-      this.$store.dispatch('group/addMember', { name: this.name, emoji })
-        .then(() => {
-          this.$router.push({ name: 'MainPage' });
-        });
+      this.$socket.emit('addMember', { name: this.name, emoji });
+      this.$router.push({ name: 'MainPage' });
     },
   },
 };

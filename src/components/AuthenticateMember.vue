@@ -1,9 +1,10 @@
 <template>
-    <section>
+  <section>
       <button
         @click="toggleExtended"
         type="text">Join a group
       </button>
+     <form @submit.prevent="handleSubmit">
       <input
         v-if="isExtended"
         v-model="name"
@@ -16,9 +17,10 @@
         type="password"
         placeholder="Enter the passcode"
       >
-      <button @click="authenticate" v-if="isExtended" :disabled="!name || !passcode">></button>
-      <p v-if="errMsg">{{errMsg}}</p>
-    </section>
+      <button tyep="submit" v-if="isExtended" :disabled="!name || !passcode">></button>
+    </form>
+    <p v-if="errMsg">{{errMsg}}</p>
+  </section>
 </template>
 
 <script>
@@ -36,7 +38,7 @@ export default {
     toggleExtended() {
       this.isExtended = !this.isExtended;
     },
-    async authenticate() {
+    async handleSubmit() {
       this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })
         .then(() => {
           if (this.$store.state.group.name) {

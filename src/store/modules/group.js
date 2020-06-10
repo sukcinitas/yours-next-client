@@ -10,6 +10,8 @@ const state = () => ({
   activeMembers: [],
   errMsg: '',
   chosenEmojis: [],
+  member: '',
+  messages: [],
 });
 
 // actions
@@ -18,10 +20,12 @@ const actions = {
     // eslint-disable-next-line no-console
     console.log(payload.message);
   },
-  async addMember({ commit }, payload) {
-    // eslint-disable-next-line no-console
-    console.log(payload);
+  async SOCKET_sendMessage({ commit }, payload) {
+    commit('setMessage', { message: payload.message });
+  },
+  async SOCKET_addMember({ commit }, payload) {
     commit('setChosenEmojis', { emoji: payload.emoji });
+    commit('setMember', { name: payload.name });
     commit('setActiveMembers', { name: payload.name, emoji: payload.emoji });
   },
   async authenticate({ commit }, payload) {
@@ -72,6 +76,12 @@ const mutations = {
   },
   setChosenEmojis(state, payload) {
     state.setChosenEmojis = state.chosenEmojis.push(payload.emoji);
+  },
+  setMember(state, payload) {
+    state.member = payload.name;
+  },
+  setMessage(state, payload) {
+    state.messages = [...state.messages, { message: payload.message, name: state.member }];
   },
 };
 

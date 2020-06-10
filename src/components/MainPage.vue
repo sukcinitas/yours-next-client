@@ -22,12 +22,19 @@
       {{member.emoji}}
       </span>
     </div>
+    <message-box></message-box>
+    <!-- <p>{{messages}}</p> -->
   </section>
 </template>
 
 <script>
+import MessageBox from './MessageBox';
+
 export default {
   name: 'MainPage',
+  components: {
+    'message-box': MessageBox,
+  },
   data() {
     return {
       isExtended: false,
@@ -51,6 +58,9 @@ export default {
     activeMembers() {
       return this.$store.state.group.activeMembers;
     },
+    // messages() {
+    //   return this.$store.state.group.messages;
+    // },
   },
   methods: {
     toggleExtended() {

@@ -1,9 +1,10 @@
 <template>
-    <section>
-      <button
-        @click="extend"
-        type="text">Create a group
-      </button>
+  <section>
+    <button
+      @click="extend"
+      type="text">Create a group
+    </button>
+    <form @submit.prevent="handleSubmit">
       <input
         v-if="isExtended"
         v-model="name"
@@ -16,9 +17,10 @@
         type="password"
         placeholder="Enter the passcode"
       >
-      <button @click="create" v-if="isExtended">></button>
-      <p v-if="errMsg">{{errMsg}}</p>
-    </section>
+      <button type="submit" v-if="isExtended">></button>
+    </form>
+    <p v-if="errMsg">{{errMsg}}</p>
+  </section>
 </template>
 
 <script>
@@ -36,11 +38,12 @@ export default {
     extend() {
       this.isExtended = !this.isExtended;
     },
-    async create() {
+    async handleSubmit() {
       this.$store.dispatch('group/createGroup', { name: this.name, passcode: this.passcode })
         .then(() => {
           if (this.$store.state.group.name) {
-            this.$router.push({ name: 'MainPage' });
+            this.$socket.emit('authenticate', { name: this.name });
+            this.$router.push({ name: 'MemberCreate' });
           } else {
             this.errMsg = this.$store.state.group.errMsg;
           }
