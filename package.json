@@ -12,7 +12,6 @@
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js"
   },
-  "proxy": "http://localhost:8081",
   "dependencies": {
     "axios": "^0.19.2",
     "socket.io-client": "^2.3.0",
