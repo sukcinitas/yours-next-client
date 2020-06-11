@@ -12,7 +12,7 @@ import router from './router';
 Vue.use(VueYoutube);
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: SocketIO('http://localhost:8081'),
+  connection: SocketIO(process.env.PORT || 'http://localhost:8081'),
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
