@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <div :class="{active: !isMessagesTurnedOff, hidden: isMessagesTurnedOff}">
       <p v-for="(message, index) in messages" :key="index">
         {{`${message.name}: ${message.message}`}}

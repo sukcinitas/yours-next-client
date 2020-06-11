@@ -8,7 +8,8 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const portfinder = require('portfinder')
 
@@ -50,6 +51,15 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: config.dev.poll,
     }
   },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      sourceMap: true,
+      terserOptions: {
+        ecma: 8,
+      },
+    })],
+  },
   plugins: [
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
@@ -65,19 +75,24 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       inject: true
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.dev.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ]),
-    new UglifyJsPlugin({
-      sourceMap: true,
-      uglifyOptions: {
-        ecma:8, 
-      }
-    }),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: path.resolve(__dirname, '../static'),
+    //     to: config.dev.assetsSubDirectory,
+    //     ignore: ['.*']
+    //   }
+    // ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, '../static'), to: config.dev.assetsSubDirectory }
+      ]
+    })
+    // new UglifyJsPlugin({
+    //   sourceMap: true,
+    //   uglifyOptions: {
+    //     ecma:8, 
+    //   }
+    // }),
   ]
 })
 
