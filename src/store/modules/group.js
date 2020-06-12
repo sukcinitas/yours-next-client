@@ -21,7 +21,7 @@ const actions = {
     console.log(payload.message);
   },
   async SOCKET_sendMessage({ commit }, payload) {
-    commit('setMessage', { message: payload.message });
+    commit('setMessage', { message: payload.message, member: payload.member });
   },
   async SOCKET_addMember({ commit }, payload) {
     commit('setChosenEmojis', { emoji: payload.emoji });
@@ -88,13 +88,13 @@ const mutations = {
     state.member = payload.name;
   },
   setMessage(state, payload) {
-    state.messages = [...state.messages, { message: payload.message, name: state.member }];
+    state.messages = [...state.messages, { message: payload.message, name: payload.member }];
   },
   removeMember(state, payload) {
     state.activeMembers = state.activeMembers.filter(member => member.name !== payload.name);
   },
   removeFromChosenEmojis(state, payload) {
-    state.activeMembers = state.activeMembers.filter(emoji => emoji !== payload.name);
+    state.chosenEmojis = state.chosenEmojis.filter(emoji => emoji !== payload.emoji);
   },
 };
 
