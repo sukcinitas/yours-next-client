@@ -13,7 +13,7 @@ console.log(location.hostname);
 Vue.use(VueYoutube);
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: SocketIO(location.hostname === 'www.infinite-woodland-46117.herokuapp.com' ? `http://infinite-woodland-46117.herokuapp.com/#/:${location.port}` : 'http://localhost:8081'),
+  connection: SocketIO(location.hostname === 'infinite-woodland-46117.herokuapp.com' ? `http://infinite-woodland-46117.herokuapp.com/#/:${location.port}` : 'http://localhost:8081'),
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
