@@ -25,8 +25,15 @@ const actions = {
   },
   async SOCKET_addMember({ commit }, payload) {
     commit('setChosenEmojis', { emoji: payload.emoji });
-    commit('setMember', { name: payload.name });
     commit('setActiveMembers', { name: payload.name, emoji: payload.emoji });
+  },
+  // only to this socket
+  async SOCKET_setMember({ commit }, payload) {
+    commit('setMember', { name: payload.name });
+  },
+  async SOCKET_removeMember({ commit }, payload) {
+    commit('removeMember', { name: payload.name });
+    commit('removeFromChosenEmojis', { emoji: payload.emoji });
   },
   async authenticate({ commit }, payload) {
     const { data } = await GroupService.authenticate(payload);
@@ -82,6 +89,12 @@ const mutations = {
   },
   setMessage(state, payload) {
     state.messages = [...state.messages, { message: payload.message, name: state.member }];
+  },
+  removeMember(state, payload) {
+    state.activeMembers = state.activeMembers.filter(member => member.name !== payload.name);
+  },
+  removeFromChosenEmojis(state, payload) {
+    state.activeMembers = state.activeMembers.filter(emoji => emoji !== payload.name);
   },
 };
 
