@@ -9,10 +9,11 @@ import store from './store';
 import App from './App';
 import router from './router';
 
+console.log(location.hostname);
 Vue.use(VueYoutube);
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: SocketIO(`http://infinite-woodland-46117.herokuapp.com/#/:${location.port}` || 'http://localhost:8081'),
+  connection: SocketIO(location.hostname === 'www.infinite-woodland-46117.herokuapp.com' ? `http://infinite-woodland-46117.herokuapp.com/#/:${location.port}` : 'http://localhost:8081'),
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
