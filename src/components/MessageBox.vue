@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     handleSubmit() {
-      this.$socket.emit('sendMessage', { message: this.message, member: this.$store.state.group.member });
+      this.$socket.emit('sendMessage', { message: this.message, member: this.$store.state.group.member.name });
       this.message = '';
     },
     addEmoji(emoji) {

@@ -20,6 +20,9 @@ const actions = {
     // eslint-disable-next-line no-console
     console.log(payload.message);
   },
+  async SOCKET_setInitialState({ commit }, payload) {
+    commit('setInitialState', payload.group);
+  },
   async SOCKET_sendMessage({ commit }, payload) {
     commit('setMessage', { message: payload.message, member: payload.member });
   },
@@ -29,7 +32,7 @@ const actions = {
   },
   // only to this socket
   async SOCKET_setMember({ commit }, payload) {
-    commit('setMember', { name: payload.name });
+    commit('setMember', { name: payload.name, emoji: payload.emoji });
   },
   async SOCKET_removeMember({ commit }, payload) {
     commit('removeMember', { name: payload.name });
@@ -85,7 +88,7 @@ const mutations = {
     state.setChosenEmojis = state.chosenEmojis.push(payload.emoji);
   },
   setMember(state, payload) {
-    state.member = payload.name;
+    state.member = payload;
   },
   setMessage(state, payload) {
     state.messages = [...state.messages, { message: payload.message, name: payload.member }];
@@ -95,6 +98,11 @@ const mutations = {
   },
   removeFromChosenEmojis(state, payload) {
     state.chosenEmojis = state.chosenEmojis.filter(emoji => emoji !== payload.emoji);
+  },
+  setInitialState(state, payload) {
+    state.activeMembers = payload.activeMembers;
+    state.chosenEmojis = payload.chosenEmojis;
+    state.messages = payload.messages;
   },
 };
 
