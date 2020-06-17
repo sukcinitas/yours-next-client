@@ -40,10 +40,10 @@ export default {
       return this.$store.state.group.name;
     },
     emojisFreeToSet() {
-      const initial = ['🦄', '🦊', '🔥'];
+      const initial = ['🦄', '🐧', '🐍', '🌞', '🍆', '👩🏻‍🦰'];
       const filtered = [];
       for (let i = 0; i < initial.length; i += 1) {
-        if (!this.$store.state.group.activeMembers.includes(initial[i])) {
+        if (!this.$store.state.group.chosenEmojis.includes(initial[i])) {
           filtered.push(initial[i]);
         }
       }
@@ -60,7 +60,6 @@ export default {
     },
     async addMember(emoji) {
       this.$socket.emit('addMember', { name: this.name, emoji });
-      // this.$socket.emit('setInitialState');
       this.$socket.emit('setMember', { name: this.name, emoji });
       this.$router.push({ name: 'MainPage' });
     },
