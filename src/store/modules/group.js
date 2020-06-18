@@ -38,6 +38,9 @@ const actions = {
     commit('removeMember', { name: payload.name });
     commit('removeFromChosenEmojis', { emoji: payload.emoji });
   },
+  async SOCKET_updatePlaylists({ dispatch }) {
+    dispatch('getPlaylists');
+  },
   async authenticate({ commit }, payload) {
     const { data } = await GroupService.authenticate(payload);
     if (data.success) {

@@ -39,28 +39,20 @@ export default {
     return {
       isExtended: false,
       title: '',
-      playlists: [],
       errMsg: '',
       successMsg: '',
     };
   },
   created() {
-    this.$store.dispatch('group/getPlaylists')
-      .then(() => {
-        if (this.$store.state.group.playlists.length !== 0) {
-          this.playlists = this.$store.state.group.playlists;
-        } else {
-          this.errMsg = this.$store.state.group.errMsg;
-        }
-      });
+    return this.getPlaylists();
   },
   computed: {
     activeMembers() {
       return this.$store.state.group.activeMembers;
     },
-    // messages() {
-    //   return this.$store.state.group.messages;
-    // },
+    playlists() {
+      return this.$store.state.group.playlists;
+    },
   },
   methods: {
     toggleExtended() {
@@ -71,6 +63,7 @@ export default {
         .then(() => {
           if (this.$store.state.playlist.successMsg) {
             this.successMsg = this.$store.state.playlist.successMsg;
+            this.$socket.emit('updatePlaylists');
             const id = this.$store.state.playlist.id;
             this.$store.dispatch('mainplaylist/getPlaylist', { id });
             setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 1000);
@@ -88,6 +81,16 @@ export default {
             return;
           }
           this.$router.push({ name: 'MainPlaylist' });
+        });
+    },
+    async getPlaylists() {
+      this.$store.dispatch('group/getPlaylists')
+        .then(() => {
+          if (this.$store.state.group.playlists.length !== 0) {
+            this.playlists = this.$store.state.group.playlists;
+          } else {
+            this.errMsg = this.$store.state.group.errMsg;
+          }
         });
     },
   },
