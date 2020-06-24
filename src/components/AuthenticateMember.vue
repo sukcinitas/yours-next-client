@@ -37,6 +37,9 @@ export default {
   methods: {
     toggleExtended() {
       this.isExtended = !this.isExtended;
+      this.errMsg = '';
+      this.name = '';
+      this.passcode = '';
     },
     async handleSubmit() {
       this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })

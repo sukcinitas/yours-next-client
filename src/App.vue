@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <div :class="{active: !isMessagesTurnedOff, hidden: isMessagesTurnedOff}">
+    <div :class="{active: !isMessagesTurnedOff,
+    hidden: isMessagesTurnedOff || !this.$store.state.group.member}">
       <p v-for="(message, index) in messages" :key="index">
         {{`${message.name}: ${message.message}`}}
       </p>
     </div>
-    <button @click="turnOffMessages">
-      {{isMessagesTurnedOff ? 'Turn on messages' : 'Turn off messaages'}}
+    <button v-if="this.$store.state.group.member" @click="turnOffMessages">
+      {{isMessagesTurnedOff ? 'Turn on messages' : 'Turn off messages'}}
     </button>
     <router-view/>
   </div>

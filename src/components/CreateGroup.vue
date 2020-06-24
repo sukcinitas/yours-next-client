@@ -37,8 +37,15 @@ export default {
   methods: {
     extend() {
       this.isExtended = !this.isExtended;
+      this.errMsg = '';
+      this.name = '';
+      this.passcode = '';
     },
     async handleSubmit() {
+      if (this.passcode.length < 8) {
+        this.errMsg = 'Passcode must be at least 8 characters long';
+        return;
+      }
       this.$store.dispatch('group/createGroup', { name: this.name, passcode: this.passcode })
         .then(() => {
           if (this.$store.state.group.name) {
