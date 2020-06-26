@@ -9,7 +9,6 @@ import store from './store';
 import App from './App';
 import router from './router';
 
-console.log(location.hostname);
 Vue.use(VueYoutube);
 Vue.use(new VueSocketIO({
   debug: true,

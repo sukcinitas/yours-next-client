@@ -10,7 +10,7 @@ const state = () => ({
   activeMembers: [],
   errMsg: '',
   chosenEmojis: [],
-  member: '',
+  member: null,
   messages: [],
 });
 
@@ -35,7 +35,7 @@ const actions = {
     commit('setMember', { name: payload.name, emoji: payload.emoji });
   },
   async SOCKET_removeMember({ commit }, payload) {
-    commit('removeMember', { name: payload.name });
+    commit('removeMember', { name: payload.client });
     commit('removeFromChosenEmojis', { emoji: payload.emoji });
   },
   async SOCKET_updatePlaylists({ dispatch }) {

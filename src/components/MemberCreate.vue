@@ -59,8 +59,8 @@ export default {
       }
     },
     async addMember(emoji) {
-      this.$socket.emit('addMember', { name: this.name, emoji });
       this.$socket.emit('setMember', { name: this.name, emoji });
+      this.$socket.emit('addMember', { name: this.name, emoji });
       this.$router.push({ name: 'MainPage' });
     },
   },
