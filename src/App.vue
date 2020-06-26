@@ -6,6 +6,10 @@
         {{`${message.name}: ${message.message}`}}
       </p>
     </div>
+    <p :class="{hidden: !this.$store.state.group.member}">
+      <span title="Can delete playlists, videos, set other moderator">Moderator:</span>
+       {{moderator}}
+    </p>
     <button v-if="this.$store.state.group.member" @click="turnOffMessages">
       {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
     </button>
@@ -24,6 +28,9 @@ export default {
   computed: {
     messages() {
       return this.$store.state.group.messages;
+    },
+    moderator() {
+      return this.$store.getters['group/moderatorEmoji'];
     },
   },
   methods: {

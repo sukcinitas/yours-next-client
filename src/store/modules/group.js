@@ -14,6 +14,7 @@ const state = () => ({
   chosenEmojis: [],
   member: null,
   messages: [],
+  moderator: '',
 });
 
 // actions
@@ -27,6 +28,9 @@ const actions = {
   },
   async SOCKET_sendMessage({ commit }, payload) {
     commit('setMessage', { message: payload.message, member: payload.member });
+  },
+  async SOCKET_setModerator({ commit }, payload) {
+    commit('setModerator', { name: payload.name });
   },
   async SOCKET_addMember({ commit }, payload) {
     commit('setChosenEmojis', { emoji: payload.emoji });
@@ -85,6 +89,9 @@ const mutations = {
   setName(state, payload) {
     state.name = payload.name;
   },
+  setModerator(state, payload) {
+    state.moderator = payload.name;
+  },
   setErrorMsg(state, payload) {
     state.errMsg = payload.error;
   },
@@ -116,6 +123,7 @@ const mutations = {
     state.activeMembers = payload.activeMembers;
     state.chosenEmojis = payload.chosenEmojis;
     state.messages = payload.messages;
+    state.moderator = payload.moderator;
   },
 };
 
@@ -123,6 +131,13 @@ const mutations = {
 const getters = {
   activeMembersNames(state) {
     return state.activeMembers.map(member => member.name);
+  },
+  isModerator(state) {
+    return state.moderator === state.member.name;
+  },
+  moderatorEmoji(state) {
+    const moderator = state.activeMembers.filter(member => member.name === state.moderator);
+    return moderator.length === 0 ? '' : moderator[0].emoji;
   },
 };
 

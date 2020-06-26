@@ -9,7 +9,12 @@
         <h3 @click="changeIndex(index)">{{item.snippet.title}}</h3>
         <img :src="item.snippet.thumbnails.medium.url" :alt="item.snippet.title">
         <hr>
-        <button @click="removeItemFromPlaylist(item.id)">Remove</button>
+        <button
+          v-if="isModerator"
+          @click="removeItemFromPlaylist(item.id)"
+        >
+          Remove
+          </button>
       </div>
   </div>
 </template>
@@ -35,6 +40,9 @@ export default {
     },
     playlist() {
       return this.initialPlaylist;
+    },
+    isModerator() {
+      return this.$store.getters['group/isModerator'];
     },
   },
   methods: {

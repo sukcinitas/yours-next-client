@@ -6,14 +6,18 @@
       <button
         @click="goToPlaylist(playlist._id)">{{playlist.title}}
       </button>
-      <button @click="deletePlaylist(playlist._id)">X</button>
+      <button
+        v-if="isModerator"
+        @click="deletePlaylist(playlist._id)"
+      >X
+      </button>
     </div>
     <input type="text" v-model="title" v-if="isExtended">
     <button
       @click="isExtended ? addPlaylist() : toggleExtended()">{{isExtended ? 'Add' : '+'}}
     </button>
     <div>
-      <span
+      <span @click="makeModerator(member.name)"
         v-for="member in activeMembers"
         :key="member.emoji"
         :title="member.name"
@@ -22,7 +26,6 @@
       </span>
     </div>
     <message-box></message-box>
-    <!-- <p>{{messages}}</p> -->
   </section>
 </template>
 
@@ -51,6 +54,9 @@ export default {
     },
     playlists() {
       return this.$store.state.group.playlists;
+    },
+    isModerator() {
+      return this.$store.getters['group/isModerator'];
     },
   },
   methods: {
@@ -105,6 +111,11 @@ export default {
             this.$socket.emit('updatePlaylists');
           }
         });
+    },
+    makeModerator(name) {
+      if (this.isModerator) {
+        this.$socket.emit('setModerator', name);
+      }
     },
   },
 };
