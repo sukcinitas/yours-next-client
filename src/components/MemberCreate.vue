@@ -21,7 +21,7 @@
         {{emoji}}
         </button>
       </div>
-      <p v-if="errMsg">{{errMsg}}</p>
+      <p v-if="errMsg && !isShowingEmojiSelection">{{errMsg}}</p>
     </section>
 </template>
 
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     checkIfMemberNameExists() {
-      if ((this.$store.state.group.activeMembers).indexOf(this.name) >= 0) {
+      if ((this.$store.getters['group/activeMembersNames']).indexOf(this.name) >= 0) {
         this.errMsg = 'Name is already in use!';
       } else {
         this.isShowingEmojiSelection = true;

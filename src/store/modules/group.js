@@ -110,9 +110,16 @@ const mutations = {
 };
 
 // getters
+const getters = {
+  activeMembersNames(state) {
+    return state.activeMembers.map(member => member.name);
+  },
+};
+
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
+  getters,
 };
