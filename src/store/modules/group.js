@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 
 /* eslint-disable no-unreachable */
 /* eslint-disable no-shadow */
@@ -9,6 +10,7 @@ const state = () => ({
   playlists: [],
   activeMembers: [],
   errMsg: '',
+  successMsg: '',
   chosenEmojis: [],
   member: null,
   messages: [],
@@ -62,11 +64,19 @@ const actions = {
     if (data.success) {
       if (data.playlists.length === 0) {
         commit('setErrorMsg', { error: 'You have not created any playlists yet!' });
-        return;
       }
       commit('setPlaylists', { playlists: data.playlists });
     } else {
       commit('setErrorMsg', { error: data.message });
+    }
+  },
+  async deletePlaylist({ commit }, payload) {
+    const { data } = await PlaylistService.delete(payload.id);
+    if (data.success) {
+      // const playlists = this.playlists.filter(playlist => playlist._id !== payload.id);
+      commit('setSuccessMsg', { message: 'Playlist has been successfully deleted!' });
+    } else {
+      commit('setErrorMsg', { error: 'Could not delete playlist!' });
     }
   },
 };

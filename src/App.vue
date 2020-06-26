@@ -7,7 +7,7 @@
       </p>
     </div>
     <button v-if="this.$store.state.group.member" @click="turnOffMessages">
-      {{isMessagesTurnedOff ? 'Turn on messages' : 'Turn off messages'}}
+      {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
     </button>
     <router-view/>
   </div>

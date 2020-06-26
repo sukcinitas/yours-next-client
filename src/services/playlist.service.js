@@ -14,7 +14,7 @@ export default {
     return axios.put(`/api/playlists/${id}`, { item });
   },
   delete(id) {
-    return axios.put(`/api/playlists/${id}`);
+    return axios.delete(`/api/playlists/${id}`);
   },
   removeItem({ id, items }) {
     return axios.put(`/api/playlists/${id}/removeItem`, { items });

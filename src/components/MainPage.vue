@@ -2,12 +2,11 @@
   <section>
     <p v-if="errMsg">{{errMsg}}</p>
     <p v-if="successMsg">{{successMsg}}</p>
-    <div>
+    <div v-for="playlist in playlists" :key="playlist.title">
       <button
-        @click="goToPlaylist(playlist._id)"
-        v-for="playlist in playlists"
-        :key="playlist.title">{{playlist.title}}
+        @click="goToPlaylist(playlist._id)">{{playlist.title}}
       </button>
+      <button @click="deletePlaylist(playlist._id)">X</button>
     </div>
     <input type="text" v-model="title" v-if="isExtended">
     <button
@@ -66,7 +65,7 @@ export default {
             this.$socket.emit('updatePlaylists');
             const id = this.$store.state.playlist.id;
             this.$store.dispatch('mainplaylist/getPlaylist', { id });
-            setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 1000);
+            setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 250);
           } else {
             this.errMsg = this.$store.state.group.errMsg;
           }
@@ -90,6 +89,20 @@ export default {
             this.playlists = this.$store.state.group.playlists;
           } else {
             this.errMsg = this.$store.state.group.errMsg;
+          }
+        });
+    },
+    async deletePlaylist(id) {
+      this.$store.dispatch('group/deletePlaylist', { id })
+        .then(() => {
+          if (this.$store.state.group.errMsg === 'Could not delete playlist!') {
+            this.errMsg = 'Could not delete playlist!';
+          } else {
+            this.successMsg = this.$store.state.group.successMsg;
+            setTimeout(() => {
+              this.successMsg = '';
+            }, 500);
+            this.$socket.emit('updatePlaylists');
           }
         });
     },

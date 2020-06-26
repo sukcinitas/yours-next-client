@@ -90,7 +90,7 @@ export default {
             this.message = 'Successfully added!';
             setTimeout(() => {
               this.message = '';
-            }, 1000);
+            }, 500);
           }
         });
     },
