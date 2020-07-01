@@ -20,47 +20,41 @@
 </template>
 
 <script>
-import DataService from '../services/data.service';
-
 export default {
   name: 'VideoItemsData',
   data() {
     return {
-      items: [],
       errMsg: '',
     };
   },
-  props: {
-    initialPlaylist: Array,
-    nowPlayingVideoIndex: Number,
-  },
   computed: {
     activeIndex() {
-      return this.nowPlayingVideoIndex;
+      return this.$store.state.mainplaylist.nowPlayingVideoIndex;
     },
     playlist() {
-      return this.initialPlaylist;
+      return this.$store.state.mainplaylist.idsArray;
+    },
+    items() {
+      return this.$store.state.mainplaylist.items;
     },
     isModerator() {
       return this.$store.getters['group/isModerator'];
     },
   },
   methods: {
-    async getData(list) {
-      const data = await DataService.getVideos(list);
-      this.items = data.data.data.items;
-    },
     changeIndex(index) {
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
     },
     removeItemFromPlaylist(videoId) {
-      this.$store.commit('mainplaylist/addItemToPendingRemovalList', { item: videoId });
-      this.items = this.items.filter(item => item.id !== videoId);
-      this.$store.commit('mainplaylist/setPlaylist', { items: this.playlist.filter(item => item !== videoId) });
+      this.$socket.emit('addItemToPendingRemovalList', { item: videoId });
+      this.$socket.emit('updatePlaylist', {
+        idsArray: this.playlist.filter(item => item !== videoId),
+        items: this.items.filter(item => item.id !== videoId),
+      });
     },
   },
   mounted() {
-    this.getData(this.playlist.join(','));
+    this.$store.dispatch('mainplaylist/getPlaylistData');
   },
 };
 </script>

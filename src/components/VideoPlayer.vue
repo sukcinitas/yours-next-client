@@ -19,22 +19,17 @@ export default {
         autoplay: 1,
         color: 'white',
       },
-      items: [],
     };
-  },
-  props: {
-    initialPlaylist: Array,
-    nowPlayingVideoIndex: Number,
   },
   computed: {
     index() {
-      return this.nowPlayingVideoIndex;
+      return this.$store.state.mainplaylist.nowPlayingVideoIndex;
     },
     videoId() {
       return this.playlist[this.index];
     },
     playlist() {
-      return this.initialPlaylist;
+      return this.$store.state.mainplaylist.idsArray;
     },
   },
   methods: {
@@ -42,7 +37,7 @@ export default {
       this.end();
     },
     end() {
-      this.$store.dispatch('mainplaylist/removeItemsFromPlaylist', { id: this.$store.state.mainplaylist.id });
+      this.$store.dispatch('mainplaylist/removeItemsFromPlaylist');
       if (this.index === this.playlist.length - 1) {
         return;
       }

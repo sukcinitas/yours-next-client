@@ -1,21 +1,8 @@
 <template>
   <div>
-    <video-player v-if="initialPlaylist.length !== 0"
-      :initial-playlist="initialPlaylist"
-      :now-playing-video-index="index"
-    >
-    </video-player>
-    <video-items-data v-if="initialPlaylist.length !== 0"
-      :initial-playlist="initialPlaylist"
-      :now-playing-video-index="index"
-    >
-    </video-items-data>
-    <p
-      v-if="initialPlaylist.length === 0"
-      @click="gotToSearch"
-    >
-      Add some videos!
-    </p>
+    <p @click="gotToSearch">Add some videos!</p>
+    <video-player v-if="initialPlaylistLength !== 0"></video-player>
+    <video-items-data v-if="initialPlaylistLength !== 0"></video-items-data>
   </div>
 </template>
 
@@ -31,17 +18,8 @@ export default {
     };
   },
   computed: {
-    initialPlaylist() {
-      return this.$store.state.mainplaylist.idsArray;
-    },
-    index() {
-      return this.$store.state.mainplaylist.nowPlayingVideoIndex;
-    },
-  },
-  watch: {
-    initialPlaylist(newValue, oldValue) {
-      // eslint-disable-next-line no-console
-      console.log('changed', oldValue, newValue);
+    initialPlaylistLength() {
+      return this.$store.state.mainplaylist.idsArray.length;
     },
   },
   methods: {

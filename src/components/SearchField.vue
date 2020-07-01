@@ -82,11 +82,12 @@ export default {
       this.nextPageToken = data.data.data.nextPageToken || '';
     },
     async add(videoId) {
-      this.$store.dispatch('mainplaylist/addItemToPlaylist', { item: videoId })
-        .then(() => {
+      await this.$store.dispatch('mainplaylist/addItemToPlaylist', { item: videoId })
+        .then((data) => {
           if (this.$store.state.mainplaylist.errMsg) {
             this.message = this.$store.state.group.errMsg;
           } else {
+            this.$socket.emit('updatePlaylist', { idsArray: data.items, items: data.itemsData });
             this.message = 'Successfully added!';
             setTimeout(() => {
               this.message = '';

@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-
 /* eslint-disable no-unreachable */
 /* eslint-disable no-shadow */
 import GroupService from '../../services/group.service';
@@ -15,14 +14,15 @@ const state = () => ({
   member: null,
   messages: [],
   moderator: '',
+  ongoingPlaylistId: {
+    id: '',
+    videoIndex: 0,
+    time: 0,
+  },
 });
 
 // actions
 const actions = {
-  async SOCKET_joinmessage(context, payload) {
-    // eslint-disable-next-line no-console
-    console.log(payload.message);
-  },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
   },
@@ -32,9 +32,12 @@ const actions = {
   async SOCKET_setModerator({ commit }, payload) {
     commit('setModerator', { name: payload.name });
   },
-  async SOCKET_addMember({ commit }, payload) {
+  async SOCKET_addMember({ commit, state, dispatch }, payload) {
     commit('setChosenEmojis', { emoji: payload.emoji });
     commit('setActiveMembers', { name: payload.name, emoji: payload.emoji });
+    if (state.moderator === state.member.name) {
+      dispatch('mainplaylist/removeItemsFromPlaylist', {}, { root: true });
+    }
   },
   // only to this socket
   async SOCKET_setMember({ commit }, payload) {
@@ -77,7 +80,6 @@ const actions = {
   async deletePlaylist({ commit }, payload) {
     const { data } = await PlaylistService.delete(payload.id);
     if (data.success) {
-      // const playlists = this.playlists.filter(playlist => playlist._id !== payload.id);
       commit('setSuccessMsg', { message: 'Playlist has been successfully deleted!' });
     } else {
       commit('setErrorMsg', { error: 'Could not delete playlist!' });
@@ -136,6 +138,9 @@ const getters = {
     return state.moderator === state.member.name;
   },
   moderatorEmoji(state) {
+    if (state.member && state.moderator === state.member.name) {
+      return 'you';
+    }
     const moderator = state.activeMembers.filter(member => member.name === state.moderator);
     return moderator.length === 0 ? '' : moderator[0].emoji;
   },
