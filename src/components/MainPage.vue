@@ -43,6 +43,7 @@ export default {
       title: '',
       errMsg: '',
       successMsg: '',
+      playlists: this.$store.state.group.playlists,
     };
   },
   created() {
@@ -52,9 +53,9 @@ export default {
     activeMembers() {
       return this.$store.state.group.activeMembers;
     },
-    playlists() {
-      return this.$store.state.group.playlists;
-    },
+    // playlists() {
+    //   return this.$store.state.group.playlists;
+    // },
     isModerator() {
       return this.$store.getters['group/isModerator'];
     },

@@ -14,7 +14,7 @@ const state = () => ({
   member: null,
   messages: [],
   moderator: '',
-  ongoingPlaylistId: {
+  ongoingPlaylist: {
     id: '',
     videoIndex: 0,
     time: 0,
@@ -49,6 +49,16 @@ const actions = {
   },
   async SOCKET_updatePlaylists({ dispatch }) {
     dispatch('getPlaylists');
+  },
+  async SOCKET_setOngoingPlaylist({ commit, state }, payload) {
+    commit('setOngoingPlaylist', {
+      id: payload.id,
+      videoIndex: payload.videoIndex || state.ongoingPlaylist.videoIndex,
+      time: payload.time || state.ongoingPlaylist.time,
+    });
+  },
+  async SOCKET_changeOngoingPlaylistVideoIndex({ commit }, payload) {
+    commit('setOngoingPlaylistVideoIndex', { videoIndex: payload.videoIndex });
   },
   async authenticate({ commit }, payload) {
     const { data } = await GroupService.authenticate(payload);
@@ -126,6 +136,13 @@ const mutations = {
     state.chosenEmojis = payload.chosenEmojis;
     state.messages = payload.messages;
     state.moderator = payload.moderator;
+    state.ongoingPlaylist = payload.ongoingPlaylist;
+  },
+  setOngoingPlaylist(state, payload) {
+    state.ongoingPlaylist = payload;
+  },
+  setOngoingPlaylistVideoIndex(state, payload) {
+    state.ongoingPlaylist.videoIndex = payload.videoIndex;
   },
 };
 
@@ -143,6 +160,11 @@ const getters = {
     }
     const moderator = state.activeMembers.filter(member => member.name === state.moderator);
     return moderator.length === 0 ? '' : moderator[0].emoji;
+  },
+  isMainAnOngoingPlaylist(state, getters, rootState) {
+    // eslint-disable-next-line no-console
+    console.log(rootState, 'root');
+    return state.ongoingPlaylist.id === rootState.mainplaylist.id;
   },
 };
 

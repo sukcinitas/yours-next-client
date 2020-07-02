@@ -29,6 +29,9 @@ export default {
   },
   computed: {
     activeIndex() {
+      if (this.$store.getters['group/isMainAnOngoingPlaylist']) {
+        return this.$store.state.group.ongoingPlaylist.videoIndex;
+      }
       return this.$store.state.mainplaylist.nowPlayingVideoIndex;
     },
     playlist() {
@@ -43,6 +46,13 @@ export default {
   },
   methods: {
     changeIndex(index) {
+      if (!this.isModerator && this.$store.getters['group/isMainAnOngoingPlaylist']) {
+        return;
+      }
+      if (this.isModerator && this.$store.getters['group/isMainAnOngoingPlaylist']) {
+        this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: index });
+        return;
+      }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
     },
     removeItemFromPlaylist(videoId) {
