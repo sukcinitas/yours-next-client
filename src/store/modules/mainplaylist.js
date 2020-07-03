@@ -25,9 +25,9 @@ const actions = {
     if (data.success) {
       commit('setPlaylist', { items: data.playlist.items });
       commit('setId', { id: payload.id });
-    } else {
-      commit('setErrorMsg', { error: data.error });
+      return { success: true };
     }
+    return { success: false, errMsg: data.error };
   },
   async getPlaylistData({ commit, state }) {
     const { data } = await DataService.getVideos(state.idsArray.join(','));

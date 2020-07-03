@@ -20,7 +20,8 @@
       <span @click="makeModerator(member.name)"
         v-for="member in activeMembers"
         :key="member.emoji"
-        :title="member.name"
+        :title="`${member.name}
+${isModerator && moderator !== member.name ? `doubleclick to make ${member.name} moderator` : ''}`"
       >
       {{member.emoji}}
       </span>
@@ -43,7 +44,6 @@ export default {
       title: '',
       errMsg: '',
       successMsg: '',
-      playlists: this.$store.state.group.playlists,
     };
   },
   created() {
@@ -53,68 +53,75 @@ export default {
     activeMembers() {
       return this.$store.state.group.activeMembers;
     },
-    // playlists() {
-    //   return this.$store.state.group.playlists;
-    // },
+    playlists() {
+      return this.$store.state.playlist.playlists;
+    },
     isModerator() {
       return this.$store.getters['group/isModerator'];
+    },
+    moderator() {
+      return this.$store.state.group.moderator;
     },
   },
   methods: {
     toggleExtended() {
       this.isExtended = !this.isExtended;
     },
+    async getPlaylists() {
+      this.$store.dispatch('playlist/getPlaylists')
+        .then((result) => {
+          if (!result.success) {
+            this.errMsg = result.errMsg;
+          }
+        });
+    },
     async addPlaylist() {
+      if (this.$store.getters['playlist/playlistsTitles'].indexOf(this.title) > -1) {
+        this.errMsg = 'Playlist with this title already exists!';
+        return;
+      }
       this.$store.dispatch('playlist/addPlaylist', { title: this.title })
-        .then(() => {
-          if (this.$store.state.playlist.successMsg) {
-            this.successMsg = this.$store.state.playlist.successMsg;
-            this.$socket.emit('updatePlaylists');
-            const id = this.$store.state.playlist.id;
-            this.$store.dispatch('mainplaylist/getPlaylist', { id });
+        .then((result) => {
+          if (result.success) {
+            this.successMsg = result.successMsg;
+            this.$socket.emit('updatePlaylists', { playlists: result.playlists });
+            this.$store.dispatch('mainplaylist/getPlaylist', { id: result.id });
             setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 250);
           } else {
-            this.errMsg = this.$store.state.group.errMsg;
+            this.errMsg = result.errMsg;
           }
         });
       this.isExtended = false;
     },
     async goToPlaylist(id) {
       this.$store.dispatch('mainplaylist/getPlaylist', { id })
-        .then(() => {
-          if (this.$store.state.mainplaylist.errMsg) {
-            this.errMsg = this.$store.state.group.errMsg;
+        .then((result) => {
+          if (!result.success) {
+            this.errMsg = result.errMsg;
             return;
           }
           this.$router.push({ name: 'MainPlaylist' });
         });
     },
-    async getPlaylists() {
-      this.$store.dispatch('group/getPlaylists')
-        .then(() => {
-          if (this.$store.state.group.playlists.length !== 0) {
-            this.playlists = this.$store.state.group.playlists;
-          } else {
-            this.errMsg = this.$store.state.group.errMsg;
-          }
-        });
-    },
     async deletePlaylist(id) {
-      this.$store.dispatch('group/deletePlaylist', { id })
-        .then(() => {
-          if (this.$store.state.group.errMsg === 'Could not delete playlist!') {
-            this.errMsg = 'Could not delete playlist!';
+      this.$store.dispatch('playlist/deletePlaylist', { id })
+        .then((result) => {
+          if (!result.success) {
+            this.errMsg = result.errMsg;
           } else {
-            this.successMsg = this.$store.state.group.successMsg;
+            this.successMsg = result.successMsg;
             setTimeout(() => {
               this.successMsg = '';
             }, 500);
-            this.$socket.emit('updatePlaylists');
+            this.$socket.emit('updatePlaylists', { playlists: result.playlists });
           }
         });
     },
     makeModerator(name) {
       if (this.isModerator) {
+        if (this.moderator === name) {
+          return;
+        }
         this.$socket.emit('setModerator', name);
       }
     },

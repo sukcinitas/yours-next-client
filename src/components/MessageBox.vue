@@ -16,12 +16,19 @@ export default {
   data() {
     return {
       message: '',
-      emojis: ['😃', '😍'],
     };
+  },
+  computed: {
+    emojis() {
+      return this.$store.state.group.messageEmojis;
+    },
+    memberName() {
+      return this.$store.state.group.member.name;
+    },
   },
   methods: {
     handleSubmit() {
-      this.$socket.emit('sendMessage', { message: this.message, member: this.$store.state.group.member.name });
+      this.$socket.emit('sendMessage', { message: this.message, member: this.memberName });
       this.message = '';
     },
     addEmoji(emoji) {

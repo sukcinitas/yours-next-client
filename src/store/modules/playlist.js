@@ -3,44 +3,64 @@
 import PlaylistService from '../../services/playlist.service';
 // initial state
 const state = () => ({
-  successMsg: '',
-  errMsg: '',
-  id: '',
+  playlists: [],
 });
 
 // actions
 const actions = {
-  async addPlaylist({ commit, rootState }, payload) {
+  async SOCKET_updatePlaylists({ commit }, payload) {
+    commit('setPlaylists', { playlists: payload.playlists });
+  },
+  async getPlaylists({ rootState, commit }) {
+    const { data } = await PlaylistService.getAll(rootState.group.name);
+    if (data.success) {
+      if (data.playlists.length === 0) {
+        return { success: false, errMsg: 'You have not created any playlists yet!' };
+      }
+      commit('setPlaylists', { playlists: data.playlists });
+      return { success: true };
+    }
+    return { success: false, errMsg: data.message };
+  },
+  async addPlaylist({ rootState, state }, payload) {
     const { data } = await PlaylistService.post({
       title: payload.title,
       createdBy: rootState.group.name,
     });
     if (data.success) {
-      commit('setSuccessMsg', { message: data.message });
+      const playlists = [...state.playlists, data.playlist];
       // eslint-disable-next-line no-underscore-dangle
-      commit('setId', { id: data.playlist._id });
-    } else {
-      commit('setErrorMsg', { error: data.error });
+      return { success: true, successMsg: data.message, playlists, id: data.playlist._id };
     }
+    return { success: false, errMsg: data.message };
+  },
+  async deletePlaylist({ state }, payload) {
+    const { data } = await PlaylistService.delete(payload.id);
+    if (data.success) {
+      // eslint-disable-next-line no-underscore-dangle
+      const playlists = state.playlists.filter(playlist => playlist._id !== payload.id);
+      return { success: true, successMsg: 'Playlist has been successfully deleted!', playlists };
+    }
+    return { success: false, errMsg: 'Could not delete playlist!' };
   },
 };
 // mutations
 const mutations = {
-  setErrorMsg(state, payload) {
-    state.errMsg = payload.error;
+  setPlaylists(state, payload) {
+    state.playlists = payload.playlists;
   },
-  setSuccessMsg(state, payload) {
-    state.successMsg = payload.message;
-  },
-  setId(state, payload) {
-    state.id = payload.id;
+};
+// getters
+const getters = {
+  playlistsTitles(state) {
+    return state.playlists.map(playlist => playlist.title);
   },
 };
 
-// getters
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
+  getters,
 };

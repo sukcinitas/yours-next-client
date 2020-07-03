@@ -2,22 +2,20 @@
   <section>
       <button
         @click="toggleExtended"
-        type="text">Join a group
+        type="button">Join a group
       </button>
-     <form @submit.prevent="handleSubmit">
+     <form @submit.prevent="handleSubmit" v-if="isExtended">
       <input
-        v-if="isExtended"
         v-model="name"
         type="text"
         placeholder="Enter the group name"
       >
       <input
-        v-if="isExtended"
         v-model="passcode"
         type="password"
         placeholder="Enter the passcode"
       >
-      <button tyep="submit" v-if="isExtended" :disabled="!name || !passcode">></button>
+      <button tyep="submit" :disabled="!name || !passcode">></button>
     </form>
     <p v-if="errMsg">{{errMsg}}</p>
   </section>
@@ -43,12 +41,12 @@ export default {
     },
     async handleSubmit() {
       this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })
-        .then(() => {
-          if (this.$store.state.group.name) {
-            this.$socket.emit('authenticate', { name: this.name });
+        .then((result) => {
+          if (result.success) {
+            this.$socket.emit('getInitialState', { name: this.name });
             this.$router.push({ name: 'MemberCreate' });
           } else {
-            this.errMsg = this.$store.state.group.errMsg;
+            this.errMsg = result.errMsg;
           }
         });
     },

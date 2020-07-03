@@ -11,7 +11,7 @@
         <button @click="checkIfMemberNameExists" :disabled="!name">></button>
       </div>
 
-      <div v-if="isShowingEmojiSelection">
+      <div v-else>
         <h6>Choose an icon</h6>
         <button
           v-for="(emoji, index) in emojisFreeToSet"
@@ -40,26 +40,27 @@ export default {
       return this.$store.state.group.name;
     },
     emojisFreeToSet() {
-      const initial = ['🦄', '🐧', '🐍', '🌞', '🍆', '👩🏻‍🦰'];
-      const filtered = [];
-      for (let i = 0; i < initial.length; i += 1) {
-        if (!this.$store.state.group.chosenEmojis.includes(initial[i])) {
-          filtered.push(initial[i]);
-        }
-      }
-      return filtered;
+      return this.$store.getters['group/emojisFreeToSet'];
+    },
+    memberNameExists() {
+      return this.$store.getters['group/activeMembersNames'].indexOf(this.name) >= 0;
     },
   },
   methods: {
     checkIfMemberNameExists() {
-      if ((this.$store.getters['group/activeMembersNames']).indexOf(this.name) >= 0) {
+      if (this.memberNameExists) {
         this.errMsg = 'Name is already in use!';
       } else {
         this.isShowingEmojiSelection = true;
       }
     },
     async addMember(emoji) {
-      this.$socket.emit('setMember', { name: this.name, emoji });
+      if (this.memberNameExists) { // extra if names are being created in parallel
+        this.errMsg = 'Name is already in use!';
+        this.isShowingEmojiSelection = false;
+        return;
+      }
+      this.$socket.emit('setMember', { name: this.name, emoji }); // only this socket
       this.$socket.emit('addMember', { name: this.name, emoji });
       this.$router.push({ name: 'MainPage' });
     },
