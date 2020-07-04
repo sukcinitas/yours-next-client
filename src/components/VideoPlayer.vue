@@ -1,12 +1,11 @@
 <template>
 <div>
+  <button v-if="isModerator" @click="makePlaylistMain">Make main</button>
   <youtube
     :video-id="videoId"
     :player-vars="playerVars"
     ref="youtube"
     @ended="ended"
-    @playing="playing"
-    @paused="paused"
   >
   </youtube>
 </div>
@@ -20,15 +19,24 @@ export default {
       playerVars: {
         autoplay: 1,
         color: 'white',
-        controls: 1,
+        controls: 0,
       },
       message: '',
     };
   },
   computed: {
+    time() {
+      return this.$store.state.mainplaylist.ongoingPlaylist.time;
+    },
+    isMainAnOngoingPlaylist() {
+      return this.$store.getters['mainplaylist/isMainAnOngoingPlaylist'];
+    },
+    isModerator() {
+      return this.$store.getters['group/isModerator'];
+    },
     index() {
-      if (this.$store.getters['group/isMainAnOngoingPlaylist']) {
-        return this.$store.state.group.ongoingPlaylist.videoIndex;
+      if (this.isMainAnOngoingPlaylist) {
+        return this.$store.state.mainplaylist.ongoingPlaylist.videoIndex;
       }
       return this.$store.state.mainplaylist.nowPlayingVideoIndex;
     },
@@ -38,38 +46,76 @@ export default {
     playlist() {
       return this.$store.state.mainplaylist.idsArray;
     },
+    isOngoingPlaylistPaused() {
+      return this.$store.getters['mainplaylist/isOngoingPlaylistPaused'];
+    },
+    isOngoingPlaylistPlaying() {
+      return this.$store.getters['mainplaylist/isOngoingPlaylistPlaying'];
+    },
   },
   methods: {
     async ended() {
       this.end();
     },
-    async playing() {
-      // eslint-disable-next-line no-console
-      this.message = 'p';
+    pause() {
+      if (this.isModerator && this.isMainAnOngoingPlaylist) {
+        this.$socket.emit('pauseOngoingPlaylist');
+      }
     },
-    async paused() {
-      // eslint-disable-next-line no-console
-      this.message = 'paused';
+    play() {
+      if (this.isModerator && this.isMainAnOngoingPlaylist) {
+        this.$socket.emit('playOngoingPlaylist');
+      }
     },
     end() {
-      this.$store.dispatch('mainplaylist/removeItemsFromPlaylist');
+      // this.$store.dispatch('mainplaylist/removeItemsFromPlaylist');
       if (this.index === this.playlist.length - 1) {
         return;
       }
-      if (!this.$store.getters['group/isModerator'] && this.$store.getters['group/isMainAnOngoingPlaylist']) {
-        this.$socket.emit('group/ongoingPlaylistVideoIndex', this.index + 1);
+      if (this.isModerator && this.isMainAnOngoingPlaylist) {
+        this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: this.index + 1 });
       }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
     },
-  },
-  beforeDestroy() {
-    this.$store.dispatch('mainplaylist/removeItemsFromPlaylist', { id: this.$store.state.mainplaylist.id });
+    fixateState(state) {
+      if (state.data === 2) {
+        this.pause();
+      } else if (state.data === 1) {
+        this.play();
+      }
+    },
+    async makePlaylistMain() {
+      this.$socket.emit('setOngoingPlaylist', {
+        id: this.$store.state.mainplaylist.id,
+        videoIndex: this.$store.state.mainplaylist.nowPlayingVideoIndex,
+        time: await this.$refs.youtube.player.getCurrentTime(),
+      });
+    },
   },
   mounted() {
-    if (!this.$store.getters['group/isModerator'] && this.$store.getters['group/isMainAnOngoingPlaylist']) {
-      this.playerVars.controls = 0;
+    if (!this.isModerator && this.isMainAnOngoingPlaylist) {
       this.$refs.youtube.player.mute();
+      // this.$refs.youtube.player.seekTo(time, true);
     }
+    this.$refs.youtube.player.addEventListener('onStateChange', this.fixateState);
+  },
+  updated() {
+    if (!this.isModerator && this.isMainAnOngoingPlaylist) {
+      const time = this.time;
+      this.$refs.youtube.player.mute();
+      // eslint-disable-next-line no-console
+      console.log(time);
+      this.$refs.youtube.player.seekTo(time, false);
+    }
+    if (this.isOngoingPlaylistPaused) {
+      this.$refs.youtube.player.pauseVideo();
+    }
+    if (this.isOngoingPlaylistPlaying) {
+      this.$refs.youtube.player.playVideo();
+    }
+  },
+  beforeDestroy() {
+    this.$refs.youtube.player.removeEventListener('onStateChange', this.fixateState);
   },
 };
 </script>

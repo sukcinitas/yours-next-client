@@ -83,11 +83,11 @@ export default {
     },
     async add(videoId) {
       await this.$store.dispatch('mainplaylist/addItemToPlaylist', { item: videoId })
-        .then((data) => {
-          if (this.$store.state.mainplaylist.errMsg) {
-            this.message = this.$store.state.group.errMsg;
+        .then((result) => {
+          if (!result.success) {
+            this.message = result.errMsg;
           } else {
-            this.$socket.emit('updatePlaylist', { idsArray: data.items, items: data.itemsData });
+            this.$socket.emit('updatePlaylist', { idsArray: result.items, items: result.itemsData });
             this.message = 'Successfully added!';
             setTimeout(() => {
               this.message = '';

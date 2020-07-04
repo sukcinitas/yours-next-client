@@ -94,6 +94,7 @@ export default {
       this.isExtended = false;
     },
     async goToPlaylist(id) {
+      this.$store.commit('mainplaylist/setId', { id });
       this.$store.dispatch('mainplaylist/getPlaylist', { id })
         .then((result) => {
           if (!result.success) {

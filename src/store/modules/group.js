@@ -11,11 +11,6 @@ const state = () => ({
   moderator: '',
   initialEmojis: ['🦄', '🐧', '🐍', '🌞', '🍆', '🦇'],
   messageEmojis: ['😀', '😍', '🤣'],
-  ongoingPlaylist: {
-    id: '',
-    videoIndex: 0,
-    time: 0,
-  },
 });
 
 // actions
@@ -42,11 +37,8 @@ const actions = {
   async SOCKET_setModerator({ commit }, payload) {
     commit('setModerator', { name: payload.name });
   },
-  async SOCKET_addMember({ commit, state, dispatch }, payload) {
+  async SOCKET_addMember({ commit }, payload) {
     commit('setActiveMembers', { name: payload.name, emoji: payload.emoji });
-    if (state.moderator === state.member.name) {
-      dispatch('mainplaylist/removeItemsFromPlaylist', {}, { root: true });
-    }
   },
   async SOCKET_setMember({ commit }, payload) { // only to this socket
     commit('setMember', { name: payload.name, emoji: payload.emoji });
@@ -56,16 +48,6 @@ const actions = {
   },
   async SOCKET_sendMessage({ commit }, payload) {
     commit('setMessage', { message: payload.message, member: payload.member });
-  },
-  async SOCKET_setOngoingPlaylist({ commit, state }, payload) {
-    commit('setOngoingPlaylist', {
-      id: payload.id,
-      videoIndex: payload.videoIndex || state.ongoingPlaylist.videoIndex,
-      time: payload.time || state.ongoingPlaylist.time,
-    });
-  },
-  async SOCKET_changeOngoingPlaylistVideoIndex({ commit }, payload) {
-    commit('setOngoingPlaylistVideoIndex', { videoIndex: payload.videoIndex });
   },
 };
 // mutations
@@ -95,12 +77,6 @@ const mutations = {
     state.moderator = payload.moderator;
     state.ongoingPlaylist = payload.ongoingPlaylist;
   },
-  setOngoingPlaylist(state, payload) {
-    state.ongoingPlaylist = payload;
-  },
-  setOngoingPlaylistVideoIndex(state, payload) {
-    state.ongoingPlaylist.videoIndex = payload.videoIndex;
-  },
 };
 
 // getters
@@ -117,9 +93,6 @@ const getters = {
     }
     const moderator = state.activeMembers.filter(member => member.name === state.moderator);
     return moderator.length === 0 ? '' : moderator[0].emoji;
-  },
-  isMainAnOngoingPlaylist(state, rootState) {
-    return state.ongoingPlaylist.id === rootState.mainplaylist.id;
   },
   emojisFreeToSet(state) {
     const chosenEmojis = state.activeMembers.map(member => member.emoji);
