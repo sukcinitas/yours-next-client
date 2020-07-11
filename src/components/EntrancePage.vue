@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1 class="header">yours next</h1>
     <authenticate-member></authenticate-member>
     <create-group></create-group>
   </div>
@@ -18,3 +19,10 @@ export default {
   components: { AuthenticateMember, CreateGroup },
 };
 </script>
+
+<style lang="scss" scoped>
+  .header {
+    font-size: 2rem;
+    margin-bottom: 2em;
+  }
+</style>

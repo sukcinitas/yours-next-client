@@ -1,21 +1,31 @@
 <template>
   <section>
-    <button
-      @click="extend"
-      type="button">Create a group
-    </button>
-    <form @submit.prevent="handleSubmit" v-if="isExtended">
+    <form @submit.prevent="handleSubmit" class="form">
+      <button
+        @click="extend"
+        type="button"
+        :class="['btn--form', 'elem-1']"
+        >
+        Create a group
+      </button>
       <input
         v-model="name"
         type="text"
         placeholder="Enter the group name"
+        :class="[{'elem-2--extended': isExtended}, {'elem-2':!isExtended}]"
       >
       <input
         v-model="passcode"
         type="password"
         placeholder="Enter the passcode"
+        :class="[{'elem-3--extended': isExtended}, {'elem-3':!isExtended}]"
       >
-      <button type="submit">></button>
+      <button
+        type="submit"
+        :class="['btn--form', {'elem-4--extended': isExtended}, {'elem-4':!isExtended}]"
+      >
+      >
+      </button>
     </form>
     <p v-if="errMsg">{{errMsg}}</p>
   </section>
@@ -57,3 +67,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  @import '@/scss/shared-styles-forms.scss';
+</style>
