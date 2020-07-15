@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-.btn--form {
+
+.btn {
   background-color: rgb(228, 228, 228);
   color: rgb(82, 82, 82);
   border: none;
@@ -7,6 +8,11 @@
   font-size: 24px;
   text-transform: uppercase;
   text-align: center;
+  width: 205px;
+  height: 38px;
+  padding: 2px;
+  margin: 2px;
+  border: 2px solid rgb(228, 228, 228);
   transition: background-color 0.25s,
               color 0.25s;
 
@@ -17,4 +23,55 @@
     transition: background-color 0.3s,
                 color 0.3s;
   }
+  &--small {
+    @extend .btn;
+    width: 30px;
+    justify-content: center;
+  }
+  &--emoji {
+    @extend .btn;
+    justify-content: center;
+    background-color: transparent;
+    font-size: 30px;
+    width: 40px;
+    height: 40px;
+    padding: 2px 8px;
+    margin: 10px;
+  }
+}
+.inpt {
+  @extend .btn;
+  border: 2px solid rgb(192, 192, 192);
+  color: #272727;
+  background-color: white;
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  text-transform: none;
+  &:hover, &:focus {
+    border: 2px solid rgb(192, 192, 192);
+    background-color: rgb(255, 255, 232);
+    cursor: auto;
+    color: #272727;
+    transition: none;
+  }
+}
+.message--error {
+  margin: 10px auto;
+  max-width: 400px;
+  padding: 2px;
+  display: block;
+  text-align: center;
+  color: rgb(211, 13, 13);
+  font-family: 'Oswald', sans-serif;
+}
+
+.heading {
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-family: 'Anton', sans-serif;
+}
+.subheading {
+  margin-bottom: 50px;
+  font-size: 24px;
+  font-family: 'Anton', sans-serif;
 }

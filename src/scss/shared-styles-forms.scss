@@ -1,5 +1,8 @@
 @import '@/scss/shared-styles-buttons.scss';
 @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+
 $form-transition-time: 0.15s;
 html {
   -webkit-box-sizing: border-box;
@@ -14,20 +17,25 @@ html {
   margin: 0;
   }
 
-.form {
+.emoji-box {
+  margin: 0 auto;
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.entry-form {
   margin: 0 auto;
   width: 900px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  .elem-1 {
-    width: 205px;
-    height: 38px;
-    padding: 2px;
-    margin: 2px;
-    border: 2px solid rgb(228, 228, 228);
+  &__button {
+    @extend .btn;
   }
-  .elem-2, .elem-3 {
+  &__input-1, &__input-2 {
     width: 0;
     height: 0;
     padding: 0;
@@ -37,21 +45,12 @@ html {
     transition: width $form-transition-time  ease-in;
     -webkit-transition: width $form-transition-time  ease-in;
     &--extended {
-      @extend .elem-1;
-      border: 2px solid rgb(192, 192, 192);
+      @extend .inpt;
       transition: width $form-transition-time  ease-in;
       -webkit-transition: width $form-transition-time  ease-in;
-      color: #272727;
-      font-family: 'Oswald', sans-serif;
-      font-size: 16px;
-
-      &:hover, &:focus {
-        border: 2px solid rgb(192, 192, 192);
-        background-color: rgb(255, 255, 197);
-      }
     }
   }
-  .elem-3 {
+  &__input-2 {
     transition: width $form-transition-time ease-in;
     -webkit-transition: width $form-transition-time  ease-in;
     &--extended {
@@ -60,24 +59,35 @@ html {
       transition-delay: 0.3s;
     }
   }
-  .elem-4 {
+  &__button--small {
     display: none;
     &--extended {
       display: inherit;
-      @extend .elem-1;
-      width: 30px;
-      text-align: center;
-      justify-content: center;
+      @extend .btn--small;
     }
   }
 } 
 
-.error {
-  margin: 10px auto;
-  max-width: 400px;
-  padding: 2px;
-  display: block;
-  text-align: center;
-  color: rgb(211, 13, 13);
-  font-family: 'Oswald', sans-serif;
+.create-member-form {
+  @extend .entry-form;
+  flex-direction: column;
+  align-items: center;
+  &__input {
+    @extend .inpt;
+  }
+  &__button--small {
+    @extend .btn--small;
+  }
+  &__button--emoji {
+    @extend .btn--emoji;
+  }
+  &__heading {
+    @extend .heading;
+  }
+  &__subheading {
+    @extend .subheading;
+  }
+  &__emoji-box {
+    @extend .emoji-box;
+  }
 }
