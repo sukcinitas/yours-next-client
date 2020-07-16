@@ -1,42 +1,63 @@
 <template>
-  <section>
-    <p v-if="errMsg">{{errMsg}}</p>
-    <p v-if="successMsg">{{successMsg}}</p>
-    <div v-for="playlist in playlists" :key="playlist.title">
-      <button
-        @click="goToPlaylist(playlist._id)">{{playlist.title}}
-      </button>
-      <button
-        v-if="isModerator"
-        @click="deletePlaylist(playlist._id)"
-      >X
+  <main :class="{main: !isMessagesTurnedOff, 'main--chat-off': isMessagesTurnedOff}">
+    <div class=header>
+      <button class="header__button" v-if="this.$store.state.group.member" @click="toggleMessages">
+      {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
       </button>
     </div>
-    <input type="text" v-model="title" v-if="isExtended">
-    <button
-      @click="isExtended ? addPlaylist() : toggleExtended()">{{isExtended ? 'Add' : '+'}}
-    </button>
-    <div>
-      <span @click="makeModerator(member.name)"
-        v-for="member in activeMembers"
-        :key="member.emoji"
-        :title="`${member.name}
-${isModerator && moderator !== member.name ? `doubleclick to make ${member.name} moderator` : ''}`"
-      >
-      {{member.emoji}}
-      </span>
+
+    <div class="playlists">
+      <div v-for="playlist in playlists" :key="playlist.title">
+        <div class="playlists__playlist">
+          <button
+          class="playlists__name"
+          @click="goToPlaylist(playlist._id)">{{playlist.title}}
+          </button>
+          <button
+            class="playlists__remove-button"
+            v-if="isModerator"
+            @click="deletePlaylist(playlist._id)"
+          >X
+          </button>
+        </div>
+      </div>
+      <p v-if="errMsg" class="message--error">{{errMsg}}</p>
+      <p v-if="successMsg" class="message--success">{{successMsg}}</p>
+      <form class="create-playlist-form" submit.prevent="addPlaylist">
+        <input type="text" v-model="title" v-if="isExtended" class="create-playlist-form__input">
+        <button
+          v-if="isExtended"
+          class="create-playlist-form__button"
+          @click="addPlaylist"
+          type="submit"
+        >
+          Add
+        </button>
+        <button
+          v-else
+          class="create-playlist-form__button--small"
+          @click="toggleExtended"
+          type="button"
+        >+
+        </button>
+      </form>
     </div>
-    <message-box></message-box>
-  </section>
+    <message-box :class="{'message-box': !isMessagesTurnedOff,
+     'message-box--off': isMessagesTurnedOff}">
+    </message-box>
+    <members-list></members-list>
+  </main>
 </template>
 
 <script>
 import MessageBox from './MessageBox';
+import MembersList from './MembersList';
 
 export default {
   name: 'MainPage',
   components: {
     'message-box': MessageBox,
+    'members-list': MembersList,
   },
   data() {
     return {
@@ -44,15 +65,13 @@ export default {
       title: '',
       errMsg: '',
       successMsg: '',
+      isMessagesTurnedOff: false,
     };
   },
   created() {
     return this.getPlaylists();
   },
   computed: {
-    activeMembers() {
-      return this.$store.state.group.activeMembers;
-    },
     playlists() {
       return this.$store.state.playlist.playlists;
     },
@@ -118,14 +137,14 @@ export default {
           }
         });
     },
-    makeModerator(name) {
-      if (this.isModerator) {
-        if (this.moderator === name) {
-          return;
-        }
-        this.$socket.emit('setModerator', name);
-      }
+    toggleMessages() {
+      this.isMessagesTurnedOff = !this.isMessagesTurnedOff;
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  @import '@/scss/shared-styles-forms.scss';
+  @import '@/scss/shared-styles-buttons.scss';
+</style>

@@ -25,7 +25,7 @@
        {'entry-form__button--small':!isExtended}]"
     >>
     </button>
-    <p v-if="errMsg" class="error">{{errMsg}}</p>
+    <p v-if="errMsg" class="message--error">{{errMsg}}</p>
   </form>
 </template>
 

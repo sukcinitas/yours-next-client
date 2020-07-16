@@ -31,7 +31,7 @@
         {{emoji}}
         </button>
       </div>
-      <p v-if="errMsg && !isShowingEmojiSelection" class="error">{{errMsg}}</p>
+      <p v-if="errMsg && !isShowingEmojiSelection" class="message--error">{{errMsg}}</p>
     </form>
 </template>
 

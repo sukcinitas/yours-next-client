@@ -1,4 +1,10 @@
 <template>
+  <div>
+    <div>
+      <p v-for="(message, index) in messages" :key="index">
+        {{`${message.name}: ${message.message}`}}
+      </p>
+    </div>
     <form @submit.prevent="handleSubmit">
       <input type="text" v-model="message">
       <div>
@@ -8,6 +14,8 @@
       </div>
       <button type="submit">Submit</button>
     </form>
+</div>
+
 </template>
 
 <script>
@@ -19,6 +27,9 @@ export default {
     };
   },
   computed: {
+    messages() {
+      return this.$store.state.group.messages;
+    },
     emojis() {
       return this.$store.state.group.messageEmojis;
     },
