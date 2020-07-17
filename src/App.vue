@@ -14,16 +14,28 @@ export default {
 </script>
 
 <style>
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+  padding: 0;
+  margin: 0;
+}
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  min-height: 100%;
 }
 #app {
-  /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center; */
-  color: #3a3a39;
+  padding-top: 60px;
+  height: 100vh;
+  min-height: 100vh;
 }
 .active {
   position: absolute;

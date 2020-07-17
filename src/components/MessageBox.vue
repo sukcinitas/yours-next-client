@@ -1,18 +1,18 @@
 <template>
   <div>
-    <div>
+    <div class="message-box__messages">
       <p v-for="(message, index) in messages" :key="index">
         {{`${message.name}: ${message.message}`}}
       </p>
     </div>
-    <form @submit.prevent="handleSubmit">
-      <input type="text" v-model="message">
-      <div>
-        <p v-for="emoji in emojis" :key="emoji" @click="addEmoji(emoji)">
+    <form @submit.prevent="handleSubmit" class="message-box__message-form">
+      <textarea type="text" v-model="message" class="message-box__textarea" rows=2></textarea>
+      <div class="message-box__emojies">
+        <span v-for="emoji in emojis" :key="emoji" @click="addEmoji(emoji)">
           {{emoji}}
-        </p>
+        </span>
       </div>
-      <button type="submit">Submit</button>
+      <button class="message-box__button" type="submit">Submit</button>
     </form>
 </div>
 
@@ -48,3 +48,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  @import '@/scss/message-box';
+</style>

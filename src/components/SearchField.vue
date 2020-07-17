@@ -1,6 +1,9 @@
 <template>
   <div class="search">
-    <p v-if="message">{{message}}</p>
+    <p>Playlist id: PLcCyuE3mscVFQbqG4SbusOGJbrkaJoeY4</p>
+    <p class="search__message--error" v-if="errorMessage && !chosenVideoId">{{errorMessage}}</p>
+    <p class="search__message--success"
+    v-if="successMessage && !chosenVideoId">{{successMessage}}</p>
     <div class="search__search-field">
       <input type="text" v-model="queryOrId" class=search__input>
       <button @click="search" class="search__button">Search</button>
@@ -26,34 +29,41 @@
       </button>
     </div>
 
-    <div v-if="picked === 'searchAll'" class="search__search-result">
-      <div v-for="item in items" :key="item.id.videoId" @click="add(item.id.videoId)">
+    <div v-if="picked === 'searchAll'" class="search__search-results">
+      <div v-for="item in items" :key="item.id.videoId"
+      @click="add(item.id.videoId)" class="search__search-result">
+        <p class="search__message--error"
+v-if="errorMessage && chosenVideoId === item.id.videoId">{{errorMessage}}</p>
+        <p class="search__message--success"
+v-if="successMessage && chosenVideoId === item.id.videoId">{{successMessage}}</p>
         <h1 class="search__heading">{{item.snippet.title}}</h1>
         <img class="search__img" :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
       </div>
     </div>
 
-    <div v-else-if="picked === 'searchPlaylists'" class="search__search-result">
-      <div v-for="item in playlists" :key="item.id" >
+    <div v-else-if="picked === 'searchPlaylists'" class="search__search-results">
+      <div v-for="item in playlists" :key="item.id" class="search__search-result">
         <h1 class="search__heading" @click="explorePlaylist(item.id)">{{item.snippet.title}}</h1>
         <img class="search__img" :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
-        <hr>
       </div>
     </div>
 
-    <div v-else-if="picked === 'searchPlaylistItems'">
+    <div v-else-if="picked === 'searchPlaylistItems'" class="search__search-results">
       <div
-       class="search__search-result"
+        class="search__search-result"
         v-for="item in items"
         :key="item.snippet.resourceId.videoId"
         @click="add(item.snippet.resourceId.videoId)"
       >
+        <p class="search__message--error"
+v-if="errorMessage && chosenVideoId === item.snippet.resourceId.videoId">{{errorMessage}}</p>
+        <p class="search__message--success"
+v-if="successMessage && chosenVideoId === item.snippet.resourceId.videoId">{{successMessage}}</p>
         <h1  class="search__heading">{{item.snippet.title}}</h1>
-        <img class="search__img" :src="item.snippet.thumbnails.high.url"
+        <img class="search__img" :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
-        <hr>
       </div>
     </div>
 
@@ -73,7 +83,9 @@ export default {
       playlists: [],
       prevPageToken: '',
       nextPageToken: '',
-      message: '',
+      errorMessage: '',
+      successMessage: '',
+      chosenVideoId: '',
     };
   },
   methods: {
@@ -96,13 +108,17 @@ export default {
       await this.$store.dispatch('mainplaylist/addItemToPlaylist', { item: videoId })
         .then((result) => {
           if (!result.success) {
-            this.message = result.errMsg;
+            this.errorMessage = result.errMsg;
+            this.chosenVideoId = videoId;
           } else {
             this.$socket.emit('updatePlaylist', { idsArray: result.items, items: result.itemsData });
-            this.message = 'Successfully added!';
+            this.successMessage = 'Successfully chosen!';
+            this.chosenVideoId = videoId;
             setTimeout(() => {
-              this.message = '';
-            }, 500);
+              this.errorMessage = '';
+              this.successMessage = '';
+              this.chosenVideoId = '';
+            }, 355500);
           }
         });
     },
@@ -147,6 +163,5 @@ export default {
 
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-forms.scss';
-  @import '@/scss/shared-styles-buttons.scss';
+  @import '@/scss/search-field.scss';
 </style>
