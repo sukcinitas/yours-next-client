@@ -20,6 +20,7 @@
                "playlists"
                "members";
     grid-template-columns: 1fr;
+    grid-template-rows: 2fr 6fr 1fr;
     justify-content: space-between;
   }
 }
@@ -70,5 +71,27 @@
   }
   &__button--small {
     @extend .btn--medium;
+  }
+}
+
+@media only screen and (max-width: 768px)  {
+  .main {
+    height: auto;
+    padding: 5px 10px;
+    grid-template-areas: "header"
+               "playlists"
+               "members"
+               "messages";
+    grid-template-columns: 1fr;
+    &--chat-off {
+      padding: 5px 10px;
+      height: auto;
+    }
+  }
+  .playlists {
+    min-height: 400px;
+    border-bottom: 2px solid silver;
+    max-width: 94%;
+    width: 94%;
   }
 }

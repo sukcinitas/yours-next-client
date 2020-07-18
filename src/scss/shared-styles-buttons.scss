@@ -35,10 +35,11 @@
   }
   &--emoji {
     @extend .btn;
+    border: none;
     justify-content: center;
     background-color: transparent;
     font-size: 30px;
-    width: 40px;
+    width: 50px;
     height: 50px;
     border-radius:50%;
     padding: 2px 8px;
@@ -108,98 +109,3 @@
   font-family: 'Anton', sans-serif;
   font-weight: 500;
 }
-// .members {
-//   grid-area: members;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-//   align-items: end;
-//   &__member {
-//     display: inline-block;
-//     font-size: 18px;
-//     margin: 2px;
-//     height: 24px;
-//     width: 24px;
-//     text-align: center;
-//     border-bottom: 2px solid transparent;
-//     position: relative;
-//     &:hover {
-//       font-size: 20px;
-//     }
-//   }
-//   &__moderator {
-//     border-bottom: 2px solid gold;
-//   }
-//   &__name {
-//     color: gold;
-//   }
-//   &__tooltip {
-//     font-size: 12px;
-//     position: absolute;
-//     top: 0;
-//     left: 20px;
-//     width: 120px;
-//     border: 2px solid silver;
-//     background-color: white;
-//     padding: 3px;
-//     z-index: 101;
-//     &--hidden {
-//       display: none;
-//     }
-//   }
-// }
-// .message-box {
-//   grid-area: messages;
-//   &--off {
-//     display: none;
-//   }
-// }
-// .playlists {
-//   grid-area: playlists;
-//   &__playlist {
-//     background-color: silver;
-//     margin: 10px;
-//     width: auto;
-//   }
-//   &__name {
-//     @extend .btn--medium;
-//     width: auto;
-//     margin: 0px;
-//     border: 2px solid silver;
-//   }
-//   &__remove-button {
-//     @extend .btn--medium;  
-//     width: 30px;
-//     margin: 0px;
-//     border: 2px solid silver;
-//     border-left: none;
-//   }
-// }
-// .main {
-//   display: grid;
-//   height: 100vh;
-//   margin: 0;
-//   padding: 10px;
-//   grid-template-areas: "header header"
-//              "playlists messages"
-//              "members members";
-//   grid-template-columns: 3fr 1fr;
-//   grid-template-rows: 2fr 6fr 1fr;
-//   justify-content: space-between;
-//   &--chat-off {
-//     display: grid;
-//     grid-template-areas: "header"
-//                "playlists"
-//                "members";
-//     grid-template-columns: 1fr;
-//     justify-content: space-between;
-//   }
-// }
-// .header {
-//   grid-area: header;
-//   &__button {
-//     @extend .btn--medium;
-//     float: right;
-//     width: auto;
-//   }
-// }

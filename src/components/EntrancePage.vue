@@ -22,7 +22,9 @@ export default {
 
 <style lang="scss" scoped>
   .header {
-    font-size: 2rem;
-    margin-bottom: 2em;
+    text-align: center;
+    font-size: 32px;
+    margin: 36px 0;
+    margin-bottom: 150px;
   }
 </style>

@@ -12,6 +12,7 @@
     :player-vars="playerVars"
     ref="youtube"
     @ended="ended"
+    fitParent
   >
   </youtube>
 </div>
