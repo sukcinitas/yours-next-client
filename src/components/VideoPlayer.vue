@@ -1,7 +1,13 @@
 <template>
 <div>
-  <button v-if="isModerator" @click="makePlaylistMain">Make main</button>
+  <button
+    class="main-playlist__button"
+    v-if="isModerator"
+    @click="makePlaylistMain"
+  >Make this playlist main
+  </button>
   <youtube
+    class="main-playlist__youtube"
     :video-id="videoId"
     :player-vars="playerVars"
     ref="youtube"
@@ -103,8 +109,6 @@ export default {
     if (!this.isModerator && this.isMainAnOngoingPlaylist) {
       const time = this.time;
       this.$refs.youtube.player.mute();
-      // eslint-disable-next-line no-console
-      console.log(time);
       this.$refs.youtube.player.seekTo(time, false);
     }
     if (this.isOngoingPlaylistPaused) {
@@ -119,3 +123,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  @import '@/scss/main-playlist.scss';
+</style>

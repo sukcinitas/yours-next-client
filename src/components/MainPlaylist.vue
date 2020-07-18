@@ -1,8 +1,19 @@
 <template>
-  <div>
-    <p @click="gotToSearch">Add some videos!</p>
-    <video-player v-if="initialPlaylistLength !== 0"></video-player>
-    <video-items-data v-if="initialPlaylistLength !== 0"></video-items-data>
+  <div class="main-playlist">
+    <button
+      class="main-playlist__button"
+      @click="gotToSearch"
+    >Add some videos!
+    </button>
+    <video-player
+      class="main-playlist__video-player"
+      v-if="initialPlaylistLength !== 0"
+    >
+    </video-player>
+    <video-items-data
+      class="main-playlist__video-items"
+      v-if="initialPlaylistLength !== 0"
+    ></video-items-data>
   </div>
 </template>
 
@@ -29,3 +40,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  @import '@/scss/main-playlist.scss';
+</style>

@@ -16,10 +16,12 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    justify-content: center; 
-    width: 326px;
+    width: 334px;
   }
   &__search-result {
+    background-color: black;
+    text-align: center;
+    margin: 10px 0;
     position: relative;
     cursor: pointer;
   }
@@ -49,21 +51,19 @@
     border: 3px solid black;
   }
   &__message--error {
-    @extend .message--error;
+    font-family: 'Anton', sans-serif;
+    color: white;
     position: absolute;
     left: 0;
     right: 0;
-    top: 20px;
+    top: 50px;
     width: auto;
     padding: 4px;
+    color: white;
+    background-color: rgba(189, 80, 80, 0.9);
   }
   &__message--success {
-    @extend .message--success;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 20px;
-    width: auto;
-    padding: 4px;
+    @extend .search__message--error;
+    background-color: rgba(80, 189, 80, 0.9);
   }
 }

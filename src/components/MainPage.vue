@@ -1,14 +1,13 @@
 <template>
   <main :class="{main: !isMessagesTurnedOff, 'main--chat-off': isMessagesTurnedOff}">
     <div class=header>
-      <button class="header__button" v-if="this.$store.state.group.member" @click="toggleMessages">
+      <button class="header__button" @click="toggleMessages">
       {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
       </button>
     </div>
 
     <div class="playlists">
-      <div v-for="playlist in playlists" :key="playlist.title">
-        <div class="playlists__playlist">
+      <div v-for="playlist in playlists" :key="playlist.title" class="playlists__playlist">
           <button
           class="playlists__name"
           @click="goToPlaylist(playlist._id)">{{playlist.title}}
@@ -19,7 +18,6 @@
             @click="deletePlaylist(playlist._id)"
           >X
           </button>
-        </div>
       </div>
       <p v-if="errMsg" class="message--error">{{errMsg}}</p>
       <p v-if="successMsg" class="message--success">{{successMsg}}</p>
@@ -147,4 +145,5 @@ export default {
 <style lang="scss" scoped>
   @import '@/scss/shared-styles-forms.scss';
   @import '@/scss/shared-styles-buttons.scss';
+  @import '@/scss/main-page.scss';
 </style>

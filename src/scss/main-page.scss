@@ -1,0 +1,74 @@
+@import '@/scss/shared-styles-buttons.scss';
+@import '@/scss/shared-styles-forms.scss';
+.main {
+  display: grid;
+  height: 100vh;
+  margin: 0;
+  padding: 10px 30px;
+  grid-template-areas: "header header"
+             "playlists messages"
+             "members members";
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 2fr 6fr 1fr;
+  justify-content: space-between;
+  &--chat-off {
+    display: grid;
+    height: 100vh;
+    margin: 0;
+    padding: 10px 30px;
+    grid-template-areas: "header"
+               "playlists"
+               "members";
+    grid-template-columns: 1fr;
+    justify-content: space-between;
+  }
+}
+
+.header {
+  grid-area: header;
+  &__button {
+    @extend .btn--medium;
+    float: right;
+    width: auto;
+  }
+}
+
+.playlists {
+  grid-area: playlists;
+  max-width: 70%;
+  margin: 20px auto;
+  text-align: center;
+  &__playlist {
+    background-color: silver;
+    margin: 10px;
+    display: inline-block;
+  }
+  &__name {
+    @extend .btn--medium;
+    width: auto;
+    margin: 0px;
+    border: 2px solid silver;
+  }
+  &__remove-button {
+    @extend .btn--medium;  
+    width: 30px;
+    margin: 0px;
+    background-color: silver;
+    border: 2px solid silver;
+    border-left: none;
+  }
+}
+
+.create-playlist-form {
+  @extend .entry-form;
+  width: auto;
+  &__input {
+    @extend .inpt--medium;
+  }
+  &__button {
+    @extend .btn--medium;
+  }
+  &__button--small {
+    @extend .btn--medium;
+  }
+}

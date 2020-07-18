@@ -33,9 +33,8 @@ html, body {
   min-height: 100%;
 }
 #app {
-  padding-top: 60px;
-  height: 100vh;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 100%;
 }
 .active {
   position: absolute;

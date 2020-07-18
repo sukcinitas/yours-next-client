@@ -47,9 +47,10 @@
   &--medium {
     @extend .btn;
     font-size: 18px;
-    height: 34px;
+    height: 40px;
     width: 46px;
     margin: 10px;
+    padding: 2px 6px;
   }
 }
 .inpt {
@@ -71,7 +72,7 @@
   &--medium {
     @extend .inpt;
     font-size: 18px;
-    height: 30px;
+    height: 40px;
     margin: 10px 0;
     min-width: 205px;
   }
@@ -85,7 +86,8 @@
   padding: 5px;
   display: block;
   text-align: center;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Anton', sans-serif;
+  color: white;
   &--error {
     background-color: rgb(100, 6, 6);
   }
@@ -152,52 +154,52 @@
 //     display: none;
 //   }
 // }
-.playlists {
-  grid-area: playlists;
-  &__playlist {
-    background-color: silver;
-    margin: 10px;
-    width: auto;
-  }
-  &__name {
-    @extend .btn--medium;
-    width: auto;
-    margin: 0px;
-    border: 2px solid silver;
-  }
-  &__remove-button {
-    @extend .btn--medium;  
-    width: 30px;
-    margin: 0px;
-    border: 2px solid silver;
-    border-left: none;
-  }
-}
-.main {
-  display: grid;
-  height: 100vh;
-  margin: 0;
-  padding: 10px;
-  grid-template-areas: "header header"
-             "playlists messages"
-             "members members";
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 2fr 6fr 1fr;
-  justify-content: space-between;
-  &--chat-off {
-    display: grid;
-    grid-template-areas: "header"
-               "playlists"
-               "members";
-    grid-template-columns: 1fr;
-    justify-content: space-between;
-  }
-}
-.header {
-  grid-area: header;
-  &__button {
-    @extend .btn--medium;
-    float: right;
-    width: auto;
-  }
-}
+// .playlists {
+//   grid-area: playlists;
+//   &__playlist {
+//     background-color: silver;
+//     margin: 10px;
+//     width: auto;
+//   }
+//   &__name {
+//     @extend .btn--medium;
+//     width: auto;
+//     margin: 0px;
+//     border: 2px solid silver;
+//   }
+//   &__remove-button {
+//     @extend .btn--medium;  
+//     width: 30px;
+//     margin: 0px;
+//     border: 2px solid silver;
+//     border-left: none;
+//   }
+// }
+// .main {
+//   display: grid;
+//   height: 100vh;
+//   margin: 0;
+//   padding: 10px;
+//   grid-template-areas: "header header"
+//              "playlists messages"
+//              "members members";
+//   grid-template-columns: 3fr 1fr;
+//   grid-template-rows: 2fr 6fr 1fr;
+//   justify-content: space-between;
+//   &--chat-off {
+//     display: grid;
+//     grid-template-areas: "header"
+//                "playlists"
+//                "members";
+//     grid-template-columns: 1fr;
+//     justify-content: space-between;
+//   }
+// }
+// .header {
+//   grid-area: header;
+//   &__button {
+//     @extend .btn--medium;
+//     float: right;
+//     width: auto;
+//   }
+// }

@@ -1,21 +1,33 @@
 <template>
   <div>
-    <p>{{errMsg}}</p>
+    <p class="main-playlist__message--error">{{errMsg}}</p>
     <div
-      :class="{active: item.id === playlist[activeIndex]}"
+      :class="[{'main-playlist__video-item--active': item.id === playlist[activeIndex]},
+       'main-playlist__video-item']"
       v-for="(item, index) in items"
       :key="playlist[index]"
       :index="index"
     >
-      <h3 @click="changeIndex(index)">{{item.snippet.title}}</h3>
-      <img :src="item.snippet.thumbnails.medium.url" :alt="item.snippet.title">
-      <hr>
+      <h3
+        @click="changeIndex(index)"
+        :class="[{'main-playlist__heading--active': item.id === playlist[activeIndex]},
+       'main-playlist__heading']"
+      >{{item.snippet.title}}
+      </h3>
+      <img
+        :class="[{'main-playlist__img--active': item.id === playlist[activeIndex]},
+       'main-playlist__img']"
+        :src="item.snippet.thumbnails.medium.url"
+        :alt="item.snippet.title"
+      >
       <button
+        :class="[{'main-playlist__button--remove--active': item.id === playlist[activeIndex]},
+       'main-playlist__button--remove']"
         v-if="isModerator"
         @click="removeItemFromPlaylist(item.id)"
       >
         Remove
-        </button>
+      </button>
     </div>
   </div>
 </template>
@@ -26,6 +38,7 @@ export default {
   data() {
     return {
       errMsg: '',
+      chosenVideoId: '',
     };
   },
   computed: {
@@ -57,11 +70,15 @@ export default {
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
     },
     removeItemFromPlaylist(videoId) {
-      // this.$socket.emit('addItemToPendingRemovalList', { item: videoId });
       this.$store.dispatch('mainplaylist/removeItemFromPlaylist', { videoId })
         .then((result) => {
           if (!result.success) {
+            this.chosenVideoId = videoId;
             this.errMsg = result.errMsg;
+            setTimeout(() => {
+              this.errorMsg = '';
+              this.chosenVideoId = '';
+            }, 500);
             return;
           }
           this.$socket.emit('updatePlaylist', {
@@ -82,8 +99,7 @@ export default {
 };
 </script>
 
-<style scoped>
-  .active {
-    background-color: lightblue;
-  }
+<style lang="scss" scoped>
+  @import '@/scss/main-playlist.scss';
 </style>
+

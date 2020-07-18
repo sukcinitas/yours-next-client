@@ -1,19 +1,27 @@
 @import '@/scss/shared-styles-buttons.scss';
 
 .message-box {
+  border-left: 2px solid silver;
   grid-area: messages;
   justify-self: center;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   &--off {
     display: none;
   }
   &__messages {
+    max-width: 300px;
+    overflow: auto;
     font-family: 'Oswald', sans-serif;
   }
   &__message-form {
+    border: 2px solid silver;
     width: 100%;
   }
   &__textarea {
+    border: none;
     @extend .textarea;
     text-align: left;
     padding: 2px;

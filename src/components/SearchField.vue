@@ -112,20 +112,23 @@ export default {
             this.chosenVideoId = videoId;
           } else {
             this.$socket.emit('updatePlaylist', { idsArray: result.items, items: result.itemsData });
-            this.successMessage = 'Successfully chosen!';
+            this.successMessage = 'Successfully added!';
             this.chosenVideoId = videoId;
             setTimeout(() => {
               this.errorMessage = '';
               this.successMessage = '';
               this.chosenVideoId = '';
-            }, 355500);
+            }, 500);
           }
         });
     },
     async explorePlaylist(id) {
       const data = await DataService.getPlaylistItems(id);
       this.items = data.data.data.items;
+      this.prevPageToken = data.data.data.prevPageToken || '';
+      this.nextPageToken = data.data.data.nextPageToken || '';
       this.picked = 'searchPlaylistItems';
+      this.queryOrId = id;
     },
     async getNextPage() {
       let data;

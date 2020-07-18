@@ -1,0 +1,75 @@
+@import '@/scss/shared-styles-buttons.scss';
+.main-playlist {
+  max-width: 60%;
+  margin: 0 auto;
+  padding-top: 40px;
+  &__button {
+    @extend .btn--medium;
+    width: auto;
+    margin: 20px auto;
+    display: block;
+    padding: 4px;
+    &--remove {
+      @extend .main-playlist__button;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      margin: 0;
+      border: 7px solid black;
+      border-top: none;
+      background-color: transparent;
+      color: transparent;
+      &--active {
+        @extend .main-playlist__button--remove;
+        border: 7px solid goldenrod;
+        border-top: none;
+      }
+    }
+  }
+  &__video-player {
+    text-align: center;
+  }
+  &__video-items {
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 334px;
+  }
+  &__video-item {
+    background-color: black;
+    text-align: center;
+    margin: 10px 0;
+    position: relative;
+    cursor: pointer;
+    &--active {
+      @extend .main-playlist__video-item;
+      background-color: goldenrod;
+    }
+  }
+  &__heading {
+    color: silver;
+    font-size: 14px;
+    background-color: black;
+    margin: 0;
+    padding: 10px;
+    font-family: 'Oswald', sans-serif;
+    &--active {
+      @extend .main-playlist__heading;
+      background-color: goldenrod;
+      color: black;
+    }
+  }
+  &__img {
+    border: 3px solid black;
+    &--active {
+      @extend .main-playlist__img;
+      border: 3px solid goldenrod;
+    }
+  }
+  &__message--error {
+    @extend .message--error;
+  }
+}

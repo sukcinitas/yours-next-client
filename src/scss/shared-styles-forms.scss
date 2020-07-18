@@ -80,18 +80,18 @@ $form-transition-time: 0.15s;
   }
 }
 
-.create-playlist-form {
-  @extend .entry-form;
-  &__input {
-    @extend .inpt--medium;
-  }
-  &__button {
-    @extend .btn--medium;
-  }
-  &__button--small {
-    @extend .btn--medium;
-  }
-}
+// .create-playlist-form {
+//   @extend .entry-form;
+//   &__input {
+//     @extend .inpt--medium;
+//   }
+//   &__button {
+//     @extend .btn--medium;
+//   }
+//   &__button--small {
+//     @extend .btn--medium;
+//   }
+// }
 
 // .search {
 //   width: 900px;
