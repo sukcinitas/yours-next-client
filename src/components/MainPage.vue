@@ -32,7 +32,7 @@
           Add
         </button>
         <button
-          v-else
+          v-if="!isExtended"
           class="create-playlist-form__button--small"
           @click="toggleExtended"
           type="button"
