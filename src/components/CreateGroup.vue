@@ -26,7 +26,7 @@
     >
     >
     </button>
-    <p v-if="errMsg" class="message--error">{{errMsg}}</p>
+    <p v-if="errMsg && isExtended" class="message--error">{{errMsg}}</p>
   </form>
 </template>
 

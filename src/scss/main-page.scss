@@ -9,7 +9,7 @@
              "playlists messages"
              "members members";
   grid-template-columns: 3fr 1fr;
-  grid-template-rows: 2fr 6fr 1fr;
+  grid-template-rows: 1fr 7fr 1fr;
   justify-content: space-between;
   &--chat-off {
     display: grid;
@@ -20,7 +20,7 @@
                "playlists"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 2fr 6fr 1fr;
+    grid-template-rows: 1fr 7fr 1fr;
     justify-content: space-between;
   }
 }
@@ -39,10 +39,16 @@
   max-width: 70%;
   margin: 20px auto;
   text-align: center;
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
   &__playlist {
+    display: flex;
     background-color: silver;
     margin: 10px;
-    display: inline-block;
   }
   &__name {
     @extend .btn--medium;
@@ -65,12 +71,17 @@
   width: auto;
   &__input {
     @extend .inpt--medium;
+    border: 2px solid #e4e4e4;
   }
   &__button {
     @extend .btn--medium;
+    margin: 10px 0;
   }
   &__button--small {
     @extend .btn--medium;
+    border: 2px solid #e4e4e4;
+    border-left: none;
+    margin: 10px 0;
   }
 }
 

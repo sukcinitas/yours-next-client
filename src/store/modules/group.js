@@ -11,6 +11,7 @@ const state = () => ({
   moderator: '',
   initialEmojis: ['🦄', '🐧', '🐍', '🌞', '🍆', '🦇'],
   messageEmojis: ['😀', '😍', '🤣'],
+  isChatTurnedOff: false,
 });
 
 // actions
@@ -77,6 +78,9 @@ const mutations = {
     state.moderator = payload.moderator;
     state.ongoingPlaylist = payload.ongoingPlaylist;
   },
+  setChatState(state, payload) {
+    state.isChatTurnedOff = payload.state;
+  },
 };
 
 // getters
@@ -103,6 +107,9 @@ const getters = {
       }
     }
     return filtered;
+  },
+  chatState(state) {
+    return state.isChatTurnedOff;
   },
 };
 

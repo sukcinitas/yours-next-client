@@ -2,22 +2,25 @@
     <form submit.prevent="addMember" class="create-member-form">
       <h4 class="create-member-form__heading">Welcome to group <b>{{group}}</b></h4>
       <h6 v-if="!isShowingEmojiSelection"
-      class="create-member-form__subheading">What will you call yourself, fellow?</h6>
-      <input
+      class="create-member-form__subheading">What will you name yourself, fellow?</h6>
+      <div class="wrapper">
+        <input
+            v-if="!isShowingEmojiSelection"
+          v-model="name"
+          type="text"
+          placeholder=""
+          class="create-member-form__input"
+        >
+        <button
           v-if="!isShowingEmojiSelection"
-        v-model="name"
-        type="text"
-        placeholder=""
-        class="create-member-form__input"
-      >
-      <button
-        v-if="!isShowingEmojiSelection"
-        class="create-member-form__button--small"
-        @click="checkIfMemberNameExists"
-        :disabled="!name"
-        type="button"
-      >>
-      </button>
+          class="create-member-form__button--small"
+          @click="checkIfMemberNameExists"
+          :disabled="!name"
+          type="button"
+        >>
+        </button>
+      </div>
+
 
       <h6 class="create-member-form__subheading" v-if="isShowingEmojiSelection">Choose an icon</h6>
       <div class="create-member-form__emoji-box" v-if="isShowingEmojiSelection">
@@ -81,4 +84,7 @@ export default {
 <style lang="scss" scoped>
   @import '@/scss/shared-styles-forms.scss';
   @import '@/scss/shared-styles-buttons.scss';
+  .wrapper {
+    display: flex;
+  }
 </style>

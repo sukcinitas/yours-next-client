@@ -25,7 +25,7 @@
        {'entry-form__button--small':!isExtended}]"
     >>
     </button>
-    <p v-if="errMsg" class="message--error">{{errMsg}}</p>
+    <p v-if="errMsg && isExtended" class="message--error">{{errMsg}}</p>
   </form>
 </template>
 
@@ -63,5 +63,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '@/scss/shared-styles-buttons.scss';
   @import '@/scss/shared-styles-forms.scss';
 </style>

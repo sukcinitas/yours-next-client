@@ -67,3 +67,13 @@
     background-color: rgba(80, 189, 80, 0.9);
   }
 }
+@media only screen and (max-width: 400px) {
+  .search {
+    max-width: 98%;
+  }
+}
+@media only screen and (max-width: 400px) and (min-width: 768px)  {
+  .search {
+    max-width: 80%;
+  }
+}

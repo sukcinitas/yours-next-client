@@ -7,36 +7,37 @@
     </div>
 
     <div class="playlists">
-      <div v-for="playlist in playlists" :key="playlist.title" class="playlists__playlist">
-          <button
-          class="playlists__name"
-          @click="goToPlaylist(playlist._id)">{{playlist.title}}
-          </button>
-          <button
-            class="playlists__remove-button"
-            v-if="isModerator"
-            @click="deletePlaylist(playlist._id)"
-          >X
-          </button>
+      <div class="playlists__list">
+        <div v-for="playlist in playlists" :key="playlist.title" class="playlists__playlist">
+            <button
+            class="playlists__name"
+            @click="goToPlaylist(playlist._id)">{{playlist.title}}
+            </button>
+            <button
+              class="playlists__remove-button"
+              v-if="isModerator"
+              @click="deletePlaylist(playlist._id)"
+            >X
+            </button>
+        </div>
       </div>
       <p v-if="errMsg" class="message--error">{{errMsg}}</p>
       <p v-if="successMsg" class="message--success">{{successMsg}}</p>
-      <form class="create-playlist-form" submit.prevent="addPlaylist">
-        <input type="text" v-model="title" v-if="isExtended" class="create-playlist-form__input">
-        <button
-          v-if="isExtended"
-          class="create-playlist-form__button"
-          @click="addPlaylist"
-          type="submit"
-        >
-          Add
-        </button>
-        <button
+      <button
           v-if="!isExtended"
           class="create-playlist-form__button--small"
           @click="toggleExtended"
           type="button"
         >+
+      </button>
+      <form class="create-playlist-form" submit.prevent="addPlaylist" v-if="isExtended">
+        <input type="text" v-model="title" class="create-playlist-form__input">
+        <button
+          class="create-playlist-form__button"
+          @click="addPlaylist"
+          type="submit"
+        >
+          Add
         </button>
       </form>
     </div>
@@ -63,7 +64,6 @@ export default {
       title: '',
       errMsg: '',
       successMsg: '',
-      isMessagesTurnedOff: false,
     };
   },
   created() {
@@ -78,6 +78,9 @@ export default {
     },
     moderator() {
       return this.$store.state.group.moderator;
+    },
+    isMessagesTurnedOff() {
+      return this.$store.getters['group/chatState'];
     },
   },
   methods: {
@@ -136,7 +139,8 @@ export default {
         });
     },
     toggleMessages() {
-      this.isMessagesTurnedOff = !this.isMessagesTurnedOff;
+      // this.isMessagesTurnedOff = !this.isMessagesTurnedOff;
+      this.$store.commit('group/setChatState', { state: !this.isMessagesTurnedOff });
     },
   },
 };

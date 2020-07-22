@@ -1,8 +1,10 @@
 <template>
   <div>
     <header class="header"><h1 class="header__heading">yours next</h1></header>
-    <authenticate-member></authenticate-member>
-    <create-group></create-group>
+    <div class="entry-forms">
+      <authenticate-member></authenticate-member>
+      <create-group></create-group>
+    </div>
   </div>
 </template>
 
@@ -24,7 +26,10 @@ export default {
   .header {
     text-align: center;
     font-size: 32px;
-    margin: 36px 0;
-    margin-bottom: 150px;
+    margin: 40px 0;
+    margin-bottom: 50px;
+  }
+  .entry-forms {
+    margin: 120px auto 20px;
   }
 </style>

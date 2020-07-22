@@ -82,9 +82,11 @@ $form-transition-time: 0.15s;
   }
   &__heading {
     @extend .heading;
+    color: #424242;
   }
   &__subheading {
-    @extend .subheading;
+    @extend .subheading;    
+    color: #424242;
   }
   &__emoji-box {
     @extend .emoji-box;
