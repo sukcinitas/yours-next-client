@@ -21,8 +21,8 @@
             </button>
         </div>
       </div>
-      <p v-if="errMsg" class="message--error">{{errMsg}}</p>
-      <p v-if="successMsg" class="message--success">{{successMsg}}</p>
+      <p v-if="errMsg" class="playlists__message--error">{{errMsg}}</p>
+      <p v-if="successMsg" class="playlists__message--success">{{successMsg}}</p>
       <button
           v-if="!isExtended"
           class="create-playlist-form__button--small"
@@ -133,13 +133,12 @@ export default {
             this.successMsg = result.successMsg;
             setTimeout(() => {
               this.successMsg = '';
-            }, 500);
+            }, 750);
             this.$socket.emit('updatePlaylists', { playlists: result.playlists });
           }
         });
     },
     toggleMessages() {
-      // this.isMessagesTurnedOff = !this.isMessagesTurnedOff;
       this.$store.commit('group/setChatState', { state: !this.isMessagesTurnedOff });
     },
   },

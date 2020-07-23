@@ -18,20 +18,8 @@
       <label for="searchPlaylistItems" class="search__label">by playlist id</label>
     </div>
 
-    <div v-show="nextPageToken !== '' || prevPageToken !== ''" class="search__pages">
-      <button
-        @click="getPrevPage" v-show="prevPageToken !== ''"
-        class="search__button--small">Back
-      </button>
-      <button
-        @click="getNextPage" v-show="nextPageToken !== ''"
-        class="search__button--small">Next
-      </button>
-    </div>
-
     <div v-if="picked === 'searchAll'" class="search__search-results">
-      <div v-for="item in items" :key="item.id.videoId"
-      @click="add(item.id.videoId)" class="search__search-result">
+      <div v-for="item in items" :key="item.id.videoId" class="search__search-result">
         <p class="search__message--error"
 v-if="errorMessage && chosenVideoId === item.id.videoId">{{errorMessage}}</p>
         <p class="search__message--success"
@@ -39,14 +27,18 @@ v-if="successMessage && chosenVideoId === item.id.videoId">{{successMessage}}</p
         <h1 class="search__heading">{{item.snippet.title}}</h1>
         <img class="search__img" :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
+        <button class="search__button--add"
+        @click="add(item.id.videoId)">Add</button>
       </div>
     </div>
 
     <div v-else-if="picked === 'searchPlaylists'" class="search__search-results">
       <div v-for="item in playlists" :key="item.id" class="search__search-result">
-        <h1 class="search__heading" @click="explorePlaylist(item.id)">{{item.snippet.title}}</h1>
+        <h1 class="search__heading">{{item.snippet.title}}</h1>
         <img class="search__img" :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
+        <button class="search__button--add"
+        @click="explorePlaylist(item.id)">Explore playlist</button>
       </div>
     </div>
 
@@ -55,7 +47,6 @@ v-if="successMessage && chosenVideoId === item.id.videoId">{{successMessage}}</p
         class="search__search-result"
         v-for="item in items"
         :key="item.snippet.resourceId.videoId"
-        @click="add(item.snippet.resourceId.videoId)"
       >
         <p class="search__message--error"
 v-if="errorMessage && chosenVideoId === item.snippet.resourceId.videoId">{{errorMessage}}</p>
@@ -64,7 +55,20 @@ v-if="successMessage && chosenVideoId === item.snippet.resourceId.videoId">{{suc
         <h1  class="search__heading">{{item.snippet.title}}</h1>
         <img class="search__img" :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
+        <button class="search__button--add"
+        @click="add(item.snippet.resourceId.videoId)">Add</button>
       </div>
+    </div>
+
+    <div v-show="nextPageToken !== '' || prevPageToken !== ''" class="search__pages">
+      <button
+        @click="getPrevPage" v-show="prevPageToken !== ''"
+        class="search__button--small search__button--left">Back
+      </button>
+      <button
+        @click="getNextPage" v-show="nextPageToken !== ''"
+        class="search__button--small search__button--right">Next
+      </button>
     </div>
 
   </div>

@@ -4,23 +4,22 @@
   display: grid;
   height: 100vh;
   margin: 0;
-  padding: 10px 30px;
   grid-template-areas: "header header"
              "playlists messages"
              "members members";
   grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr 7fr 1fr;
+  grid-template-rows: 1fr 7fr 30px;
   justify-content: space-between;
   &--chat-off {
     display: grid;
     height: 100vh;
     margin: 0;
-    padding: 10px 30px;
+
     grid-template-areas: "header"
                "playlists"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 7fr 1fr;
+    grid-template-rows: 1fr 7fr 30px;
     justify-content: space-between;
   }
 }
@@ -39,6 +38,7 @@
   max-width: 70%;
   margin: 20px auto;
   text-align: center;
+  position: relative;
   &__list {
     display: flex;
     flex-wrap: wrap;
@@ -63,6 +63,18 @@
     background-color: silver;
     border: 2px solid silver;
     border-left: none;
+  }
+  &__message--error {
+    font-family: 'Anton', sans-serif;
+    color: white;
+    width: auto;
+    padding: 4px;
+    color: white;
+    background-color: rgba(189, 80, 80, 0.9);
+  }
+  &__message--success {
+    @extend .playlists__message--error;
+    background-color: rgba(80, 189, 80, 0.9);
   }
 }
 

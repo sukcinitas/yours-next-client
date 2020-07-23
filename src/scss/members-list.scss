@@ -5,7 +5,10 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-end;
+  // background: #7878b9;
+  // border-top-left-radius: 300%;
+  // border-top-right-radius: 300%;  
+  // align-items: flex-end;
   &__member {
     display: inline-block;
     font-size: 18px;

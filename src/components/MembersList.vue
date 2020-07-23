@@ -1,23 +1,22 @@
 <template>
-  <div class="members">
-    <div
-      v-for="member in activeMembers"
-      :key="member.emoji"
-      :class="[{'members__moderator': moderator === member.name}, 'members__member']"
-      @click="makeModerator(member.name)"
-      @mouseover="isTooltipDisplayed = true, target = $event.target.innerText"
-      @mouseout="isTooltipDisplayed = false"
-    >
-      <p>{{member.emoji}}</p>
-      <p
-        :class="{'members__tooltip': isTooltipDisplayed && target === member.emoji,
-        'members__tooltip--hidden': !isTooltipDisplayed || target !== member.emoji}"
+    <div class="members">
+      <div
+        v-for="member in activeMembers"
+        :key="member.emoji"
+        :class="[{'members__moderator': moderator === member.name}, 'members__member']"
+        @click="makeModerator(member.name)"
+        @mouseover="isTooltipDisplayed = true, target = $event.target.innerText"
+        @mouseout="isTooltipDisplayed = false"
       >
-      {{naming(member.name)}}
-      </p>
+        <p>{{member.emoji}}</p>
+        <p
+          :class="{'members__tooltip': isTooltipDisplayed && target === member.emoji,
+          'members__tooltip--hidden': !isTooltipDisplayed || target !== member.emoji}"
+        >
+        {{naming(member.name)}}
+        </p>
+      </div>
     </div>
-
-  </div>
 </template>
 
 <script>

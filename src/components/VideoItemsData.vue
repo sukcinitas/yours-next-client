@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="main-playlist__message--error">{{errMsg}}</p>
+    <p v-if="errMsg && !chosenVideoId" class="main-playlist__message--error">{{errMsg}}</p>
     <div
       :class="[{'main-playlist__video-item--active': item.id === playlist[activeIndex]},
        'main-playlist__video-item']"
@@ -28,6 +28,8 @@
       >
         Remove
       </button>
+      <p v-if="errMsg && chosenVideoId === item.id"
+      class="main-playlist__message--error">{{errMsg}}</p>
     </div>
   </div>
 </template>
@@ -84,6 +86,12 @@ export default {
           this.$socket.emit('updatePlaylist', {
             idsArray: result.items,
             items: result.itemsData,
+          });
+          this.$nextTick(() => {
+            const isRemovedBefore = this.playlist.indexOf(videoId) < this.activeIndex;
+            if (isRemovedBefore) {
+              this.changeIndex(this.activeIndex - 1);
+            }
           });
         });
     },

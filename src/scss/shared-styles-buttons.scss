@@ -112,3 +112,32 @@
   font-family: 'Anton', sans-serif;
   font-weight: 500;
 }
+
+@media only screen and (max-width: 400px) {
+  .heading {
+    font-size: 24px;
+  }
+  .subheading { 
+    font-size: 18px;
+  }
+  .emoji-box {
+    width: auto;
+  }
+  .btn--emoji {
+    font-size: 24px;
+  }
+}
+@media only screen and (max-width: 768px) and (min-width: 400px)  {
+  .heading {
+    font-size: 24px;
+  }
+  .subheading { 
+    font-size: 18px;
+  }
+  .btn--emoji {
+    font-size: 24px;
+  }
+  .emoji-box {
+    width: auto;
+  }
+}

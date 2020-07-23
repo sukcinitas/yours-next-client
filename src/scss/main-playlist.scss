@@ -70,7 +70,17 @@
     }
   }
   &__message--error {
-    @extend .message--error;
+    text-align: center;
+    font-family: 'Anton', sans-serif;
+    color: white;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50px;
+    width: auto;
+    padding: 4px;
+    color: white;
+    background-color: rgba(189, 80, 80, 0.9);
   }
 }
 @media only screen and (max-width: 400px) {
@@ -78,7 +88,7 @@
     max-width: 98%;
   }
 }
-@media only screen and (max-width: 400px) and (min-width: 768px)  {
+@media only screen and (max-width: 768px) and (min-width: 400px)  {
   .main-playlist {
     max-width: 80%;
   }

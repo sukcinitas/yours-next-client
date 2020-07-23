@@ -23,13 +23,28 @@
     text-align: center;
     margin: 10px 0;
     position: relative;
-    cursor: pointer;
   }
   &__input {
     @extend .inpt;
+    height: 40px;
+    font-size: 14px;
   } 
   &__button {
     @extend .btn;
+    height: 40px;
+    &--add {
+      @extend .btn;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      margin: 0;
+      border: 7px solid black;
+      border-top: none;
+      background-color: transparent;
+      color: transparent;
+    }
   }
   &__label {
     font-size: 12px;
@@ -38,6 +53,15 @@
   }
   &__button--small {
     @extend .btn--medium;
+    width: 50px;
+  }
+  &__button--left {
+    float: left;
+    margin-left: calc((100% - 326px)/4 - 25px); //326px is main content, 25px is half of button width
+  }
+  &__button--right {
+    float: right;
+    margin-right: calc((100% - 326px)/4 - 25px);
   }
   &__heading {
     color: silver;
@@ -66,14 +90,45 @@
     @extend .search__message--error;
     background-color: rgba(80, 189, 80, 0.9);
   }
+  &__pages {
+    position: fixed;
+    top: calc(50% - 20px); // 20px is half of button height
+    left: 0;
+    right: 0;
+  }
 }
 @media only screen and (max-width: 400px) {
   .search {
     max-width: 98%;
+    &__pages {
+      margin-bottom: 40px;
+      position: static;
+    }
+    &__button--left {
+      float: none;
+      margin-left: 2px;
+    }
+    &__button--right {
+      float: none;
+      margin-right: 2px;
+    }
   }
 }
-@media only screen and (max-width: 400px) and (min-width: 768px)  {
+@media only screen and (max-width: 768px) and (min-width: 400px)  {
   .search {
+    display: inherit;
     max-width: 80%;
+    &__pages {
+      margin-bottom: 40px;
+      position: static;
+    }
+    &__button--left {
+      float: none;
+      margin-left: 2px;
+    }
+    &__button--right {
+      float: none;
+      margin-right: 2px;
+    }
   }
 }
