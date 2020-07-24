@@ -63,6 +63,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-buttons.scss';
   @import '@/scss/shared-styles-forms.scss';
 </style>

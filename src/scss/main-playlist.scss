@@ -43,13 +43,13 @@
     text-align: center;
     margin: 10px 0;
     position: relative;
-    cursor: pointer;
     &--active {
       @extend .main-playlist__video-item;
       background-color: goldenrod;
     }
   }
   &__heading {
+    cursor: pointer;
     color: silver;
     font-size: 14px;
     background-color: black;
@@ -86,10 +86,20 @@
 @media only screen and (max-width: 400px) {
   .main-playlist {
     max-width: 98%;
+    &__button--remove {
+      background-color: rgb(228, 228, 228);
+      color: rgb(82, 82, 82);
+      cursor: pointer;
+    }
   }
 }
 @media only screen and (max-width: 768px) and (min-width: 400px)  {
   .main-playlist {
     max-width: 80%;
+    &__button--remove {
+      background-color: rgb(228, 228, 228);
+      color: rgb(82, 82, 82);
+      cursor: pointer;
+    }
   }
 }

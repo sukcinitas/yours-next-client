@@ -81,6 +81,8 @@
 .create-playlist-form {
   @extend .entry-form;
   width: auto;
+  display: flex;
+  flex-direction: row;
   &__input {
     @extend .inpt--medium;
     border: 2px solid #e4e4e4;
@@ -103,9 +105,10 @@
     padding: 5px 10px;
     grid-template-areas: "header"
                "playlists"
-               "members"
-               "messages";
+               "messages"
+               "members";
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
     &--chat-off {
       padding: 5px 10px;
       height: auto;

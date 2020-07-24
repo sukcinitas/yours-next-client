@@ -113,6 +113,10 @@
       float: none;
       margin-right: 2px;
     }
+    &__button--add {
+      background-color: rgb(228, 228, 228);
+      color: rgb(82, 82, 82);
+    }
   }
 }
 @media only screen and (max-width: 768px) and (min-width: 400px)  {
@@ -130,6 +134,10 @@
     &__button--right {
       float: none;
       margin-right: 2px;
+    }
+    &__button--add {
+      background-color: rgb(228, 228, 228);
+      color: rgb(82, 82, 82);
     }
   }
 }

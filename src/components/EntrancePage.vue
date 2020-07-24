@@ -23,13 +23,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .header {
-    text-align: center;
-    font-size: 32px;
-    margin: 40px 0;
-    margin-bottom: 50px;
-  }
-  .entry-forms {
-    margin: 120px auto 20px;
-  }
+  @import '@/scss/shared-styles-forms.scss';
+  @import '@/scss/shared-styles-buttons.scss';
+  @import '@/scss/entrance-page.scss';
 </style>
