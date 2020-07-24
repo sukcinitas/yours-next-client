@@ -1,5 +1,5 @@
 <template>
-    <div class="members">
+    <div :class="[isBottom ? 'members--bottom' : 'members']">
       <div
         v-for="member in activeMembers"
         :key="member.emoji"
@@ -22,6 +22,7 @@
 <script>
 export default {
   name: 'MembersList',
+  props: ['isBottom'],
   data() {
     return {
       isTooltipDisplayed: false,

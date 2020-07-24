@@ -14,16 +14,18 @@
       class="main-playlist__video-items"
       v-if="initialPlaylistLength !== 0"
     ></video-items-data>
+    <members-list :isBottom="false"></members-list>
   </div>
 </template>
 
 <script>
 import VideoPlayer from './VideoPlayer';
 import VideoItemsData from './VideoItemsData';
+import MembersList from './MembersList';
 
 export default {
   name: 'MainPlaylist',
-  components: { VideoPlayer, VideoItemsData },
+  components: { VideoPlayer, VideoItemsData, MembersList },
   data() {
     return {
     };

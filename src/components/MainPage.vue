@@ -30,11 +30,10 @@
           type="button"
         >+
       </button>
-      <form class="create-playlist-form" submit.prevent="addPlaylist" v-if="isExtended">
+      <form class="create-playlist-form" @submit.prevent="addPlaylist" v-show="isExtended">
         <input type="text" v-model="title" class="create-playlist-form__input">
         <button
           class="create-playlist-form__button"
-          @click="addPlaylist"
           type="submit"
         >
           Add
@@ -44,7 +43,7 @@
     <message-box :class="{'message-box': !isMessagesTurnedOff,
      'message-box--off': isMessagesTurnedOff}">
     </message-box>
-    <members-list></members-list>
+    <members-list :isBottom="true"></members-list>
   </main>
 </template>
 
@@ -103,11 +102,13 @@ export default {
       this.$store.dispatch('playlist/addPlaylist', { title: this.title })
         .then((result) => {
           if (result.success) {
+            this.errMsg = '';
             this.successMsg = result.successMsg;
             this.$socket.emit('updatePlaylists', { playlists: result.playlists });
             this.$store.dispatch('mainplaylist/getPlaylist', { id: result.id });
             setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 250);
           } else {
+            this.successMsg = '';
             this.errMsg = result.errMsg;
           }
         });

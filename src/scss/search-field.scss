@@ -1,7 +1,8 @@
 @import '@/scss/shared-styles-buttons.scss';
 .search {
   max-width: 60%;
-  margin: 30px auto;
+  margin: 0 auto;
+  padding-top: 50px;
   text-align: center;
   &__search-field {
     display: flex;

@@ -1,20 +1,19 @@
 <template>
-    <form submit.prevent="addMember" class="create-member-form">
+    <form @submit.prevent="addMember" class="create-member-form">
       <h4 class="create-member-form__heading">Welcome to group <b>{{group}}</b></h4>
-      <h6 v-if="!isShowingEmojiSelection"
+      <h6 v-show="!isShowingEmojiSelection"
       class="create-member-form__subheading">What will you name yourself, fellow?</h6>
-      <div class="wrapper">
+      <div class="wrapper" v-show="!isShowingEmojiSelection">
         <input
-            v-if="!isShowingEmojiSelection"
           v-model="name"
           type="text"
           placeholder=""
           class="create-member-form__input"
         >
         <button
-          v-if="!isShowingEmojiSelection"
           class="create-member-form__button--small"
           @click="checkIfMemberNameExists"
+          @keyup.enter="checkIfMemberNameExists"
           :disabled="!name"
           type="button"
         >>
@@ -22,18 +21,27 @@
       </div>
 
 
-      <h6 class="create-member-form__subheading" v-if="isShowingEmojiSelection">Choose an icon</h6>
-      <div class="create-member-form__emoji-box" v-if="isShowingEmojiSelection">
+      <h6 class="create-member-form__subheading" v-show="isShowingEmojiSelection">
+        Choose an icon</h6>
+      <div class="create-member-form__emoji-box" v-show="isShowingEmojiSelection">
         <button
         v-for="(emoji, index) in emojisFreeToSet"
         :key="index"
-        @click="addMember(emoji)"
-        type="submit"
-          class="create-member-form__button--emoji"
+        @click="chooseEmoji(emoji)"
+        type="button"
+        :class="[selectedEmoji === emoji ? 'create-member-form__button--selected-emoji' :
+        'create-member-form__button--emoji']"
         >
         {{emoji}}
         </button>
       </div>
+      <button
+        v-show="isShowingEmojiSelection"
+        type="submit"
+        class="create-member-form__button--small"
+        :disabled="!selectedEmoji || !name"
+      >>
+      </button>
       <p v-if="errMsg && !isShowingEmojiSelection" class="message--error">{{errMsg}}</p>
     </form>
 </template>
@@ -46,6 +54,7 @@ export default {
       name: '',
       errMsg: '',
       isShowingEmojiSelection: false,
+      selectedEmoji: '',
     };
   },
   computed: {
@@ -67,14 +76,17 @@ export default {
         this.isShowingEmojiSelection = true;
       }
     },
-    async addMember(emoji) {
+    chooseEmoji(emoji) {
+      this.selectedEmoji = emoji;
+    },
+    async addMember() {
       if (this.memberNameExists) { // extra if names are being created in parallel
         this.errMsg = 'Name is already in use!';
         this.isShowingEmojiSelection = false;
         return;
       }
-      this.$socket.emit('setMember', { name: this.name, emoji }); // only this socket
-      this.$socket.emit('addMember', { name: this.name, emoji });
+      this.$socket.emit('setMember', { name: this.name, emoji: this.selectedEmoji }); // only this socket
+      this.$socket.emit('addMember', { name: this.name, emoji: this.selectedEmoji });
       this.$router.push({ name: 'MainPage' });
     },
   },

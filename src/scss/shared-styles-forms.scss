@@ -6,9 +6,8 @@
 $form-transition-time: 0.15s;
 
 .emoji-box {
-  margin: 0 auto;
+  margin: 40px auto;
   width: 400px;
-  height: 400px;
   text-align: center;
   // display: flex;
   // flex-direction: row;
@@ -73,12 +72,18 @@ $form-transition-time: 0.15s;
   margin-top: 60px;
   &__input {
     @extend .inpt;
+    border: 2px solid #ddd;
+    margin-right: 0;
   }
   &__button--small {
     @extend .btn--small;
+    margin-left: 0;
   }
   &__button--emoji {
     @extend .btn--emoji;
+  }
+  &__button--selected-emoji {
+    @extend .btn--selected-emoji;
   }
   &__heading {
     @extend .heading;

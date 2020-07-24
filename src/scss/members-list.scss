@@ -1,7 +1,11 @@
 @import '@/scss/shared-styles-buttons.scss';
 
 .members {
-  grid-area: members;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  // grid-area: members;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -9,6 +13,16 @@
   // border-top-left-radius: 300%;
   // border-top-right-radius: 300%;  
   // align-items: flex-end;
+  &--bottom {
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    // grid-area: members;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
   &__member {
     display: inline-block;
     font-size: 18px;
@@ -28,9 +42,9 @@
   &__tooltip {
     font-size: 12px;
     position: absolute;
-    top: -26px;
+    top: 0px;
     left: 15px;
-    width: 120px;
+    width: 200px;
     border: 2px solid silver;
     background-color: white;
     padding: 3px;
