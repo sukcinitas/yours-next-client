@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="entry-form">
+  <form
+    @submit.prevent="handleSubmit"
+    :class="[{'entry-form--extended': isExtended}, {'entry-form':!isExtended}]"
+  >
     <button
       @click="toggleExtended"
       type="button"

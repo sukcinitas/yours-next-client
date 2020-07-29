@@ -9,7 +9,8 @@ const state = () => ({
   member: '',
   messages: [],
   moderator: '',
-  initialEmojis: ['🦄', '🐧', '🐍', '🌞', '🍆', '🦇'],
+  initialEmojis: [0x1F429, 0x1F408, 0x1F98E,
+    0x1F98A, 0x1F43A, 0x1F344, 0x1F346, 0x1F469, 0x2600, 0x1F987],
   messageEmojis: ['😀', '😍', '🤣'],
   isChatTurnedOff: false,
 });

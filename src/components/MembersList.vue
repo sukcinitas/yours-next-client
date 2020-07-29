@@ -4,14 +4,15 @@
         v-for="member in activeMembers"
         :key="member.emoji"
         :class="[{'members__moderator': moderator === member.name}, 'members__member']"
-        @click="makeModerator(member.name)"
+        @dblclick="makeModerator(member.name)"
         @mouseover="isTooltipDisplayed = true, target = $event.target.innerText"
         @mouseout="isTooltipDisplayed = false"
       >
         <p>{{member.emoji}}</p>
         <p
           :class="{'members__tooltip': isTooltipDisplayed && target === member.emoji,
-          'members__tooltip--hidden': !isTooltipDisplayed || target !== member.emoji}"
+          'members__tooltip--hidden': !isTooltipDisplayed || target !== member.emoji,
+          'members__tooltip--bottom': isTooltipDisplayed && target === member.emoji && isBottom}"
         >
         {{naming(member.name)}}
         </p>
@@ -31,7 +32,7 @@ export default {
   },
   computed: {
     activeMembers() {
-      return this.$store.state.group.activeMembers;
+      return this.$store.state.group.activeMembers.map(member => member);
     },
     isModerator() {
       return this.$store.getters['group/isModerator'];
@@ -53,7 +54,7 @@ export default {
       if (this.$store.state.group.member.name === name) {
         return 'you';
       }
-      return this.isModerator ? `click to make ${name} the moderator` : name;
+      return this.isModerator ? `Double-click to make ${name} moderator` : name;
     },
   },
 };

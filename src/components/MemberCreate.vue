@@ -62,7 +62,7 @@ export default {
       return this.$store.state.group.name;
     },
     emojisFreeToSet() {
-      return this.$store.getters['group/emojisFreeToSet'];
+      return this.$store.getters['group/emojisFreeToSet'].map(emoji => String.fromCodePoint(emoji));
     },
     memberNameExists() {
       return this.$store.getters['group/activeMembersNames'].indexOf(this.name) >= 0;
