@@ -1,5 +1,6 @@
 <template>
   <div class="search">
+    <button @click="goHome" class="search__button--medium">Home</button>
     <p>Playlist id: PLcCyuE3mscVFQbqG4SbusOGJbrkaJoeY4</p>
     <p class="search__message--error" v-if="errorMessage && !chosenVideoId">{{errorMessage}}</p>
     <p class="search__message--success"
@@ -165,6 +166,9 @@ export default {
       }
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
+    },
+    goHome() {
+      this.$router.push({ name: 'MainPage' });
     },
   },
 };

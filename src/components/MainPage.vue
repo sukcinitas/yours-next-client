@@ -11,7 +11,7 @@
         <div v-for="playlist in playlists" :key="playlist.title" class="playlists__playlist">
             <button
             class="playlists__name"
-            @click="goToPlaylist(playlist._id)">{{playlist.title}}
+            @click="goToPlaylist(playlist._id, playlist.title)">{{playlist.title}}
             </button>
             <button
               class="playlists__remove-button"
@@ -106,7 +106,7 @@ export default {
             this.successMsg = result.successMsg;
             this.$socket.emit('updatePlaylists', { playlists: result.playlists });
             this.$store.dispatch('mainplaylist/getPlaylist', { id: result.id });
-            setTimeout(() => this.$router.push({ name: 'MainPlaylist' }), 250);
+            setTimeout(() => this.$router.push({ path: '/mainplaylist' }), 250);
           } else {
             this.successMsg = '';
             this.errMsg = result.errMsg;
@@ -122,7 +122,7 @@ export default {
             this.errMsg = result.errMsg;
             return;
           }
-          this.$router.push({ name: 'MainPlaylist' });
+          this.$router.push({ path: '/mainplaylist' });
         });
     },
     async deletePlaylist(id) {

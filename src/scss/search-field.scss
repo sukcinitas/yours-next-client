@@ -33,6 +33,12 @@
   &__button {
     @extend .btn;
     height: 40px;
+    &--medium {
+      @extend .btn--medium;
+      position: absolute;
+      right: 10px;
+      top: 0;
+    }
     &--add {
       @extend .btn;
       position: absolute;
@@ -54,7 +60,7 @@
   }
   &__button--small {
     @extend .btn--medium;
-    width: 50px;
+    width: 70px;
   }
   &__button--left {
     float: left;

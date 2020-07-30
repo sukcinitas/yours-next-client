@@ -3,12 +3,21 @@
   max-width: 60%;
   margin: 0 auto;
   padding-top: 50px;
+  padding-bottom: 100px;
+  // box-shadow: 0 0 1000px silver;
+  min-height: 100vh;
   &__button {
     @extend .btn--medium;
     width: auto;
     margin: 20px auto;
     display: block;
     padding: 4px;
+    &--medium {
+      @extend .btn--medium;
+      position: absolute;
+      right: 10px;
+      top: 0;
+    }
     &--remove {
       @extend .main-playlist__button;
       position: absolute;
@@ -47,6 +56,27 @@
       @extend .main-playlist__video-item;
       background-color: goldenrod;
     }
+  }
+  &__title {
+    @extend .heading;
+    color: #424242;
+    text-transform: uppercase;
+    font-size: 40px;
+    margin: 30px auto;
+  }
+  &__title--bg {
+    @extend .heading;
+    color: #424242;
+    position: absolute;
+    left: 0;
+    right: 0;
+    font-size: 400px;
+    color: rgba(192, 192, 192, 0.253);
+    text-align: center;
+    overflow: hidden;
+    white-space: pre-wrap;
+    z-index: -10;
+    margin: 0 auto;
   }
   &__heading {
     cursor: pointer;

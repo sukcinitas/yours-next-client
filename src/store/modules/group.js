@@ -6,7 +6,10 @@ import GroupService from '../../services/group.service';
 const state = () => ({
   name: '',
   activeMembers: [],
-  member: '',
+  member: {
+    name: '',
+    emoji: '',
+  },
   messages: [],
   moderator: '',
   initialEmojis: [0x1F429, 0x1F408, 0x1F98E,
@@ -74,7 +77,6 @@ const mutations = {
   },
   setInitialState(state, payload) {
     state.activeMembers = payload.activeMembers;
-    state.chosenEmojis = payload.chosenEmojis;
     state.messages = payload.messages;
     state.moderator = payload.moderator;
     state.ongoingPlaylist = payload.ongoingPlaylist;
@@ -102,8 +104,10 @@ const getters = {
   emojisFreeToSet(state) {
     const chosenEmojis = state.activeMembers.map(member => member.emoji);
     const filtered = [];
+    // eslint-disable-next-line no-console
+    console.log(chosenEmojis);
     for (let i = 0; i < state.initialEmojis.length; i += 1) {
-      if (!chosenEmojis.includes(state.initialEmojis[i])) {
+      if (!chosenEmojis.includes(String.fromCodePoint(state.initialEmojis[i]))) {
         filtered.push(state.initialEmojis[i]);
       }
     }

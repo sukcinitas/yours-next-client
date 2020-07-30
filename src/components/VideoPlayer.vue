@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       playerVars: {
-        autoplay: 1,
+        autoplay: 0,
         color: 'white',
         controls: 0,
       },

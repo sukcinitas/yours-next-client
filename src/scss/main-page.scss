@@ -58,7 +58,7 @@
   }
   &__remove-button {
     @extend .btn--medium;  
-    width: 30px;
+    width: auto;
     margin: 0px;
     background-color: silver;
     border: 2px solid silver;

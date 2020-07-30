@@ -48,8 +48,11 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.state.group.name) {
+    if (!store.state.group.name && !store.state.group.member.name
+      && !store.state.group.member.emoji) {
       next({ name: 'EntrancePage' });
+    } else if (store.state.group.name && !store.state.group.member.name) {
+      next({ name: 'MemberCreate' });
     } else {
       next();
     }
@@ -62,7 +65,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.matched.some(record => record.meta.requiresThings)) {
     if (!store.state.group.name) {
       next({ name: 'EntrancePage' });
-    } else if (store.state.group.name && store.state.group.member) {
+    } else if (store.state.group.name && store.state.group.member.name) {
       next({ name: 'MainPage' });
     } else {
       next();

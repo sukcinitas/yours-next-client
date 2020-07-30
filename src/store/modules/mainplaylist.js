@@ -6,7 +6,7 @@ const state = () => ({
   idsArray: [],
   nowPlayingVideoIndex: 0,
   id: '',
-  // pendingRemovalList: [],
+  title: '',
   items: [],
   ongoingPlaylist: {
     id: '',
@@ -45,6 +45,8 @@ const actions = {
     const { data } = await PlaylistService.get(payload.id);
     if (data.success) {
       commit('setPlaylist', { items: data.playlist.items });
+      commit('setId', { id: data.playlist._id });
+      commit('setTitle', { title: data.playlist.title });
       return { success: true };
     }
     return { success: false, errMsg: data.error };
@@ -107,6 +109,9 @@ const mutations = {
   },
   setId(state, payload) {
     state.id = payload.id;
+  },
+  setTitle(state, payload) {
+    state.title = payload.title;
   },
   setOngoingPlaylistPause(state) {
     state.ongoingPlaylist = Object.assign(

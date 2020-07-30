@@ -43,7 +43,7 @@
     font-family: 'Oswald', sans-serif;
     font-size: 12px;
     position: absolute;
-    top: 0px;
+    top: 5px;
     left: 15px;
     border: 2px solid silver;
     background-color: rgba(255, 255, 255, 0.7);
@@ -54,7 +54,7 @@
     }
     &--bottom {
       @extend .members__tooltip;
-      bottom: 0;
+      bottom: 5px;
       top: auto;
     }
   }
