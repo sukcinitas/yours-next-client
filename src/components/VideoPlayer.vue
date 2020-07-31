@@ -15,6 +15,18 @@
     fitParent
   >
   </youtube>
+  <button @click="isOngoingPlaylistPaused ? play() : pause()">
+    {{isOngoingPlaylistPaused ? "Play" : "Pause"}}</button>
+  <button
+    v-if="index !== 0 && isNextAndPrevButtonDisplayed"
+    @click="prevVideo"
+  >Previous video
+  </button>
+  <button
+    v-if="index !== playlist.length - 1 && isNextAndPrevButtonDisplayed"
+    @click="nextVideo"
+  >Next video
+  </button>
 </div>
 
 </template>
@@ -59,23 +71,34 @@ export default {
     isOngoingPlaylistPlaying() {
       return this.$store.getters['mainplaylist/isOngoingPlaylistPlaying'];
     },
+    isNextAndPrevButtonDisplayed() {
+      return (this.isMainAnOngoingPlaylist && this.isModerator) ||
+      !this.isMainAnOngoingPlaylist;
+    },
   },
   methods: {
     async ended() {
       this.end();
     },
     pause() {
-      if (this.isModerator && this.isMainAnOngoingPlaylist) {
+      // eslint-disable-next-line no-console
+      console.log('pause');
+      if (this.isMainAnOngoingPlaylist) {
         this.$socket.emit('pauseOngoingPlaylist');
+      } else {
+        this.$refs.youtube.player.pauseVideo();
       }
     },
     play() {
-      if (this.isModerator && this.isMainAnOngoingPlaylist) {
+      // eslint-disable-next-line no-console
+      console.log('play video');
+      if (this.isMainAnOngoingPlaylist) {
         this.$socket.emit('playOngoingPlaylist');
+      } else {
+        this.$refs.youtube.player.playVideo();
       }
     },
     end() {
-      // this.$store.dispatch('mainplaylist/removeItemsFromPlaylist');
       if (this.index === this.playlist.length - 1) {
         return;
       }
@@ -84,33 +107,66 @@ export default {
       }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
     },
-    fixateState(state) {
-      if (state.data === 2) {
-        this.pause();
-      } else if (state.data === 1) {
-        this.play();
-      }
-    },
-    async makePlaylistMain() {
+    // fixateState(state) {
+    //   if (state.data === 2) {
+    //     this.pause();
+    //   } else if (state.data === 1) {
+    //     this.play();
+    //   }
+    // },
+    async makePlaylistMain() { // main - first video from the start
       this.$socket.emit('setOngoingPlaylist', {
         id: this.$store.state.mainplaylist.id,
-        videoIndex: this.$store.state.mainplaylist.nowPlayingVideoIndex,
-        time: await this.$refs.youtube.player.getCurrentTime(),
+        videoIndex: 0,
+        time: 0,
       });
+    },
+    prevVideo() {
+      if (!this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+        return;
+      }
+      if (this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+        this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: this.index - 1 });
+        return;
+      }
+      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index - 1);
+    },
+    nextVideo() {
+      if (!this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+        return;
+      }
+      if (this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+        this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: this.index + 1 });
+        return;
+      }
+      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
+    },
+    async seekTo() {
+      const time = await this.$refs.youtube.player.getCurrentTime();
+      // eslint-disable-next-line no-console
+      console.log(time);
+      this.$refs.youtube.player.seekTo(time, true);
+      // this.play();
     },
   },
   mounted() {
     if (!this.isModerator && this.isMainAnOngoingPlaylist) {
       this.$refs.youtube.player.mute();
-      // this.$refs.youtube.player.seekTo(time, true);
+      this.$refs.youtube.player.seekTo(this.time, true);
     }
     this.$refs.youtube.player.addEventListener('onStateChange', this.fixateState);
   },
   updated() {
     if (!this.isModerator && this.isMainAnOngoingPlaylist) {
-      const time = this.time;
-      this.$refs.youtube.player.mute();
-      this.$refs.youtube.player.seekTo(time, false);
+      // eslint-disable-next-line no-console
+      console.log('updated!');
+      // const time = this.$refs.youtube.player.getCurrentTime();
+      // this.$refs.youtube.player.seekTo(time, false);
+      if (this.isMainAnOngoingPlaylist) {
+        this.$refs.youtube.player.mute();
+      } else {
+        this.$refs.youtube.player.unMute();
+      }
     }
     if (this.isOngoingPlaylistPaused) {
       this.$refs.youtube.player.pauseVideo();
@@ -121,6 +177,13 @@ export default {
   },
   beforeDestroy() {
     this.$refs.youtube.player.removeEventListener('onStateChange', this.fixateState);
+    if (this.isModerator && this.isMainAnOngoingPlaylist) {
+      this.$socket.emit('setOngoingPlaylist', {
+        id: '',
+        videoIndex: 0,
+        time: 0,
+      });
+    }
   },
 };
 </script>

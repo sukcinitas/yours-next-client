@@ -18,15 +18,17 @@ const state = () => ({
 });
 
 const actions = {
-  async SOCKET_setOngoingPlaylist({ commit, state }, payload) {
+  async SOCKET_setOngoingPlaylist({ commit }, payload) {
     commit('setOngoingPlaylist', {
       id: payload.id,
-      videoIndex: payload.videoIndex || state.ongoingPlaylist.videoIndex,
-      time: payload.time || state.ongoingPlaylist.time,
+      videoIndex: 0,
+      time: 0,
     });
+    commit('setOngoingPlaylistPlay');
   },
   async SOCKET_changeOngoingPlaylistVideoIndex({ commit }, payload) {
     commit('setOngoingPlaylistVideoIndex', { videoIndex: payload.videoIndex });
+    commit('setOngoingPlaylistPlay');
   },
   async SOCKET_pauseOngoingPlaylist({ commit }) {
     commit('setOngoingPlaylistPause');
@@ -125,7 +127,9 @@ const mutations = {
     state.ongoingPlaylist = payload;
   },
   setOngoingPlaylistVideoIndex(state, payload) {
-    state.ongoingPlaylist.videoIndex = payload.videoIndex;
+    // state.ongoingPlaylist.videoIndex = payload.videoIndex;
+    state.ongoingPlaylist = Object.assign(
+      {}, state.ongoingPlaylist, { videoIndex: payload.videoIndex });
   },
 };
 
