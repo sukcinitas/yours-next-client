@@ -100,8 +100,8 @@
   text-align: center;
   font-family: 'Anton', sans-serif;
   color: white;
-  position: absolute;
-  top: 190px;
+  // position: absolute;
+  // top: 190px;
   padding: 4px 30px;
   &--error {
     @extend .message;

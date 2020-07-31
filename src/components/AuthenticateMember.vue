@@ -1,35 +1,39 @@
 <template>
-  <form
-    @submit.prevent="handleSubmit"
-    :class="[{'entry-form--extended': isExtended}, {'entry-form':!isExtended}]"
-  >
-    <button
-      @click="toggleExtended"
-      type="button"
-      class="entry-form__button"
-    >Join a group
-    </button>
-    <input
-      v-model="name"
-      type="text"
-      placeholder="Enter the group name"
-      :class="[{'entry-form__input-1--extended': isExtended}, {'entry-form__input-1':!isExtended}]"
+  <div>
+      <form
+      @submit.prevent="handleSubmit"
+      :class="[{'entry-form--extended': isExtended}, {'entry-form':!isExtended}]"
     >
-    <input
-      v-model="passcode"
-      type="password"
-      placeholder="Enter the passcode"
-      :class="[{'entry-form__input-2--extended': isExtended}, {'entry-form__input-2':!isExtended}]"
-    >
-    <button
-      type="submit"
-      :disabled="!name || !passcode"
-      :class="[{'entry-form__button--small--extended': isExtended},
-       {'entry-form__button--small':!isExtended}]"
-    >>
-    </button>
-    <p v-if="errMsg && isExtended" class="message--error">{{errMsg}}</p>
-  </form>
+      <button
+        @click="toggleExtended"
+        type="button"
+        class="entry-form__button"
+      >Join a group
+      </button>
+      <input
+        v-model="name"
+        type="text"
+        placeholder="Enter the group name"
+        :class="[{'entry-form__input-1--extended': isExtended},
+         {'entry-form__input-1':!isExtended}]"
+      >
+      <input
+        v-model="passcode"
+        type="password"
+        placeholder="Enter the passcode"
+        :class="[{'entry-form__input-2--extended': isExtended},
+         {'entry-form__input-2':!isExtended}]"
+      >
+      <button
+        type="submit"
+        :disabled="!name || !passcode"
+        :class="[{'entry-form__button--small--extended': isExtended},
+        {'entry-form__button--small':!isExtended}]"
+      >>
+      </button>
+    </form>
+    <p v-if="errMsg && isExtended" class="entry-form__message--error">{{errMsg}}</p>
+  </div>
 </template>
 
 <script>

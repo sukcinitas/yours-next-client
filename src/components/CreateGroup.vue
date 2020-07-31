@@ -1,36 +1,40 @@
 <template>
-  <form
-  @submit.prevent="handleSubmit"
-  :class="[{'entry-form--extended': isExtended}, {'entry-form':!isExtended}]"
-  >
-    <button
-      @click="extend"
-      type="button"
-      class="entry-form__button"
+  <div>
+      <form
+    @submit.prevent="handleSubmit"
+    :class="[{'entry-form--extended': isExtended}, {'entry-form':!isExtended}]"
+    >
+      <button
+        @click="extend"
+        type="button"
+        class="entry-form__button"
+        >
+        Create a group
+      </button>
+      <input
+        v-model="name"
+        type="text"
+        placeholder="Enter a group name"
+        :class="[{'entry-form__input-1--extended': isExtended},
+         {'entry-form__input-1':!isExtended}]"
       >
-      Create a group
-    </button>
-    <input
-      v-model="name"
-      type="text"
-      placeholder="Enter a group name"
-      :class="[{'entry-form__input-1--extended': isExtended}, {'entry-form__input-1':!isExtended}]"
-    >
-    <input
-      v-model="passcode"
-      type="password"
-      placeholder="Enter a passcode"
-      :class="[{'entry-form__input-2--extended': isExtended}, {'entry-form__input-2':!isExtended}]"
-    >
-    <button
-      type="submit"
-      :class="[{'entry-form__button--small--extended': isExtended},
-      {'entry-form__button--small':!isExtended}]"
-    >
-    >
-    </button>
-    <p v-if="errMsg && isExtended" class="message--error">{{errMsg}}</p>
-  </form>
+      <input
+        v-model="passcode"
+        type="password"
+        placeholder="Enter a passcode"
+        :class="[{'entry-form__input-2--extended': isExtended},
+         {'entry-form__input-2':!isExtended}]"
+      >
+      <button
+        type="submit"
+        :class="[{'entry-form__button--small--extended': isExtended},
+        {'entry-form__button--small':!isExtended}]"
+      >
+      >
+      </button>
+    </form>
+    <p v-if="errMsg && isExtended" class="entry-form__message--error">{{errMsg}}</p>
+  </div>
 </template>
 
 <script>

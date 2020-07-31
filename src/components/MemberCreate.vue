@@ -42,7 +42,8 @@
         :disabled="!selectedEmoji || !name"
       >>
       </button>
-      <p v-if="errMsg && !isShowingEmojiSelection" class="message--error">{{errMsg}}</p>
+      <p v-if="errMsg && !isShowingEmojiSelection"
+      class="create-member-form__message--error">{{errMsg}}</p>
     </form>
 </template>
 

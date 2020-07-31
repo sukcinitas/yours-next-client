@@ -2,29 +2,37 @@
 <div>
   <button
     class="main-playlist__button"
-    v-if="isModerator"
+    v-if="isModerator && !isMainAnOngoingPlaylist"
     @click="makePlaylistMain"
   >Make this playlist main
   </button>
-  <youtube
-    class="main-playlist__youtube"
-    :video-id="videoId"
-    :player-vars="playerVars"
-    ref="youtube"
-    @ended="ended"
-    fitParent
-  >
-  </youtube>
-  <button @click="isOngoingPlaylistPaused ? play() : pause()">
-    {{isOngoingPlaylistPaused ? "Play" : "Pause"}}</button>
+  <div class="main-playlist__youtube">
+    <youtube
+      :video-id="videoId"
+      :player-vars="playerVars"
+      ref="youtube"
+      @ended="ended"
+      @paused="fixatePause"
+      @playing="fixatePlay"
+      fitParent
+    >
+    </youtube>
+  </div>
+  <button
+    @click="paused ? play() : pause()"
+    class="main-playlist__button"
+  >{{paused ? "Play" : "Pause"}}
+  </button>
   <button
     v-if="index !== 0 && isNextAndPrevButtonDisplayed"
     @click="prevVideo"
+    class="main-playlist__button"
   >Previous video
   </button>
   <button
     v-if="index !== playlist.length - 1 && isNextAndPrevButtonDisplayed"
     @click="nextVideo"
+    class="main-playlist__button"
   >Next video
   </button>
 </div>
@@ -36,11 +44,12 @@ export default {
   data() {
     return {
       playerVars: {
-        autoplay: 0,
+        autoplay: 1,
         color: 'white',
         controls: 0,
       },
       message: '',
+      paused: false,
     };
   },
   computed: {
@@ -68,9 +77,9 @@ export default {
     isOngoingPlaylistPaused() {
       return this.$store.getters['mainplaylist/isOngoingPlaylistPaused'];
     },
-    isOngoingPlaylistPlaying() {
-      return this.$store.getters['mainplaylist/isOngoingPlaylistPlaying'];
-    },
+    // isOngoingPlaylistPlaying() {
+    //   return this.$store.getters['mainplaylist/isOngoingPlaylistPlaying'];
+    // },
     isNextAndPrevButtonDisplayed() {
       return (this.isMainAnOngoingPlaylist && this.isModerator) ||
       !this.isMainAnOngoingPlaylist;
@@ -81,22 +90,24 @@ export default {
       this.end();
     },
     pause() {
-      // eslint-disable-next-line no-console
-      console.log('pause');
       if (this.isMainAnOngoingPlaylist) {
-        this.$socket.emit('pauseOngoingPlaylist');
+        this.$socket.emit('toggleOngoingPlaylist', { paused: true });
       } else {
         this.$refs.youtube.player.pauseVideo();
       }
     },
     play() {
-      // eslint-disable-next-line no-console
-      console.log('play video');
       if (this.isMainAnOngoingPlaylist) {
-        this.$socket.emit('playOngoingPlaylist');
+        this.$socket.emit('toggleOngoingPlaylist', { paused: false });
       } else {
         this.$refs.youtube.player.playVideo();
       }
+    },
+    fixatePause() {
+      this.paused = true;
+    },
+    fixatePlay() {
+      this.paused = false;
     },
     end() {
       if (this.index === this.playlist.length - 1) {
@@ -106,19 +117,22 @@ export default {
         this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: this.index + 1 });
       }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
+      this.play();
     },
     // fixateState(state) {
     //   if (state.data === 2) {
-    //     this.pause();
+    //     return true;
     //   } else if (state.data === 1) {
-    //     this.play();
+    //     return false;
     //   }
+    //   return false;
     // },
     async makePlaylistMain() { // main - first video from the start
       this.$socket.emit('setOngoingPlaylist', {
         id: this.$store.state.mainplaylist.id,
         videoIndex: 0,
         time: 0,
+        paused: false,
       });
     },
     prevVideo() {
@@ -130,6 +144,7 @@ export default {
         return;
       }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index - 1);
+      this.play();
     },
     nextVideo() {
       if (!this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
@@ -140,21 +155,22 @@ export default {
         return;
       }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
+      this.play();
     },
-    async seekTo() {
-      const time = await this.$refs.youtube.player.getCurrentTime();
-      // eslint-disable-next-line no-console
-      console.log(time);
-      this.$refs.youtube.player.seekTo(time, true);
-      // this.play();
-    },
+    // async seekTo() {
+    //   const time = await this.$refs.youtube.player.getCurrentTime();
+    //   // eslint-disable-next-line no-console
+    //   console.log(time);
+    //   this.$refs.youtube.player.seekTo(time, true);
+    //   // this.play();
+    // },
   },
   mounted() {
     if (!this.isModerator && this.isMainAnOngoingPlaylist) {
       this.$refs.youtube.player.mute();
       this.$refs.youtube.player.seekTo(this.time, true);
     }
-    this.$refs.youtube.player.addEventListener('onStateChange', this.fixateState);
+    // this.$refs.youtube.player.addEventListener('onStateChange', this.fixateState);
   },
   updated() {
     if (!this.isModerator && this.isMainAnOngoingPlaylist) {
@@ -162,26 +178,26 @@ export default {
       console.log('updated!');
       // const time = this.$refs.youtube.player.getCurrentTime();
       // this.$refs.youtube.player.seekTo(time, false);
-      if (this.isMainAnOngoingPlaylist) {
-        this.$refs.youtube.player.mute();
+      this.$refs.youtube.player.mute();
+    } else {
+      this.$refs.youtube.player.unMute();
+    }
+    if (this.isMainAnOngoingPlaylist) {
+      if (this.isOngoingPlaylistPaused) {
+        this.$refs.youtube.player.pauseVideo();
       } else {
-        this.$refs.youtube.player.unMute();
+        this.$refs.youtube.player.playVideo();
       }
-    }
-    if (this.isOngoingPlaylistPaused) {
-      this.$refs.youtube.player.pauseVideo();
-    }
-    if (this.isOngoingPlaylistPlaying) {
-      this.$refs.youtube.player.playVideo();
     }
   },
   beforeDestroy() {
-    this.$refs.youtube.player.removeEventListener('onStateChange', this.fixateState);
+    // this.$refs.youtube.player.removeEventListener('onStateChange', this.fixateState);
     if (this.isModerator && this.isMainAnOngoingPlaylist) {
       this.$socket.emit('setOngoingPlaylist', {
         id: '',
         videoIndex: 0,
         time: 0,
+        paused: false,
       });
     }
   },
