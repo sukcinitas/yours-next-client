@@ -14,27 +14,30 @@
       @ended="ended"
       @paused="fixatePause"
       @playing="fixatePlay"
+      @ready="fixateReady"
       fitParent
     >
     </youtube>
   </div>
-  <button
-    @click="paused ? play() : pause()"
-    class="main-playlist__button"
-  >{{paused ? "Play" : "Pause"}}
-  </button>
-  <button
-    v-if="index !== 0 && isNextAndPrevButtonDisplayed"
-    @click="prevVideo"
-    class="main-playlist__button"
-  >Previous video
-  </button>
-  <button
-    v-if="index !== playlist.length - 1 && isNextAndPrevButtonDisplayed"
-    @click="nextVideo"
-    class="main-playlist__button"
-  >Next video
-  </button>
+  <div class="main-playlist__controls">
+    <button
+      @click="paused ? play() : pause()"
+      class="main-playlist__button--controls"
+    >{{paused ? "Play" : "Pause"}}
+    </button>
+    <button
+      v-if="index !== 0 && isNextAndPrevButtonDisplayed"
+      @click="prevVideo"
+      class="main-playlist__button--controls"
+    >Previous video
+    </button>
+    <button
+      v-if="index !== playlist.length - 1 && isNextAndPrevButtonDisplayed"
+      @click="nextVideo"
+      class="main-playlist__button--controls"
+    >Next video
+    </button>
+  </div>
 </div>
 
 </template>
@@ -100,6 +103,8 @@ export default {
       if (this.isMainAnOngoingPlaylist) {
         this.$socket.emit('toggleOngoingPlaylist', { paused: false });
       } else {
+        // eslint-disable-next-line no-console
+        console.log('hey I play');
         this.$refs.youtube.player.playVideo();
       }
     },
@@ -108,6 +113,10 @@ export default {
     },
     fixatePlay() {
       this.paused = false;
+    },
+    fixateReady() {
+      this.$refs.youtube.player.playVideo();
+      // always start page from playing; substitute if autoplay does not work
     },
     end() {
       if (this.index === this.playlist.length - 1) {

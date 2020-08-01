@@ -111,17 +111,23 @@
       margin-bottom: 40px;
       position: static;
     }
+    &__button, &__button--medium, &__button--small {
+      font-size: 16px;
+    }
     &__button--left {
       float: none;
       margin-left: 2px;
+      font-size: 16px;
     }
     &__button--right {
       float: none;
       margin-right: 2px;
+      font-size: 16px;
     }
     &__button--add {
       background-color: rgb(228, 228, 228);
       color: rgb(82, 82, 82);
+      font-size: 16px;
     }
   }
 }
@@ -133,17 +139,23 @@
       margin-bottom: 40px;
       position: static;
     }
+    &__button, &__button--medium, &__button--small {
+      font-size: 16px;
+    }
     &__button--left {
       float: none;
       margin-left: 2px;
+      font-size: 16px;
     }
     &__button--right {
       float: none;
       margin-right: 2px;
+      font-size: 16px;
     }
     &__button--add {
       background-color: rgb(228, 228, 228);
       color: rgb(82, 82, 82);
+      font-size: 16px;
     }
   }
 }

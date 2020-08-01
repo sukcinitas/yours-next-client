@@ -101,6 +101,8 @@ const actions = {
 
 const mutations = {
   changeNowPlayingVideoIndex(state, index) {
+    // eslint-disable-next-line no-console
+    console.log('hey I change index!');
     state.nowPlayingVideoIndex = index;
   },
   setPlaylist(state, payload) {
