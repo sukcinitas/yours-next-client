@@ -29,12 +29,14 @@
     width: auto;
     margin: 20px auto;
     display: block;
-    padding: 4px;
-    &--medium {
+    // padding: 4px;
+    &--home {
       @extend .main-playlist__button;
       position: absolute;
-      right: 10px;
+      right: 0;
       top: 0;
+      margin: 10px;
+      // padding: 2px 16px;
     }
     &--controls {
       @extend .main-playlist__button;

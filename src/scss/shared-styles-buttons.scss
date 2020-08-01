@@ -35,7 +35,7 @@
   }
   &--emoji {
     @extend .btn;
-    border: none;
+    border: 2px solid transparent;
     justify-content: center;
     background-color: transparent;
     font-size: 30px;
@@ -47,7 +47,7 @@
   }
   &--selected-emoji {
     @extend .btn;
-    border: none;
+    border: 2px solid rgb(228, 228, 228);
     justify-content: center;
     font-size: 30px;
     width: 50px;

@@ -11,6 +11,7 @@
       >Join a group
       </button>
       <input
+        ref="input"
         v-model="name"
         type="text"
         placeholder="Enter the group name"
@@ -53,6 +54,9 @@ export default {
       this.errMsg = '';
       this.name = '';
       this.passcode = '';
+      if (this.isExtended) {
+        this.$refs.input.focus();
+      }
     },
     async handleSubmit() {
       this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })

@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="message-box__messages">
-      <p v-for="(message, index) in messages" :key="index">
-        {{`${message.name}: ${message.message}`}}
-      </p>
+      <div class="message-box__message" v-for="(message, index) in messages" :key="index">
+        <p class="message-box__message-name">{{message.name}}</p>
+        <p class="message-box__message-content">{{message.message}}</p>
+      </div>
     </div>
     <form @submit.prevent="handleSubmit" class="message-box__message-form">
       <div class="message-box__input">
@@ -14,7 +15,7 @@
           </span>
         </div>
       </div>
-      <button class="message-box__button" type="submit">Submit</button>
+      <button class="message-box__button" type="submit" :disabled="!message">Submit</button>
     </form>
 </div>
 

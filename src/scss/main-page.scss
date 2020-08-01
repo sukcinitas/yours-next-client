@@ -8,7 +8,7 @@
              "playlists messages"
              "members members";
   grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr 7fr 30px;
+  grid-template-rows: 70px auto 30px;
   justify-content: space-between;
   &--chat-off {
     display: grid;
@@ -19,7 +19,7 @@
                "playlists"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 7fr 30px;
+    grid-template-rows: 70px auto 30px;
     justify-content: space-between;
   }
 }
@@ -105,10 +105,10 @@
     padding: 5px 10px;
     grid-template-areas: "header"
                "playlists"
-               "messages"
-               "members";
+               "members"
+               "messages";
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: 60px auto 30px auto;
     &--chat-off {
       padding: 5px 10px;
       height: auto;
@@ -116,7 +116,6 @@
   }
   .playlists {
     min-height: 400px;
-    border-bottom: 2px solid silver;
     max-width: 94%;
     width: 94%;
   }

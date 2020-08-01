@@ -66,7 +66,9 @@ export default {
       return this.$store.getters['group/emojisFreeToSet'].map(emoji => String.fromCodePoint(emoji));
     },
     memberNameExists() {
-      return this.$store.getters['group/activeMembersNames'].indexOf(this.name) >= 0;
+      const name = this.name.toLowerCase();
+      const activeMembersNames = this.$store.getters['group/activeMembersNames'].map(memberName => memberName.toLowerCase());
+      return activeMembersNames.indexOf(name) >= 0;
     },
   },
   methods: {

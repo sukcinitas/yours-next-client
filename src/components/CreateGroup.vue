@@ -5,13 +5,14 @@
     :class="[{'entry-form--extended': isExtended}, {'entry-form':!isExtended}]"
     >
       <button
-        @click="extend"
+        @click="toggleExtended"
         type="button"
         class="entry-form__button"
         >
         Create a group
       </button>
       <input
+        ref="input"
         v-model="name"
         type="text"
         placeholder="Enter a group name"
@@ -49,11 +50,14 @@ export default {
     };
   },
   methods: {
-    extend() {
+    toggleExtended() {
       this.isExtended = !this.isExtended;
       this.errMsg = '';
       this.name = '';
       this.passcode = '';
+      if (this.isExtended) {
+        this.$refs.input.focus();
+      }
     },
     async handleSubmit() {
       if (this.passcode.length < 8) {
