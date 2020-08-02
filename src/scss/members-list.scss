@@ -5,17 +5,11 @@
   left: 0;
   right: 0;
   top: 0;
-  // grid-area: members;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  // background: #7878b9;
-  // border-top-left-radius: 300%;
-  // border-top-right-radius: 300%;  
-  // align-items: flex-end;
   &--bottom {
     bottom: 0;
-    // position: absolute;
     left: 0;
     right: 0;
     grid-area: members;
@@ -62,5 +56,8 @@
 @media only screen and (max-width: 768px)  {
   .members {
     align-items: flex-start;
+    &--bottom {
+      align-items: flex-end;
+    }
   }
 }

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <header class="header"><h1 class="header__heading">yours next</h1></header>
+    <header class="header">
+      <h1 class="header__heading">yours next</h1>
+    </header>
     <div class="entry-forms">
       <authenticate-member></authenticate-member>
       <create-group></create-group>

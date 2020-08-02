@@ -1,8 +1,8 @@
 <template>
   <div>
-      <form
-    @submit.prevent="handleSubmit"
-    :class="[{'entry-form--extended': isExtended}, {'entry-form':!isExtended}]"
+    <form
+      @submit.prevent="handleSubmit"
+      :class="[isExtended ? 'entry-form--extended' : 'entry-form']"
     >
       <button
         @click="toggleExtended"
@@ -16,15 +16,15 @@
         v-model="name"
         type="text"
         placeholder="Enter a group name"
-        :class="[{'entry-form__input-1--extended': isExtended},
-         {'entry-form__input-1':!isExtended}]"
+        :class="[isExtended ? 'entry-form__input-1--extended' : 'entry-form__input-1',
+        err.type === 'name' ? 'input--error' : '']"
       >
       <input
         v-model="passcode"
         type="password"
         placeholder="Enter a passcode"
-        :class="[{'entry-form__input-2--extended': isExtended},
-         {'entry-form__input-2':!isExtended}]"
+        :class="[isExtended ? 'entry-form__input-2--extended' : 'entry-form__input-2',
+        err.type === 'passcode' ? 'input--error' : '']"
       >
       <button
         type="submit"
@@ -34,7 +34,7 @@
       >
       </button>
     </form>
-    <p v-if="errMsg && isExtended" class="entry-form__message--error">{{errMsg}}</p>
+    <p v-if="err.message && isExtended" class="entry-form__message--error">{{err.message}}</p>
   </div>
 </template>
 
@@ -46,13 +46,19 @@ export default {
       isExtended: false,
       name: '',
       passcode: '',
-      errMsg: '',
+      err: {
+        message: '',
+        type: '',
+      },
     };
   },
   methods: {
     toggleExtended() {
       this.isExtended = !this.isExtended;
-      this.errMsg = '';
+      this.err = {
+        message: '',
+        type: '',
+      };
       this.name = '';
       this.passcode = '';
       if (this.isExtended) {
@@ -61,7 +67,10 @@ export default {
     },
     async handleSubmit() {
       if (this.passcode.length < 8) {
-        this.errMsg = 'Passcode must be at least 8 characters long';
+        this.err = {
+          message: 'Passcode must be at least 8 characters long!',
+          type: 'passcode',
+        };
         return;
       }
       this.$store.dispatch('group/createGroup', { name: this.name, passcode: this.passcode })
@@ -70,7 +79,10 @@ export default {
             this.$socket.emit('getInitialState', { name: this.name });
             this.$router.push({ name: 'MemberCreate' });
           } else {
-            this.errMsg = result.errMsg;
+            this.err = {
+              message: result.errMsg,
+              type: result.errType,
+            };
           }
         });
     },

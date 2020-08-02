@@ -26,7 +26,13 @@ const actions = {
       commit('setName', { name: payload.name });
       return { success: true };
     }
-    return { success: false, errMsg: data.message };
+    let errType = 'else';
+    if (data.message === 'Passcode is incorrect!') {
+      errType = 'passcode';
+    } else if (data.message === 'Group with this name is not found!') {
+      errType = 'name';
+    }
+    return { success: false, errMsg: data.message, errType };
   },
   async createGroup({ commit }, payload) {
     const { data } = await GroupService.create(payload);
@@ -34,7 +40,8 @@ const actions = {
       commit('setName', { name: payload.name });
       return { success: true };
     }
-    return { success: false, errMsg: data.message };
+    const errType = data.message === 'Name is already in use!' ? 'name' : 'else';
+    return { success: false, errMsg: data.message, errType };
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);

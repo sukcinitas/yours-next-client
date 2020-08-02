@@ -1,0 +1,76 @@
+@import '@/scss/shared-styles-buttons.scss';
+@import '@/scss/shared-styles-forms.scss';
+.create-member-form {
+  @extend .entry-form;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+  &__input {
+    @extend .inpt;
+    border: 2px solid #ddd;
+    margin-right: 0;
+  }
+  &__button--small {
+    @extend .btn--small;
+    margin-left: 0;
+  }
+  &__button--emoji {
+    @extend .btn--emoji;
+  }
+  &__button--selected-emoji {
+    @extend .btn--selected-emoji;
+  }
+  &__heading {
+    @extend .heading;
+    color: #424242;
+    &--bold {
+      color: goldenrod;
+      text-transform: uppercase;
+    }
+  }
+  &__subheading {
+    @extend .subheading;    
+    color: #424242;
+  }
+  &__emoji-box {
+      margin: 40px auto;
+      max-width: 400px;
+      text-align: center;
+  }
+  &__message--error {
+    @extend .message--error;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .create-member-form {
+    margin-top: 20px;
+    &__heading {
+      font-size: 24px;
+      margin-top: 30px;
+    }
+    &__subheading { 
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+    &__emoji-box {
+      width: auto;
+    }
+  }
+}
+@media only screen and (max-width: 768px) and (min-width: 400px)  {
+  .create-member-form {
+    margin-top: 20px;
+    &__heading {
+      font-size: 24px;
+      margin-top: 30px;
+    }
+    &__subheading { 
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+    &__emoji-box {
+      width: auto;
+    }
+  }
+}

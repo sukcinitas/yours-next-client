@@ -2,6 +2,7 @@
 .search {
   max-width: 60%;
   margin: 0 auto;
+  margin-top: 30px;
   padding-top: 50px;
   text-align: center;
   &__search-field {
@@ -29,15 +30,21 @@
     @extend .inpt;
     height: 40px;
     font-size: 14px;
+    margin-right: 0px;
+    border: 2px solid #ddd;
+    width: 280px;
   } 
   &__button {
     @extend .btn;
     height: 40px;
+    margin-left: 0px;
+    font-size: 22px;
+    width: 105px;
     &--home {
       @extend .btn--medium;
+      top: 22px;
       position: absolute;
-      right: 0;
-      top: 0;
+      right: 22px;
     }
     &--add {
       @extend .btn;
@@ -113,6 +120,9 @@
     }
     &__button, &__button--home, &__button--small {
       font-size: 16px;
+    }
+    &__input {
+      width: 205px;
     }
     &__button--left {
       float: none;

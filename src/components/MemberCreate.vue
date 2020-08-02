@@ -1,6 +1,8 @@
 <template>
     <form @submit.prevent="addMember" class="create-member-form">
-      <h4 class="create-member-form__heading">Welcome to group <b>{{group}}</b></h4>
+      <h4 class="create-member-form__heading">Welcome to group
+        <b class="create-member-form__heading--bold">{{group}}</b>
+      </h4>
       <h6 v-show="!isShowingEmojiSelection"
       class="create-member-form__subheading">What will you name yourself, fellow?</h6>
       <div class="wrapper" v-show="!isShowingEmojiSelection">
@@ -100,8 +102,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-forms.scss';
-  @import '@/scss/shared-styles-buttons.scss';
+  @import '@/scss/member-create.scss';
   .wrapper {
     display: flex;
   }

@@ -30,8 +30,15 @@
           type="button"
         >+
       </button>
-      <form class="create-playlist-form" @submit.prevent="addPlaylist" v-show="isExtended">
-        <input type="text" v-model="title" class="create-playlist-form__input">
+      <form
+        class="create-playlist-form"
+        @submit.prevent="addPlaylist" v-show="isExtended"
+      >
+        <input
+          type="text"
+          v-model="title"
+          class="create-playlist-form__input"
+        >
         <button
           class="create-playlist-form__button"
           type="submit"

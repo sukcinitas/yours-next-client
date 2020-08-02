@@ -4,11 +4,6 @@
 
 $form-transition-time: 0.15s;
 
-.emoji-box {
-  margin: 40px auto;
-  max-width: 400px;
-  text-align: center;
-}
 .entry-form {
   margin: 0 auto;
   display: flex;
@@ -27,20 +22,20 @@ $form-transition-time: 0.15s;
     margin: 0;
     border: none;
     overflow: hidden;
-    transition: width $form-transition-time  ease-in;
-    -webkit-transition: width $form-transition-time  ease-in;
+    transition: width $form-transition-time  linear;
+    -webkit-transition: width $form-transition-time  linear;
     &--extended {
       @extend .inpt;
-      transition: width $form-transition-time  ease-in;
-      -webkit-transition: width $form-transition-time  ease-in;
+      transition: width 0.15s  linear;
+      -webkit-transition: width 0.15s  linear;
     }
   }
   &__input-2 {
-    transition: width $form-transition-time ease-in;
-    -webkit-transition: width $form-transition-time  ease-in;
+    // transition: width $form-transition-time ease-in;
+    // -webkit-transition: width $form-transition-time  ease-in;
     &--extended {
-      transition: width $form-transition-time ease-in;
-      -webkit-transition: width $form-transition-time  ease-in;
+      // transition: width $form-transition-time ease-in;
+      // -webkit-transition: width $form-transition-time  ease-in;
       transition-delay: 0.3s;
     }
   }
@@ -71,70 +66,5 @@ $form-transition-time: 0.15s;
       max-width: 205px;
       margin: 10px auto 30px;
     }
-  }
-}
-
-.create-member-form {
-  @extend .entry-form;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 60px;
-  &__input {
-    @extend .inpt;
-    border: 2px solid #ddd;
-    margin-right: 0;
-  }
-  &__button--small {
-    @extend .btn--small;
-    margin-left: 0;
-  }
-  &__button--emoji {
-    @extend .btn--emoji;
-  }
-  &__button--selected-emoji {
-    @extend .btn--selected-emoji;
-  }
-  &__heading {
-    @extend .heading;
-    color: #424242;
-  }
-  &__subheading {
-    @extend .subheading;    
-    color: #424242;
-  }
-  &__emoji-box {
-    @extend .emoji-box;
-  }
-  &__message--error {
-    @extend .message--error;
-  }
-}
-
-@media only screen and (max-width: 400px) {
-  .create-member-form {
-    margin-top: 20px;
-    &__heading {
-      font-size: 24px;
-    }
-    &__subheading { 
-      font-size: 18px;
-    }
-  }
-  .emoji-box {
-    width:auto;
-  }
-}
-@media only screen and (max-width: 768px) and (min-width: 400px)  {
-  .create-member-form {
-    margin-top: 20px;
-    &__heading {
-      font-size: 24px;
-    }
-    &__subheading { 
-      font-size: 18px;
-    }
-  }
-  .emoji-box {
-    width:auto;
   }
 }
