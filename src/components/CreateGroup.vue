@@ -18,6 +18,7 @@
         placeholder="Enter a group name"
         :class="[isExtended ? 'entry-form__input-1--extended' : 'entry-form__input-1',
         err.type === 'name' ? 'input--error' : '']"
+        @click="deleteErr('name')"
       >
       <input
         v-model="passcode"
@@ -25,6 +26,7 @@
         placeholder="Enter a passcode"
         :class="[isExtended ? 'entry-form__input-2--extended' : 'entry-form__input-2',
         err.type === 'passcode' ? 'input--error' : '']"
+        @click="deleteErr(passcode)"
       >
       <button
         type="submit"
@@ -85,6 +87,14 @@ export default {
             };
           }
         });
+    },
+    deleteErr(type) {
+      if (this.err.type === type) {
+        this.err = {
+          message: '',
+          type: '',
+        };
+      }
     },
   },
 };

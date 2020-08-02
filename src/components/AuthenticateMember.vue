@@ -17,6 +17,7 @@
         placeholder="Enter the group name"
         :class="[isExtended ? 'entry-form__input-1--extended' : 'entry-form__input-1',
         err.type === 'name' ? 'input--error' : '']"
+        @click="deleteErr('name')"
       >
       <input
         v-model="passcode"
@@ -24,6 +25,7 @@
         placeholder="Enter the passcode"
         :class="[isExtended ? 'entry-form__input-2--extended' : 'entry-form__input-2',
         err.type === 'passcode' ? 'input--error' : '']"
+        @click="deleteErr('passcode')"
       >
       <button
         type="submit"
@@ -32,7 +34,16 @@
       >>
       </button>
     </form>
-    <p v-if="err.message && isExtended" class="entry-form__message--error">{{err.message}}</p>
+    <p
+      v-if="err.type === 'name' && isExtended"
+      class="entry-form__message--error"
+    >{{err.message}}
+    </p>
+    <p
+      v-if="err.type === 'passcode' && isExtended"
+      class="entry-form__message--error"
+    >{{err.message}}
+    </p>
   </div>
 </template>
 
@@ -76,6 +87,14 @@ export default {
             };
           }
         });
+    },
+    deleteErr(type) {
+      if (this.err.type === type) {
+        this.err = {
+          message: '',
+          type: '',
+        };
+      }
     },
   },
 };
