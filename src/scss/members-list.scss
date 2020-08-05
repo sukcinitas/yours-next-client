@@ -2,8 +2,8 @@
 
 .members {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 75px;
+  right: 75px;
   top: 0;
   display: flex;
   flex-direction: row;
@@ -50,6 +50,7 @@
       @extend .members__tooltip;
       bottom: 5px;
       top: auto;
+      left: 0;
     }
   }
 }

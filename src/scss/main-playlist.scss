@@ -31,8 +31,8 @@
     &--home {
       @extend .main-playlist__button;
       position: absolute;
-      right: 22px;
-      top: 22px;
+      right: 0px;
+      top: 0px;
       margin: 10px;
     }
     &--controls {

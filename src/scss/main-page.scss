@@ -28,8 +28,8 @@
   &__button {
     @extend .btn--medium;
     position: absolute;
-    right: 22px;
-    top: 22px;
+    right: 0px;
+    top: 0px;
     width: auto;
   }
 }
@@ -116,7 +116,7 @@
                "messages"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 60px calc(100vh - 60px) auto 42px;
+    grid-template-rows: 60px auto calc(100vh - 42px) 42px;
     &--chat-off {
       height: auto;
       padding: 5px 10px;
@@ -127,7 +127,7 @@
     min-height: 400px;
     max-width: 94%;
     width: 94%;
-    margin: 80px auto 20px;
+    margin: 50px auto 20px;
     &__name {
       font-size: 14px;
     }
