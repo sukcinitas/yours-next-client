@@ -12,6 +12,9 @@
             <button
             class="playlists__name"
             @click="goToPlaylist(playlist._id, playlist.title)">{{playlist.title}}
+              <span class="playlists__date">
+                {{formatDate(playlist.updatedAt)}}
+              </span>
             </button>
             <button
               class="playlists__remove-button"
@@ -57,6 +60,7 @@
 <script>
 import MessageBox from './MessageBox';
 import MembersList from './MembersList';
+import formatDate from '../util/formatDate';
 
 export default {
   name: 'MainPage',
@@ -87,6 +91,9 @@ export default {
     },
     isMessagesTurnedOff() {
       return this.$store.getters['group/chatState'];
+    },
+    isMainAnOngoingPlaylist() {
+      return this.$store.getters['mainplaylist/isMainAnOngoingPlaylist'];
     },
   },
   methods: {
@@ -148,6 +155,12 @@ export default {
     },
     toggleMessages() {
       this.$store.commit('group/setChatState', { state: !this.isMessagesTurnedOff });
+    },
+    formatDate(date) {
+      if (!date) {
+        return '';
+      }
+      return `last updated on ${formatDate(date)}`;
     },
   },
 };

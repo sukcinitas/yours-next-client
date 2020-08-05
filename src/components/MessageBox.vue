@@ -8,7 +8,14 @@
     </div>
     <form @submit.prevent="handleSubmit" class="message-box__message-form">
       <div class="message-box__input">
-        <textarea type="text" v-model="message" class="message-box__textarea" rows=2></textarea>
+        <textarea
+          type="text"
+          v-model="message"
+          class="message-box__textarea"
+          rows=2
+          ref="textarea"
+        >
+        </textarea>
         <div class="message-box__emojies">
           <span v-for="emoji in emojis" :key="emoji" @click="addEmoji(emoji)">
             {{emoji}}
@@ -44,9 +51,11 @@ export default {
     handleSubmit() {
       this.$socket.emit('sendMessage', { message: this.message, member: this.memberName });
       this.message = '';
+      this.$refs.textarea.focus();
     },
     addEmoji(emoji) {
       this.message = `${this.message}${emoji}`;
+      this.$refs.textarea.focus();
     },
   },
 };

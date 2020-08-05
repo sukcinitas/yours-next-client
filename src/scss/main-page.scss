@@ -27,7 +27,9 @@
   grid-area: header;
   &__button {
     @extend .btn--medium;
-    float: right;
+    position: absolute;
+    right: 22px;
+    top: 22px;
     width: auto;
   }
 }
@@ -54,6 +56,12 @@
     width: auto;
     margin: 0px;
     border: 2px solid silver;
+    height: auto;
+  }
+  &__date {
+    display: block;
+    font-size: 10px;
+    text-transform: none;
   }
   &__remove-button {
     @extend .btn--medium;  
@@ -62,6 +70,7 @@
     background-color: silver;
     border: 2px solid silver;
     border-left: none;
+    height: auto;
   }
   &__message--error {
     font-family: 'Anton', sans-serif;
@@ -107,15 +116,23 @@
                "messages"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 60px calc(100vh - 60px) calc(100vh - 42px) 42px;
+    grid-template-rows: 60px calc(100vh - 60px) auto 42px;
     &--chat-off {
-      padding: 5px 10px;
       height: auto;
+      padding: 5px 10px;
+      grid-template-rows: 60px calc(100vh - 102px) 42px;
     }
   }
   .playlists {
     min-height: 400px;
     max-width: 94%;
     width: 94%;
+    margin: 80px auto 20px;
+    &__name {
+      font-size: 14px;
+    }
+    &__date {
+      font-size: 9px;
+    }
   }
 }

@@ -37,7 +37,6 @@
     background-color: #ddd;
     padding: 15px;
     border-radius: 20px;
-    width: 100%;
     overflow-wrap: break-word;
   }
   &__message-name {
@@ -69,6 +68,7 @@
     &:hover, &:focus {
       background-color: white;
       border: none;
+      outline: none;
     }
   }
   &__emojies {
@@ -91,6 +91,6 @@
   .message-box {
     width: 94%;
     max-height: 600px;
-    border-top: 2px solid silver;
+    border-top: 1px solid goldenrod;
   }
 }

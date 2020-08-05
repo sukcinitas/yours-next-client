@@ -26,7 +26,7 @@
         placeholder="Enter a passcode"
         :class="[isExtended ? 'entry-form__input-2--extended' : 'entry-form__input-2',
         err.type === 'passcode' ? 'input--error' : '']"
-        @click="deleteErr(passcode)"
+        @click="deleteErr('passcode')"
       >
       <button
         type="submit"
