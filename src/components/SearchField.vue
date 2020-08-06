@@ -151,6 +151,8 @@ export default {
       }
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     },
     async getPrevPage() {
       let data;
@@ -166,6 +168,8 @@ export default {
       }
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     },
     goHome() {
       this.$router.push({ name: 'MainPage' });
