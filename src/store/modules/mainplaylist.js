@@ -13,7 +13,6 @@ const state = () => ({
     videoIndex: 0,
     time: 0,
     paused: false,
-    // playing: true,
   },
 });
 
@@ -33,16 +32,10 @@ const actions = {
   async SOCKET_toggleOngoingPlaylist({ commit }, payload) {
     commit('setOngoingPlaylistPause', { paused: payload.paused });
   },
-  // async SOCKET_playOngoingPlaylist({ commit }) {
-  //   commit('setOngoingPlaylistPlay');
-  // },
   async SOCKET_updatePlaylist({ commit }, payload) {
     commit('setPlaylist', { items: payload.idsArray });
     commit('setItems', { items: payload.items });
   },
-  // async SOCKET_addItemToPendingRemovalList({ commit }, payload) {
-  //   commit('addItemToPendingRemovalList', { item: payload.item });
-  // },
   async getPlaylist({ commit }, payload) {
     const { data } = await PlaylistService.get(payload.id);
     if (data.success) {
@@ -101,8 +94,6 @@ const actions = {
 
 const mutations = {
   changeNowPlayingVideoIndex(state, index) {
-    // eslint-disable-next-line no-console
-    console.log('hey I change index!');
     state.nowPlayingVideoIndex = index;
   },
   setPlaylist(state, payload) {
@@ -121,15 +112,10 @@ const mutations = {
     state.ongoingPlaylist = Object.assign(
       {}, state.ongoingPlaylist, { paused: payload.paused });
   },
-  // setOngoingPlaylistPlay(state) {
-  //   state.ongoingPlaylist = Object.assign(
-  //     {}, state.ongoingPlaylist, { paused: false, playing: true });
-  // },
   setOngoingPlaylist(state, payload) {
     state.ongoingPlaylist = payload;
   },
   setOngoingPlaylistVideoIndex(state, payload) {
-    // state.ongoingPlaylist.videoIndex = payload.videoIndex;
     state.ongoingPlaylist = Object.assign(
       {}, state.ongoingPlaylist, { videoIndex: payload.videoIndex });
   },
@@ -142,9 +128,6 @@ const getters = {
   isOngoingPlaylistPaused(state) {
     return state.ongoingPlaylist.paused;
   },
-  // isOngoingPlaylistPlaying(state) {
-  //   return state.ongoingPlaylist.playing;
-  // },
 };
 
 export default {

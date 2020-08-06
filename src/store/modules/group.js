@@ -43,6 +43,9 @@ const actions = {
     const errType = data.message === 'Name is already in use!' ? 'name' : 'else';
     return { success: false, errMsg: data.message, errType };
   },
+  async SOCKET_reload() {
+    window.location.reload();
+  },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
   },
@@ -86,7 +89,18 @@ const mutations = {
     state.activeMembers = payload.activeMembers;
     state.messages = payload.messages;
     state.moderator = payload.moderator;
-    state.ongoingPlaylist = payload.ongoingPlaylist;
+    state.ongoingPlaylist = payload.ongoingPlaylist; //
+  },
+  resetState(state) {
+    state.activeMembers = [];
+    state.name = '';
+    state.member = {
+      name: '',
+      emoji: '',
+    };
+    state.messages = '';
+    state.moderator = '';
+    state.isChatTurnedOf = false;
   },
   setChatState(state, payload) {
     state.isChatTurnedOff = payload.state;
