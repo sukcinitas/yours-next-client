@@ -44,7 +44,7 @@ const actions = {
     return { success: false, errMsg: data.message, errType };
   },
   async SOCKET_reload() {
-    window.location.reload();
+    window.location.href = 'http://infinite-woodland-46117.herokuapp.com/#/';
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
