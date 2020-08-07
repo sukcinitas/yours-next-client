@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unreachable */
 /* eslint-disable no-shadow */
@@ -43,8 +44,15 @@ const actions = {
     const errType = data.message === 'Name is already in use!' ? 'name' : 'else';
     return { success: false, errMsg: data.message, errType };
   },
-  async SOCKET_reload() {
-    window.location.href = 'http://infinite-woodland-46117.herokuapp.com/#/';
+  async SOCKET_connect() {
+    console.log('connected');
+  },
+  async SOCKET_disconnect() {
+    console.log('disconnected');
+  },
+  async SOCKET_reconnecting() {
+    console.log('reconnected'); // after disconnecting, does it always try to reconnect?
+    window.location.reload();
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
@@ -89,7 +97,7 @@ const mutations = {
     state.activeMembers = payload.activeMembers;
     state.messages = payload.messages;
     state.moderator = payload.moderator;
-    state.ongoingPlaylist = payload.ongoingPlaylist; //
+    state.ongoingPlaylist = payload.ongoingPlaylist;
   },
   resetState(state) {
     state.activeMembers = [];
