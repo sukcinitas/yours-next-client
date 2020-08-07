@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="message-box__messages">
+    <div class="message-box__messages" ref="messages">
       <div class="message-box__message" v-for="(message, index) in messages" :key="index">
         <p class="message-box__message-name">{{message.name}}</p>
         <p class="message-box__message-content">{{message.message}}</p>
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       message: '',
+      messagesWillBeUpdated: false,
     };
   },
   computed: {
@@ -47,16 +48,35 @@ export default {
       return this.$store.state.group.member.name;
     },
   },
+  watch: {
+    messages() {
+      this.messagesWillBeUpdated = true;
+    },
+  },
   methods: {
     handleSubmit() {
       this.$socket.emit('sendMessage', { message: this.message, member: this.memberName });
       this.message = '';
-      this.$refs.textarea.focus();
     },
     addEmoji(emoji) {
       this.message = `${this.message}${emoji}`;
       this.$refs.textarea.focus();
     },
+    scrollTop() {
+      this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
+       + this.$refs.messages.clientHeight;
+    },
+  },
+  updated() {
+    if (this.messagesWillBeUpdated) {
+      // eslint-disable-next-line no-console
+      console.log('updated');
+      this.scrollTop();
+      this.messagesWillBeUpdated = false;
+    }
+  },
+  mounted() {
+    this.scrollTop();
   },
 };
 </script>
