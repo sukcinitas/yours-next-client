@@ -1,7 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap');
 .header {
   text-align: center;
-  font-size: 32px;
-  padding: 40px
+  padding: 50px;
+  &__heading {
+    font-family: 'Montserrat Subrayada', sans-serif;
+    font-weight: 700;
+    font-size: 60px;
+    color: #333;
+  }
 }
 .entry-forms {
   margin: 120px auto 20px;
@@ -9,5 +15,6 @@
 @media only screen and (max-width: 768px)  {
   .entry-forms {
     margin: 80px auto 50px;
+    font-size: 40px;
   }
 }

@@ -53,6 +53,7 @@ export default {
       },
       message: '',
       paused: false,
+      timeWillBeUpdated: false,
     };
   },
   computed: {
@@ -80,12 +81,27 @@ export default {
     isOngoingPlaylistPaused() {
       return this.$store.getters['mainplaylist/isOngoingPlaylistPaused'];
     },
-    // isOngoingPlaylistPlaying() {
-    //   return this.$store.getters['mainplaylist/isOngoingPlaylistPlaying'];
-    // },
     isNextAndPrevButtonDisplayed() {
       return (this.isMainAnOngoingPlaylist && this.isModerator) ||
       !this.isMainAnOngoingPlaylist;
+    },
+    userJoined() {
+      return this.$store.state.mainplaylist.userJoined;
+    },
+  },
+  watch: {
+    time() {
+      this.timeWillBeUpdated = true;
+    },
+    async userJoined() {
+      const time = await this.$refs.youtube.player.getCurrentTime();
+      this.$socket.emit('setOngoingPlaylist', {
+        id: this.$store.state.mainplaylist.id,
+        videoIndex: this.index,
+        time,
+        paused: false,
+      });
+      this.$store.commit('mainplaylist/setUserJoined', { state: false });
     },
   },
   methods: {
@@ -103,8 +119,6 @@ export default {
       if (this.isMainAnOngoingPlaylist) {
         this.$socket.emit('toggleOngoingPlaylist', { paused: false });
       } else {
-        // eslint-disable-next-line no-console
-        console.log('hey I play');
         this.$refs.youtube.player.playVideo();
       }
     },
@@ -128,14 +142,6 @@ export default {
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
       this.play();
     },
-    // fixateState(state) {
-    //   if (state.data === 2) {
-    //     return true;
-    //   } else if (state.data === 1) {
-    //     return false;
-    //   }
-    //   return false;
-    // },
     async makePlaylistMain() { // main - first video from the start
       this.$socket.emit('setOngoingPlaylist', {
         id: this.$store.state.mainplaylist.id,
@@ -166,27 +172,44 @@ export default {
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
       this.play();
     },
-    // async seekTo() {
-    //   const time = await this.$refs.youtube.player.getCurrentTime();
-    //   // eslint-disable-next-line no-console
-    //   console.log(time);
-    //   this.$refs.youtube.player.seekTo(time, true);
-    //   // this.play();
-    // },
+    async seekTo(time) {
+      // eslint-disable-next-line no-console
+      console.log('seeking');
+      this.$refs.youtube.player.seekTo(time, true);
+    },
   },
-  mounted() {
+  async beforeMount() {
+    // if (!this.isModerator && this.isMainAnOngoingPlaylist) {
+    //   this.$socket.emit('userJoinsOngoingPlaylist');
+    // }
+  },
+  async mounted() {
     if (!this.isModerator && this.isMainAnOngoingPlaylist) {
       this.$refs.youtube.player.mute();
-      this.$refs.youtube.player.seekTo(this.time, true);
     }
-    // this.$refs.youtube.player.addEventListener('onStateChange', this.fixateState);
-  },
-  updated() {
+    //
+    // to keep seekTo in syncronization, I wait 5secs till video is probably loaded
+    // and then I seekTo a certain time
+    setTimeout(() => {
+      if (!this.isModerator && this.isMainAnOngoingPlaylist) {
+        this.$socket.emit('userJoinsOngoingPlaylist');
+      }
+    }, 5000);
     if (!this.isModerator && this.isMainAnOngoingPlaylist) {
-      // eslint-disable-next-line no-console
-      console.log('updated!');
-      // const time = this.$refs.youtube.player.getCurrentTime();
-      // this.$refs.youtube.player.seekTo(time, false);
+      this.$socket.emit('userJoinsOngoingPlaylist');
+    }
+    // if (this.isMainAnOngoingPlaylist) {
+    //   const time = await this.$refs.youtube.player.getCurrentTime();
+    //   this.$socket.emit('setOngoingPlaylist', {
+    //     id: this.videoId,
+    //     videoIndex: this.index,
+    //     time,
+    //     paused: false,
+    //   });
+    // }
+  },
+  async updated() {
+    if (!this.isModerator && this.isMainAnOngoingPlaylist) {
       this.$refs.youtube.player.mute();
     } else {
       this.$refs.youtube.player.unMute();
@@ -198,9 +221,13 @@ export default {
         this.$refs.youtube.player.playVideo();
       }
     }
+    if (this.timeWillBeUpdated) {
+      this.seekTo(this.time);
+      // this.$refs.youtube.player.loadVideoById(this.playlist[this.index], this.time);
+      this.timeWillBeUpdated = false;
+    }
   },
   beforeDestroy() {
-    // this.$refs.youtube.player.removeEventListener('onStateChange', this.fixateState);
     if (this.isModerator && this.isMainAnOngoingPlaylist) {
       this.$socket.emit('setOngoingPlaylist', {
         id: '',

@@ -14,16 +14,24 @@ const state = () => ({
     time: 0,
     paused: false,
   },
+  userJoined: false,
 });
 
 const actions = {
   async SOCKET_setOngoingPlaylist({ commit }, payload) {
     commit('setOngoingPlaylist', {
       id: payload.id,
-      videoIndex: 0,
-      time: 0,
+      videoIndex: payload.videoIndex,
+      time: payload.time,
       paused: false,
     });
+  },
+  async SOCKET_userJoinsOngoingPlaylist({ rootState, commit }) {
+    // eslint-disable-next-line no-console
+    console.log(rootState);
+    if (rootState.group.member.name === rootState.group.moderator) {
+      commit('setUserJoined', { state: true });
+    }
   },
   async SOCKET_changeOngoingPlaylistVideoIndex({ commit }, payload) {
     commit('setOngoingPlaylistVideoIndex', { videoIndex: payload.videoIndex });
@@ -118,6 +126,9 @@ const mutations = {
   setOngoingPlaylistVideoIndex(state, payload) {
     state.ongoingPlaylist = Object.assign(
       {}, state.ongoingPlaylist, { videoIndex: payload.videoIndex });
+  },
+  setUserJoined(state, payload) {
+    state.userJoined = payload.state;
   },
 };
 

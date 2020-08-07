@@ -56,6 +56,7 @@ const actions = {
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
+    commit('mainplaylist/setOngoingPlaylist', payload.group.ongoingPlaylist, { root: true });
   },
   async SOCKET_setModerator({ commit }, payload) {
     commit('setModerator', { name: payload.name });
@@ -97,7 +98,6 @@ const mutations = {
     state.activeMembers = payload.activeMembers;
     state.messages = payload.messages;
     state.moderator = payload.moderator;
-    state.ongoingPlaylist = payload.ongoingPlaylist;
   },
   resetState(state) {
     state.activeMembers = [];
