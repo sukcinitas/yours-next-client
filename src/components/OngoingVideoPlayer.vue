@@ -1,11 +1,5 @@
 <template>
 <div>
-  <button
-    class="main-playlist__button"
-    v-if="isModerator && !isMainAnOngoingPlaylist"
-    @click="makePlaylistMain"
-  >Make this playlist main
-  </button>
   <div class="main-playlist__youtube">
     <youtube
       :video-id="videoId"
@@ -16,6 +10,7 @@
       @playing="fixatePlay"
       @ready="fixateReady"
       fitParent
+      resize
     >
     </youtube>
   </div>
@@ -43,13 +38,14 @@
 </template>
 <script>
 export default {
-  name: 'VideoPlayer',
+  name: 'OngoingVideoPlayer',
   data() {
     return {
       playerVars: {
         autoplay: 1,
         color: 'white',
-        controls: 0,
+        controls: 1,
+        iv_load_policy: 3,
       },
       message: '',
       paused: false,
@@ -60,17 +56,11 @@ export default {
     time() {
       return this.$store.state.mainplaylist.ongoingPlaylist.time;
     },
-    isMainAnOngoingPlaylist() {
-      return this.$store.getters['mainplaylist/isMainAnOngoingPlaylist'];
-    },
     isModerator() {
       return this.$store.getters['group/isModerator'];
     },
     index() {
-      if (this.isMainAnOngoingPlaylist) {
-        return this.$store.state.mainplaylist.ongoingPlaylist.videoIndex;
-      }
-      return this.$store.state.mainplaylist.nowPlayingVideoIndex;
+      return this.$store.state.mainplaylist.ongoingPlaylist.videoIndex;
     },
     videoId() {
       return this.playlist[this.index];
@@ -82,8 +72,7 @@ export default {
       return this.$store.getters['mainplaylist/isOngoingPlaylistPaused'];
     },
     isNextAndPrevButtonDisplayed() {
-      return (this.isMainAnOngoingPlaylist && this.isModerator) ||
-      !this.isMainAnOngoingPlaylist;
+      return this.isModerator;
     },
     userJoined() {
       return this.$store.state.mainplaylist.userJoined;
@@ -109,18 +98,10 @@ export default {
       this.end();
     },
     pause() {
-      if (this.isMainAnOngoingPlaylist) {
-        this.$socket.emit('toggleOngoingPlaylist', { paused: true });
-      } else {
-        this.$refs.youtube.player.pauseVideo();
-      }
+      this.$socket.emit('toggleOngoingPlaylist', { paused: true });
     },
     play() {
-      if (this.isMainAnOngoingPlaylist) {
-        this.$socket.emit('toggleOngoingPlaylist', { paused: false });
-      } else {
-        this.$refs.youtube.player.playVideo();
-      }
+      this.$socket.emit('toggleOngoingPlaylist', { paused: false });
     },
     fixatePause() {
       this.paused = true;
@@ -136,99 +117,54 @@ export default {
       if (this.index === this.playlist.length - 1) {
         return;
       }
-      if (this.isModerator && this.isMainAnOngoingPlaylist) {
+      if (this.isModerator) {
         this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: this.index + 1 });
       }
-      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
-      this.play();
-    },
-    async makePlaylistMain() { // main - first video from the start
-      this.$socket.emit('setOngoingPlaylist', {
-        id: this.$store.state.mainplaylist.id,
-        videoIndex: 0,
-        time: 0,
-        paused: false,
-      });
     },
     prevVideo() {
-      if (!this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
-        return;
-      }
-      if (this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+      if (this.isModerator) {
         this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: this.index - 1 });
-        return;
       }
-      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index - 1);
-      this.play();
     },
     nextVideo() {
-      if (!this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
-        return;
-      }
-      if (this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+      if (this.isModerator) {
         this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: this.index + 1 });
-        return;
       }
-      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
-      this.play();
     },
     async seekTo(time) {
-      // eslint-disable-next-line no-console
-      console.log('seeking');
       this.$refs.youtube.player.seekTo(time, true);
     },
   },
-  async beforeMount() {
-    // if (!this.isModerator && this.isMainAnOngoingPlaylist) {
-    //   this.$socket.emit('userJoinsOngoingPlaylist');
-    // }
-  },
   async mounted() {
-    if (!this.isModerator && this.isMainAnOngoingPlaylist) {
+    if (!this.isModerator) {
       this.$refs.youtube.player.mute();
     }
-    //
-    // to keep seekTo in syncronization, I wait 5secs till video is probably loaded
+    // to keep seekTo in syncronization, I wait 5secs till propability that video is loaded is high
     // and then I seekTo a certain time
     setTimeout(() => {
-      if (!this.isModerator && this.isMainAnOngoingPlaylist) {
+      if (!this.isModerator) {
         this.$socket.emit('userJoinsOngoingPlaylist');
       }
     }, 5000);
-    if (!this.isModerator && this.isMainAnOngoingPlaylist) {
-      this.$socket.emit('userJoinsOngoingPlaylist');
-    }
-    // if (this.isMainAnOngoingPlaylist) {
-    //   const time = await this.$refs.youtube.player.getCurrentTime();
-    //   this.$socket.emit('setOngoingPlaylist', {
-    //     id: this.videoId,
-    //     videoIndex: this.index,
-    //     time,
-    //     paused: false,
-    //   });
-    // }
   },
   async updated() {
-    if (!this.isModerator && this.isMainAnOngoingPlaylist) {
+    if (!this.isModerator) {
       this.$refs.youtube.player.mute();
     } else {
       this.$refs.youtube.player.unMute();
     }
-    if (this.isMainAnOngoingPlaylist) {
-      if (this.isOngoingPlaylistPaused) {
-        this.$refs.youtube.player.pauseVideo();
-      } else {
-        this.$refs.youtube.player.playVideo();
-      }
+    if (this.isOngoingPlaylistPaused) {
+      this.$refs.youtube.player.pauseVideo();
+    } else {
+      this.$refs.youtube.player.playVideo();
     }
     if (this.timeWillBeUpdated) {
       this.seekTo(this.time);
-      // this.$refs.youtube.player.loadVideoById(this.playlist[this.index], this.time);
       this.timeWillBeUpdated = false;
     }
   },
   beforeDestroy() {
-    if (this.isModerator && this.isMainAnOngoingPlaylist) {
+    if (this.isModerator) {
       this.$socket.emit('setOngoingPlaylist', {
         id: '',
         videoIndex: 0,

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import MainPage from '../components/MainPage';
 import MainPlaylist from '../components/MainPlaylist';
+import OrdinaryPlaylist from '../components/OrdinaryPlaylist';
 import SearchField from '../components/SearchField';
 import EntrancePage from '../components/EntrancePage';
 import MemberCreate from '../components/MemberCreate';
@@ -21,6 +22,12 @@ const router = new Router({
       path: '/mainplaylist',
       name: 'MainPlaylist',
       component: MainPlaylist,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/playlist',
+      name: 'OrdinaryPlaylist',
+      component: OrdinaryPlaylist,
       meta: { requiresAuth: true },
     },
     {

@@ -3,16 +3,15 @@
     <button @click="goHome" class="main-playlist__button--home">Home</button>
     <h4 class="main-playlist__title">{{title}}</h4>
     <button
-      v-if="isModerator"
       class="main-playlist__button"
       @click="gotToSearch"
     >Add some videos!
     </button>
-    <ongoing-video-player
+    <ordinary-video-player
       class="main-playlist__video-player"
       v-if="initialPlaylistLength !== 0"
     >
-    </ongoing-video-player>
+    </ordinary-video-player>
     <video-items-data
       class="main-playlist__video-items"
       v-if="initialPlaylistLength !== 0"
@@ -22,13 +21,13 @@
 </template>
 
 <script>
-import OngoingVideoPlayer from './OngoingVideoPlayer';
+import OrdinaryVideoPlayer from './OrdinaryVideoPlayer';
 import VideoItemsData from './VideoItemsData';
 import MembersList from './MembersList';
 
 export default {
-  name: 'MainPlaylist',
-  components: { OngoingVideoPlayer, VideoItemsData, MembersList },
+  name: 'OrdinaryPlaylist',
+  components: { OrdinaryVideoPlayer, VideoItemsData, MembersList },
   data() {
     return {
     };

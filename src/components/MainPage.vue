@@ -8,10 +8,16 @@
 
     <div class="playlists">
       <div class="playlists__list">
+          <div class="playlists__playlist--ongoing" v-if="ongoingPlaylistId">
+            <button
+            class="playlists__name--ongoing"
+            @click="goToOngoingPlaylist(ongoingPlaylistId)">Ongoing playlist
+            </button>
+        </div>
         <div v-for="playlist in playlists" :key="playlist.title" class="playlists__playlist">
             <button
             class="playlists__name"
-            @click="goToPlaylist(playlist._id, playlist.title)">{{playlist.title}}
+            @click="goToPlaylist(playlist._id)">{{playlist.title}}
               <span class="playlists__date">
                 {{formatDate(playlist.updatedAt)}}
               </span>
@@ -95,6 +101,9 @@ export default {
     isMainAnOngoingPlaylist() {
       return this.$store.getters['mainplaylist/isMainAnOngoingPlaylist'];
     },
+    ongoingPlaylistId() {
+      return this.$store.state.mainplaylist.ongoingPlaylist.id;
+    },
   },
   methods: {
     toggleExtended() {
@@ -129,6 +138,17 @@ export default {
       this.isExtended = false;
     },
     async goToPlaylist(id) {
+      this.$store.commit('mainplaylist/setId', { id });
+      this.$store.dispatch('mainplaylist/getPlaylist', { id })
+        .then((result) => {
+          if (!result.success) {
+            this.errMsg = result.errMsg;
+            return;
+          }
+          this.$router.push({ path: '/playlist' });
+        });
+    },
+    async goToOngoingPlaylist(id) {
       this.$store.commit('mainplaylist/setId', { id });
       this.$store.dispatch('mainplaylist/getPlaylist', { id })
         .then((result) => {

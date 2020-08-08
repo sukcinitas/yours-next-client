@@ -3,7 +3,8 @@
       <div
         v-for="member in activeMembers"
         :key="member.emoji"
-        :class="[{'members__moderator': moderator === member.name}, 'members__member']"
+        :class="[{'members__moderator': moderator === member.name}, 'members__member',
+        {'members__you' : user === member.name}]"
         @dblclick="makeModerator(member.name)"
         @mouseover="isTooltipDisplayed = true, target = $event.target.innerText"
         @mouseout="isTooltipDisplayed = false"
@@ -39,6 +40,9 @@ export default {
     },
     moderator() {
       return this.$store.state.group.moderator;
+    },
+    user() {
+      return this.$store.state.group.member.name;
     },
   },
   methods: {

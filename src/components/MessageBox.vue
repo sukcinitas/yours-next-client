@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="message-box">
     <div class="message-box__messages" ref="messages">
       <div class="message-box__message" v-for="(message, index) in messages" :key="index">
         <p class="message-box__message-name">{{message.name}}</p>
