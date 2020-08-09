@@ -6,7 +6,7 @@
     @click="makePlaylistMain"
   >Make this playlist main
   </button>
-  <div class="main-playlist__youtube">
+  <div class="main-playlist__youtube--ordinary">
     <youtube
       :video-id="videoId"
       :player-vars="playerVars"
@@ -18,11 +18,6 @@
     </youtube>
   </div>
   <div class="main-playlist__controls">
-    <button
-      @click="paused ? play() : pause()"
-      class="main-playlist__button--controls"
-    >{{paused ? "Play" : "Pause"}}
-    </button>
     <button
       @click="prevVideo"
       class="main-playlist__button--controls"
@@ -39,7 +34,7 @@
 </template>
 <script>
 export default {
-  name: 'VideoPlayer',
+  name: 'OrdinaryVideoPlayer',
   data() {
     return {
       playerVars: {
@@ -73,18 +68,6 @@ export default {
         return;
       }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
-    },
-    pause() {
-      this.$refs.youtube.player.pauseVideo();
-    },
-    play() {
-      this.$refs.youtube.player.playVideo();
-    },
-    fixatePause() {
-      this.paused = true;
-    },
-    fixatePlay() {
-      this.paused = false;
     },
     async makePlaylistMain() {
       this.$socket.emit('setOngoingPlaylist', {

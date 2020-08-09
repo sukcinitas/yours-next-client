@@ -31,6 +31,12 @@
       <p v-if="errMsg && chosenVideoId === item.id"
       class="main-playlist__message--error">{{errMsg}}</p>
     </div>
+    <!-- <button
+      type="button"
+      class="main-playlist__button"
+      @click="loadMore"
+    >Load more
+    </button> -->
   </div>
 </template>
 
@@ -93,6 +99,14 @@ export default {
               this.changeIndex(this.activeIndex - 1);
             }
           });
+        });
+    },
+    loadMore() {
+      this.$store.dispatch('mainplaylist/getPlaylistData')
+        .then((result) => {
+          if (!result.success) {
+            this.errMsg = result.errMsg;
+          }
         });
     },
   },

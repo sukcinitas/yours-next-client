@@ -8,6 +8,8 @@ const state = () => ({
   id: '',
   title: '',
   items: [],
+  setCount: 0,
+  itemCount: 5,
   ongoingPlaylist: {
     id: '',
     videoIndex: 0,
@@ -27,8 +29,6 @@ const actions = {
     });
   },
   async SOCKET_userJoinsOngoingPlaylist({ rootState, commit }) {
-    // eslint-disable-next-line no-console
-    console.log(rootState);
     if (rootState.group.member.name === rootState.group.moderator) {
       commit('setUserJoined', { state: true });
     }
@@ -55,7 +55,13 @@ const actions = {
     return { success: false, errMsg: data.error };
   },
   async getPlaylistData({ commit, state }) {
-    const { data } = await DataService.getVideos(state.idsArray.join(','));
+    if (state.idsArray.length === state.items.length) {
+      return { success: true };
+    }
+    commit('setSetCount');
+    const idsArrayOfItemCount = (state.idsArray.slice((state.setCount - 1) *
+    state.itemCount, state.setCount * state.itemCount)).join(',');
+    const { data } = await DataService.getVideos(idsArrayOfItemCount);
     if (!data.success) {
       return { success: false, errMsg: 'Could not retrieve playlist data!' };
     }
@@ -108,7 +114,7 @@ const mutations = {
     state.idsArray = payload.items;
   },
   setItems(state, payload) {
-    state.items = payload.items;
+    state.items = [...state.items, ...payload.items];
   },
   setId(state, payload) {
     state.id = payload.id;
@@ -129,6 +135,9 @@ const mutations = {
   },
   setUserJoined(state, payload) {
     state.userJoined = payload.state;
+  },
+  setSetCount(state) {
+    state.setCount += 1;
   },
 };
 
