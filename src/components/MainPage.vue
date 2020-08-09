@@ -156,7 +156,7 @@ export default {
             this.errMsg = result.errMsg;
             return;
           }
-          this.$router.push({ path: '/mainplaylist' });
+          this.$router.push({ path: '/playlist' });
         });
     },
     async deletePlaylist(id) {

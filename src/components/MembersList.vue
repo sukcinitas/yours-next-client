@@ -52,6 +52,11 @@ export default {
           return;
         }
         this.$socket.emit('setModerator', name);
+        // eslint-disable-next-line no-console
+        console.log(window.location);
+        if (window.location.hash === '#/mainplaylist') {
+          this.$router.push({ name: 'OrdinaryPlaylist' });
+        }
       }
     },
     naming(name) {

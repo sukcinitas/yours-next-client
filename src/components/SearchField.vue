@@ -118,7 +118,15 @@ export default {
             this.errorMessage = result.errMsg;
             this.chosenVideoId = videoId;
           } else {
-            this.$socket.emit('updatePlaylist', { idsArray: result.items, items: result.itemsData });
+            // this.$socket.emit('updatePlaylist',
+            // { idsArray: result.items, items: result.itemsData });
+            this.$socket.emit('updatePlaylist', {
+              idsArray: result.items,
+              itemData: result.itemData,
+              type: 'addition',
+              alreadyIn: result.alreadyIn,
+              id: result.id,
+            });
             this.successMessage = 'Successfully added!';
             this.chosenVideoId = videoId;
             setTimeout(() => {

@@ -1,7 +1,7 @@
 <template>
   <div class="main-playlist">
     <button @click="goHome" class="main-playlist__button--home">Home</button>
-    <h4 class="main-playlist__title">{{title}}</h4>
+    <h4 class="main-playlist__title--ongoing">{{title}}</h4>
     <button
       v-if="isModerator"
       class="main-playlist__button"
@@ -14,6 +14,7 @@
     >
     </ongoing-video-player>
     <video-items-data
+      :isOngoing="true"
       class="main-playlist__video-items"
       v-if="initialPlaylistLength !== 0"
     ></video-items-data>

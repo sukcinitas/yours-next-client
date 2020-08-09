@@ -99,6 +99,11 @@
     text-transform: uppercase;
     font-size: 40px;
     margin: 30px auto;
+    &--ongoing {
+      @extend .main-playlist__title;
+      color: goldenrod;
+      -webkit-text-stroke: 0.6px #424242;
+    }
   }
   &__title--bg {
     @extend .heading;

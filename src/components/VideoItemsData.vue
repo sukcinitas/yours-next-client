@@ -31,12 +31,13 @@
       <p v-if="errMsg && chosenVideoId === item.id"
       class="main-playlist__message--error">{{errMsg}}</p>
     </div>
-    <!-- <button
+    <button
+      v-if="isThereMoreToLoad"
       type="button"
       class="main-playlist__button"
       @click="loadMore"
     >Load more
-    </button> -->
+    </button>
   </div>
 </template>
 
@@ -49,9 +50,10 @@ export default {
       chosenVideoId: '',
     };
   },
+  props: ['isOngoing'],
   computed: {
     activeIndex() {
-      if (this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+      if (this.isOngoing) {
         return this.$store.state.mainplaylist.ongoingPlaylist.videoIndex;
       }
       return this.$store.state.mainplaylist.nowPlayingVideoIndex;
@@ -65,13 +67,31 @@ export default {
     isModerator() {
       return this.$store.getters['group/isModerator'];
     },
+    isThereMoreToLoad() {
+      return this.$store.state.mainplaylist.idsArray.length >
+      this.$store.state.mainplaylist.items.length;
+    },
+    isIndexAheadOfData() {
+      return this.$store.getters['mainplaylist/isIndexAheadOfData'];
+    },
+  },
+  watch: {
+    activeIndex(newValue, oldValue) {
+      // eslint-disable-next-line no-console
+      console.log(oldValue, newValue);
+      if (newValue > oldValue) {
+        if (this.isIndexAheadOfData) {
+          this.loadMore();
+        }
+      }
+    },
   },
   methods: {
     changeIndex(index) {
-      if (!this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+      if (!this.isModerator && this.isOngoing) {
         return;
       }
-      if (this.isModerator && this.$store.getters['mainplaylist/isMainAnOngoingPlaylist']) {
+      if (this.isModerator && this.isOngoing) {
         this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: index });
         return;
       }
@@ -91,7 +111,10 @@ export default {
           }
           this.$socket.emit('updatePlaylist', {
             idsArray: result.items,
-            items: result.itemsData,
+            itemData: videoId,
+            type: 'deletion',
+            alreadyIn: false,
+            id: result.id,
           });
           this.$nextTick(() => {
             const isRemovedBefore = this.playlist.indexOf(videoId) < this.activeIndex;
@@ -106,15 +129,22 @@ export default {
         .then((result) => {
           if (!result.success) {
             this.errMsg = result.errMsg;
+          } else if (result.increaseSetCount) {
+            this.$store.commit('mainplaylist/setSetCount');
           }
         });
     },
   },
   mounted() {
+    if (this.$store.state.mainplaylist.setCount >= 1) {
+      return;
+    }
     this.$store.dispatch('mainplaylist/getPlaylistData')
       .then((result) => {
         if (!result.success) {
           this.errMsg = result.errMsg;
+        } else if (result.increaseSetCount) {
+          this.$store.commit('mainplaylist/setSetCount');
         }
       });
   },

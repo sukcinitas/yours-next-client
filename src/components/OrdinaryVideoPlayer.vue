@@ -19,11 +19,13 @@
   </div>
   <div class="main-playlist__controls">
     <button
+      v-if="index !== 0"
       @click="prevVideo"
       class="main-playlist__button--controls"
     >Previous video
     </button>
     <button
+      v-if="index !== playlist.length - 1"
       @click="nextVideo"
       class="main-playlist__button--controls"
     >Next video

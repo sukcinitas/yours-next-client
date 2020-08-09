@@ -12,7 +12,7 @@
       v-if="initialPlaylistLength !== 0"
     >
     </ordinary-video-player>
-    <video-items-data
+    <video-items-data :isOngoing="false"
       class="main-playlist__video-items"
       v-if="initialPlaylistLength !== 0"
     ></video-items-data>
