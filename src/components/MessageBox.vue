@@ -69,8 +69,6 @@ export default {
   },
   updated() {
     if (this.messagesWillBeUpdated) {
-      // eslint-disable-next-line no-console
-      console.log('updated');
       this.scrollTop();
       this.messagesWillBeUpdated = false;
     }

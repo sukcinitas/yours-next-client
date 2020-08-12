@@ -27,6 +27,9 @@ const actions = {
       time: payload.time,
       paused: false,
     });
+    if (!payload.id && window.location.hash === '#/mainplaylist') {
+      window.history.back();
+    }
   },
   async SOCKET_userJoinsOngoingPlaylist({ rootState, commit }) {
     if (rootState.group.member.name === rootState.group.moderator) {

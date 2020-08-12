@@ -78,10 +78,15 @@
   }
   &__video-items {
     margin: 50px auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: block;
+    // flex-direction: column;
+    // justify-content: center;
     width: 334px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    max-height: calc(100vh - 20px);
+    border-top: 3px solid silver;
+    border-bottom: 3px solid silver;
   }
   &__video-item {
     background-color: black;
@@ -131,6 +136,10 @@
       @extend .main-playlist__heading;
       background-color: goldenrod;
       color: black;
+      cursor: default;
+      &--ongoing {
+        cursor: default;
+      }
     }
   }
   &__img {

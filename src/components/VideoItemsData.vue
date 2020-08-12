@@ -11,7 +11,8 @@
       <h3
         @click="changeIndex(index)"
         :class="[{'main-playlist__heading--active': item.id === playlist[activeIndex]},
-       'main-playlist__heading']"
+       'main-playlist__heading', {'main-playlist__heading--active--ongoing':
+       isOngoing && !isModerator}]"
       >{{item.snippet.title}}
       </h3>
       <img
