@@ -1,7 +1,6 @@
 <template>
   <div class="search">
     <button @click="goHome" class="search__button--home">Home</button>
-    <p>Playlist id: PLcCyuE3mscVFQbqG4SbusOGJbrkaJoeY4</p>
     <p class="search__message--error" v-if="errorMessage && !chosenVideoId">{{errorMessage}}</p>
     <p class="search__message--success"
     v-if="successMessage && !chosenVideoId">{{successMessage}}</p>
@@ -11,14 +10,15 @@
     </div>
 
     <div class="search__search-options">
-      <input type="radio" id="searchAll" value="searchAll" v-model="picked">
+      <input type="radio" id="searchAll" name="searchParameters" value="searchAll" v-model="picked">
       <label for="searchAll" class="search__label">by phrase</label>
-      <input type="radio" id="searchPlaylists" value="searchPlaylists" v-model="picked">
+      <input type="radio" id="searchPlaylists" value="searchPlaylists"
+      v-model="picked" name="searchParameters" >
       <label for="searchPlaylists" class="search__label">by channel id</label>
-      <input type="radio" id="searchPlaylistItems" value="searchPlaylistItems" v-model="picked">
+      <input type="radio" id="searchPlaylistItems" value="searchPlaylistItems"
+      v-model="picked" name="searchParameters">
       <label for="searchPlaylistItems" class="search__label">by playlist id</label>
     </div>
-
     <div v-if="picked === 'searchAll'" class="search__search-results">
       <div v-for="item in items" :key="item.id.videoId" class="search__search-result">
         <p class="search__message--error"
@@ -44,6 +44,8 @@ v-if="successMessage && chosenVideoId === item.id.videoId">{{successMessage}}</p
     </div>
 
     <div v-else-if="picked === 'searchPlaylistItems'" class="search__search-results">
+      <button v-if="isExploring" class="search__button--centered" @click="backToList">
+        Back to playlist list</button>
       <div
         class="search__search-result"
         v-for="item in items"
@@ -84,8 +86,8 @@ export default {
   components: { MembersList },
   data() {
     return {
-      picked: 'searchAll', // searchAll, searchPlaylists, searchPlaylistItems
-      queryOrId: '',
+      picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems
+      queryOrId: 'PLcCyuE3mscVFQbqG4SbusOGJbrkaJoeY4',
       items: [],
       playlists: [],
       prevPageToken: '',
@@ -93,6 +95,7 @@ export default {
       errorMessage: '',
       successMessage: '',
       chosenVideoId: '',
+      isExploring: false,
     };
   },
   methods: {
@@ -118,8 +121,6 @@ export default {
             this.errorMessage = result.errMsg;
             this.chosenVideoId = videoId;
           } else {
-            // this.$socket.emit('updatePlaylist',
-            // { idsArray: result.items, items: result.itemsData });
             this.$socket.emit('updatePlaylist', {
               idsArray: result.items,
               itemData: result.itemData,
@@ -144,6 +145,7 @@ export default {
       this.nextPageToken = data.data.data.nextPageToken || '';
       this.picked = 'searchPlaylistItems';
       this.queryOrId = id;
+      this.isExploring = true;
     },
     async getNextPage() {
       let data;
@@ -178,6 +180,10 @@ export default {
       this.nextPageToken = data.data.data.nextPageToken || '';
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    },
+    backToList() {
+      this.picked = 'searchPlaylists';
+      this.isExploring = false;
     },
     goHome() {
       this.$router.push({ name: 'MainPage' });

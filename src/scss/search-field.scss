@@ -38,8 +38,13 @@
     @extend .btn;
     height: 40px;
     margin-left: 0px;
-    font-size: 22px;
+    font-size: 18px;
     width: 105px;
+    &--centered {
+      @extend .search__button;
+      margin: 0 auto;
+      width: auto;
+    }
     &--home {
       @extend .btn--medium;
       top: 0px;

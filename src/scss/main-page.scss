@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap');
 @import '@/scss/shared-styles-buttons.scss';
 @import '@/scss/shared-styles-forms.scss';
 .main {
@@ -31,6 +32,10 @@
     right: 0px;
     top: 0px;
     width: auto;
+  }
+  &__heading {
+    font-family: 'Montserrat Subrayada', sans-serif;
+    font-size: 40px;
   }
 }
 

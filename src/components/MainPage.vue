@@ -1,6 +1,7 @@
 <template>
   <main :class="{main: !isMessagesTurnedOff, 'main--chat-off': isMessagesTurnedOff}">
     <div class=header>
+      <h1 class="header__heading">yours next</h1>
       <button class="header__button" @click="toggleMessages">
       {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
       </button>
