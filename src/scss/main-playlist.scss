@@ -79,20 +79,20 @@
   &__video-items {
     margin: 50px auto;
     display: block;
-    // flex-direction: column;
-    // justify-content: center;
-    width: 334px;
+    max-width: 360px;
     overflow-y: scroll;
     scrollbar-width: none;
-    max-height: calc(100vh - 20px);
-    border-top: 3px solid silver;
-    border-bottom: 3px solid silver;
+    max-height: calc(100vh - 100px);
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    box-shadow: inset 0px 0px 20px silver;
   }
   &__video-item {
     background-color: black;
     text-align: center;
-    margin: 10px 0;
+    margin: 10px auto;
     position: relative;
+    width: 336px;
     &--active {
       @extend .main-playlist__video-item;
       background-color: goldenrod;
@@ -178,7 +178,7 @@
 }
 @media only screen and (max-width: 768px) and (min-width: 400px)  {
   .main-playlist {
-    max-width: 80%;
+    max-width: 90%;
     &__button--remove {
       background-color: rgb(228, 228, 228);
       color: rgb(82, 82, 82);

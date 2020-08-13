@@ -44,6 +44,9 @@ const actions = {
     const errType = data.message === 'Name is already in use!' ? 'name' : 'else';
     return { success: false, errMsg: data.message, errType };
   },
+  resetState({ commit }) {
+    commit('resetState');
+  },
   async SOCKET_connect() {
     console.log('connected');
   },

@@ -2,12 +2,17 @@
   <main :class="{main: !isMessagesTurnedOff, 'main--chat-off': isMessagesTurnedOff}">
     <div class=header>
       <h1 class="header__heading">yours next</h1>
-      <button class="header__button" @click="toggleMessages">
-      {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
-      </button>
+      <div class="header__buttons">
+        <button class="header__button" @click="leave">
+          Leave
+        </button>
+        <button class="header__button" @click="toggleMessages">
+        {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
+        </button>
+      </div>
     </div>
-
     <div class="playlists">
+      <h2 class="playlists__heading">Playlists of group {{group}}</h2>
       <div class="playlists__list">
           <div class="playlists__playlist--ongoing" v-if="ongoingPlaylistId">
             <button
@@ -19,9 +24,9 @@
             <button
             class="playlists__name"
             @click="goToPlaylist(playlist._id)">{{playlist.title}}
-              <span class="playlists__date">
+              <!-- <span class="playlists__date">
                 {{formatDate(playlist.updatedAt)}}
-              </span>
+              </span> -->
             </button>
             <button
               class="playlists__remove-button"
@@ -105,6 +110,9 @@ export default {
     ongoingPlaylistId() {
       return this.$store.state.mainplaylist.ongoingPlaylist.id;
     },
+    group() {
+      return this.$store.state.group.name;
+    },
   },
   methods: {
     toggleExtended() {
@@ -157,7 +165,7 @@ export default {
             this.errMsg = result.errMsg;
             return;
           }
-          this.$router.push({ path: '/mainplaylist' });
+          this.$router.push({ path: '/playlist' });
         });
     },
     async deletePlaylist(id) {
@@ -176,6 +184,10 @@ export default {
     },
     toggleMessages() {
       this.$store.commit('group/setChatState', { state: !this.isMessagesTurnedOff });
+    },
+    leave() {
+      this.$store.dispatch('group/resetState'); // for backup if reload does not work
+      this.$router.go(); // when no arguments are provided, it refreshes the page
     },
     formatDate(date) {
       if (!date) {

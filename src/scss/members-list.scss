@@ -19,15 +19,16 @@
   }
   &__member {
     display: inline-block;
-    font-size: 18px;
+    font-size: 16px;
     margin: 4px 2px;
     height: 24px;
     width: 24px;
+    padding: 1px;
     text-align: center;
     border-bottom: 2px solid transparent;
     position: relative;
     &:hover {
-      font-size: 19px;
+      font-size: 17px;
     }
   }
   &__you {  

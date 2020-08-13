@@ -9,7 +9,7 @@
              "playlists messages"
              "members members";
   grid-template-columns: 3fr 1fr;
-  grid-template-rows: 70px auto 32px;
+  grid-template-rows: 36px auto 32px;
   justify-content: space-between;
   &--chat-off {
     display: grid;
@@ -19,23 +19,33 @@
                "playlists"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 70px auto 32px;
+    grid-template-rows: 36px auto 32px;
     justify-content: space-between;
   }
 }
 
 .header {
   grid-area: header;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-shadow: 0px 0px 7px silver;
+  align-items: center;
+  background-color: #424242;
+  &__buttons {
+    float: right;
+  }
   &__button {
     @extend .btn--medium;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    width: auto;
+    font-size: 16px;
+    height: 32px;
+    margin: 0;
+    padding: 1px 16px;
   }
   &__heading {
     font-family: 'Montserrat Subrayada', sans-serif;
-    font-size: 40px;
+    font-size: 30px;
+    color: silver;
   }
 }
 
@@ -45,6 +55,12 @@
   margin: 20px auto;
   text-align: center;
   position: relative;
+  &__heading {
+    margin: 30px auto 40px;
+    font-family: 'Anton', sans-serif;
+    text-transform: uppercase;
+    color: #424242;
+  }
   &__list {
     display: flex;
     flex-wrap: wrap;
@@ -129,11 +145,11 @@
                "messages"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 60px auto calc(100vh - 42px) 42px;
+    grid-template-rows: 36px auto calc(100vh - 42px) 42px;
     &--chat-off {
       height: auto;
       padding: 5px 10px;
-      grid-template-rows: 60px calc(100vh - 102px) 42px;
+      grid-template-rows: 36px calc(100vh - 78px) 42px;
     }
   }
   .playlists {
@@ -148,7 +164,10 @@
       font-size: 9px;
     }
   }
+  .header__heading {
+    font-size: 20px;
+  }
   .header__button {
-    font-size: 16px;
+    font-size: 14px;
   }
 }

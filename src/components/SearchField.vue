@@ -69,7 +69,7 @@ v-if="successMessage && chosenVideoId === item.snippet.resourceId.videoId">{{suc
         class="search__button--small search__button--left">Back
       </button>
       <button
-        @click="getNextPage" v-show="nextPageToken !== ''"
+        @click="getNextPage" v-show="nextPageToken !== '' && items.length !== 0"
         class="search__button--small search__button--right">Next
       </button>
     </div>
