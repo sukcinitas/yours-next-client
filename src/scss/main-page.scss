@@ -9,7 +9,7 @@
              "playlists messages"
              "members members";
   grid-template-columns: 3fr 1fr;
-  grid-template-rows: 36px auto 32px;
+  grid-template-rows: 60px auto 32px;
   justify-content: space-between;
   &--chat-off {
     display: grid;
@@ -19,7 +19,7 @@
                "playlists"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 36px auto 32px;
+    grid-template-rows: 60px auto 32px;
     justify-content: space-between;
   }
 }
@@ -29,18 +29,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  box-shadow: 0px 0px 7px silver;
   align-items: center;
-  background-color: #424242;
-  &__buttons {
-    float: right;
-  }
+  justify-content: space-between;
   &__button {
     @extend .btn--medium;
     font-size: 16px;
-    height: 32px;
-    margin: 0;
-    padding: 1px 16px;
+    margin: 10px;
+    padding: 2px 16px;
   }
   &__heading {
     font-family: 'Montserrat Subrayada', sans-serif;
@@ -145,11 +140,11 @@
                "messages"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 36px auto calc(100vh - 42px) 42px;
+    grid-template-rows: 60px auto calc(100vh - 42px) 42px;
     &--chat-off {
       height: auto;
       padding: 5px 10px;
-      grid-template-rows: 36px calc(100vh - 78px) 42px;
+      grid-template-rows: 60px calc(100vh - 78px) 42px;
     }
   }
   .playlists {

@@ -1,15 +1,12 @@
 <template>
   <main :class="{main: !isMessagesTurnedOff, 'main--chat-off': isMessagesTurnedOff}">
     <div class=header>
-      <h1 class="header__heading">yours next</h1>
-      <div class="header__buttons">
-        <button class="header__button" @click="leave">
-          Leave
-        </button>
-        <button class="header__button" @click="toggleMessages">
-        {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
-        </button>
-      </div>
+      <button class="header__button" @click="leave">
+        Leave
+      </button>
+      <button class="header__button" @click="toggleMessages">
+      {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
+      </button>
     </div>
     <div class="playlists">
       <h2 class="playlists__heading">Playlists of group {{group}}</h2>
@@ -138,7 +135,7 @@ export default {
             this.successMsg = result.successMsg;
             this.$socket.emit('updatePlaylists', { playlists: result.playlists });
             this.$store.dispatch('mainplaylist/getPlaylist', { id: result.id });
-            setTimeout(() => this.$router.push({ path: '/mainplaylist' }), 250);
+            setTimeout(() => this.$router.push({ path: '/playlist' }), 250);
           } else {
             this.successMsg = '';
             this.errMsg = result.errMsg;

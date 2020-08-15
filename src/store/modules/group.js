@@ -14,8 +14,9 @@ const state = () => ({
   messages: [],
   moderator: '',
   initialEmojis: [0x1F429, 0x1F408, 0x1F98E,
-    0x1F98A, 0x1F43A, 0x1F344, 0x1F346, 0x1F469, 0x2600, 0x1F987],
-  messageEmojis: ['😀', '😍', '🤣'],
+    0x1F98A, 0x1F43A, 0x1F344, 0x1F346, 0x1F469, 0x2600, 0x1F987,
+    0x1F419, 0x1F483, 0x1F308, 0x1F996, 0x1F478],
+  messageEmojis: ['😀', '😍', '🤣', '🍕', '👿', '🤘', '😑', '🌈'],
   isChatTurnedOff: false,
 });
 
