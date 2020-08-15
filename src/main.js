@@ -5,9 +5,14 @@ import Vue from 'vue';
 import VueYoutube from 'vue-youtube';
 import VueSocketIO from 'vue-socket.io';
 import SocketIO from 'socket.io-client';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faStepForward, faStepBackward, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import store from './store';
 import App from './App';
 import router from './router';
+
+library.add(faStepForward, faStepBackward, faPause, faPlay);
 
 Vue.use(VueYoutube);
 Vue.use(new VueSocketIO({
@@ -20,6 +25,7 @@ Vue.use(new VueSocketIO({
   },
   options: { path: '/' }, // Optional options
 }));
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

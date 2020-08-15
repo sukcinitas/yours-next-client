@@ -16,21 +16,27 @@
   </div>
   <div class="main-playlist__controls">
     <button
-      @click="paused ? play() : pause()"
-      class="main-playlist__button--controls"
-    >{{paused ? "Play" : "Pause"}}
-    </button>
-    <button
+      :icon="['fas', 'step-backward']"
       v-if="index !== 0 && isNextAndPrevButtonDisplayed"
       @click="prevVideo"
       class="main-playlist__button--controls"
-    >Previous video
+    ><font-awesome-icon :icon="['fas', 'step-backward']"></font-awesome-icon>
+    </button>
+    <button v-if="paused"
+      @click="play()"
+      class="main-playlist__button--controls"
+    ><font-awesome-icon :icon="['fas', 'play']"></font-awesome-icon>
+    </button>
+    <button v-if="!paused"
+      @click="pause()"
+      class="main-playlist__button--controls"
+    ><font-awesome-icon :icon="['fas', 'pause']"></font-awesome-icon>
     </button>
     <button
       v-if="index !== playlist.length - 1 && isNextAndPrevButtonDisplayed"
       @click="nextVideo"
       class="main-playlist__button--controls"
-    >Next video
+    ><font-awesome-icon :icon="['fas', 'step-forward']"></font-awesome-icon>
     </button>
   </div>
 </div>

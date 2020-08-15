@@ -22,13 +22,13 @@
       v-if="index !== 0"
       @click="prevVideo"
       class="main-playlist__button--controls"
-    >Previous video
+    ><font-awesome-icon :icon="['fas', 'step-backward']"></font-awesome-icon>
     </button>
     <button
       v-if="index !== playlist.length - 1"
       @click="nextVideo"
       class="main-playlist__button--controls"
-    >Next video
+    ><font-awesome-icon :icon="['fas', 'step-forward']"></font-awesome-icon>
     </button>
   </div>
 </div>
