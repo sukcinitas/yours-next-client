@@ -44,6 +44,13 @@
       top: 0px;
       margin: 10px;
     }
+    &--back {
+      @extend .main-playlist__button;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      margin: 10px;
+    }
     &--controls {
       @extend .main-playlist__button;
       margin: 0px;
@@ -62,7 +69,7 @@
       right: 0;
       width: 100%;
       margin: 0;
-      border: 7px solid black;
+      border: 8px solid black;
       border-top: none;
       background-color: transparent;
       color: transparent;
@@ -82,10 +89,10 @@
     max-width: 360px;
     overflow-y: scroll;
     scrollbar-width: none;
-    max-height: calc(100vh - 100px);
-    border-top: 1px solid silver;
-    border-bottom: 1px solid silver;
-    box-shadow: inset 0px 0px 20px silver;
+    max-height: calc(100vh - 200px);
+    border-top: 5px solid #424242;
+    border-bottom: 5px solid #424242;
+    background-color: #fafafa;
   }
   &__video-item {
     background-color: black;
@@ -166,6 +173,7 @@
 @media only screen and (max-width: 400px) {
   .main-playlist {
     max-width: 98%;
+    padding-bottom: 10px;
     &__button--remove {
       background-color: rgb(228, 228, 228);
       color: rgb(82, 82, 82);
@@ -173,6 +181,11 @@
     }
     &__button {
       font-size: 16px;
+    }
+    &__video-items {
+      margin: 50px auto 10px;
+      max-height: 494px;
+
     }
   }
 }

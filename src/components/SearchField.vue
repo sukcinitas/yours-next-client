@@ -1,5 +1,6 @@
 <template>
   <div class="search">
+    <button @click="goBack" class="search__button--back">Back</button>
     <button @click="goHome" class="search__button--home">Home</button>
     <p class="search__message--error" v-if="errorMessage && !chosenVideoId">{{errorMessage}}</p>
     <p class="search__message--success"
@@ -187,6 +188,9 @@ export default {
     },
     goHome() {
       this.$router.push({ name: 'MainPage' });
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
 };

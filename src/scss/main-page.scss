@@ -81,7 +81,7 @@
     width: auto;
     margin: 0px;
     border: 2px solid silver;
-    height: auto;
+    height: 40px;
     &--ongoing {
       @extend .playlists__name;
       background-color: goldenrod;
@@ -99,7 +99,7 @@
     background-color: silver;
     border: 2px solid silver;
     border-left: none;
-    height: auto;
+    height: 40px;
   }
   &__message--error {
     font-family: 'Anton', sans-serif;

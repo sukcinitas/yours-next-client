@@ -44,12 +44,19 @@
       @extend .search__button;
       margin: 0 auto;
       width: auto;
+      padding: 2px 16px;
     }
     &--home {
       @extend .btn--medium;
       top: 0px;
       position: absolute;
       right: 0px;
+    }
+    &--back {
+      @extend .btn--medium;
+      top: 0px;
+      position: absolute;
+      left: 0px;
     }
     &--add {
       @extend .btn;

@@ -24,7 +24,7 @@
 
 
       <h6 class="create-member-form__subheading" v-show="isShowingEmojiSelection">
-        Choose an icon</h6>
+        Choose an emoji</h6>
       <div class="create-member-form__emoji-box" v-show="isShowingEmojiSelection">
         <button
         v-for="(emoji, index) in emojisFreeToSet"

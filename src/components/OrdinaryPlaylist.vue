@@ -1,5 +1,6 @@
 <template>
   <div class="main-playlist">
+    <button @click="goBack" class="main-playlist__button--back">Back</button>
     <button @click="goHome" class="main-playlist__button--home">Home</button>
     <h4 class="main-playlist__title">{{title}}</h4>
     <button
@@ -46,6 +47,9 @@ export default {
     },
     goHome() {
       this.$router.push({ name: 'MainPage' });
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
 };
