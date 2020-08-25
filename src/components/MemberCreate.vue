@@ -93,8 +93,6 @@ export default {
       this.$socket.emit('setMember', { name: this.name, emoji: this.selectedEmoji }); // only this socket
       await this.$store.commit('group/setMember', { name: this.name, emoji: this.selectedEmoji });
       this.$socket.emit('addMember', { name: this.name, emoji: this.selectedEmoji });
-      // eslint-disable-next-line no-console
-      console.log('hey');
       this.$router.push({ name: 'MainPage' });
     },
   },

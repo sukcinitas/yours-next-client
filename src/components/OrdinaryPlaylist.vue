@@ -8,15 +8,15 @@
       @click="gotToSearch"
     >Add some videos!
     </button>
-    <ordinary-video-player
-      class="main-playlist__video-player"
-      v-if="initialPlaylistLength !== 0"
-    >
-    </ordinary-video-player>
-    <video-items-data :isOngoing="false"
-      class="main-playlist__video-items"
-      v-if="initialPlaylistLength !== 0"
-    ></video-items-data>
+    <template v-if="initialPlaylistLength !== 0">
+      <ordinary-video-player
+        class="main-playlist__video-player"
+      >
+      </ordinary-video-player>
+      <video-items-data :isOngoing="false"
+        class="main-playlist__video-items"
+      ></video-items-data>
+    </template>
     <members-list :isBottom="false"></members-list>
   </div>
 </template>
