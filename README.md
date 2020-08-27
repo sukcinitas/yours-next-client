@@ -1,30 +1,33 @@
+# Yours Next
+An application to create shared playlists you can play using Youtube IFrame Player API and to chat in real-time using socket.io.
+You can take a look at the application [here](http://infinite-woodland-46117.herokuapp.com) (it might take ~ 10 seconds for the sleeping app on Heroku to wake up).
+
 ----
 ## Technologies & methodologies
 ##### Front-end
 - JavaScript
 - Vue, Vuex, Vue Router
 - VueYoutube
-- Socket.io-client
+- Socket.io-client, Vue-socket.io
 - Axios
+- Font Awesome
 - Sass (SCSS syntax)
 - BEM naming methodology
 
 ##### Back-end [yours-next-server](https://github.com/sukcinitas/yours-next-server)
-- Node & Express
-- MongoDB & Mongoose
-- Axios
-- Bcryptjs
-- Socket.io
 
 ##### APIs
 - Youtube IFrame Player API
 - Youtube Data API
 
 ##### Testing & linting & bundling & compiling
-- Jest
 - Webpack (Vue Webpack Boilerplate)
 - Babel
 - ESLint (Airbnb style guide)
+
+----
+## Setup 
+You can find setup information in [yours-next-server](https://github.com/sukcinitas/yours-next-server) repository.
 
 ----
 ## User stories
