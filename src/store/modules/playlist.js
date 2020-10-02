@@ -22,7 +22,8 @@ const actions = {
     }
     return { success: false, errMsg: data.message };
   },
-  async addPlaylist({ rootState, state }, payload) {
+  async addPlaylist({ rootState, state, dispatch }, payload) {
+    dispatch('getPlaylists');
     const { data } = await PlaylistService.post({
       title: payload.title,
       createdBy: rootState.group.name,
@@ -51,7 +52,7 @@ const mutations = {
 
 const getters = {
   playlistsTitles(state) {
-    return state.playlists.map(playlist => playlist.title);
+    return state.playlists.map(playlist => (playlist.title).toLowerCase());
   },
 };
 

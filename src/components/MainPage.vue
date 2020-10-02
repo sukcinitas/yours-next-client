@@ -124,10 +124,6 @@ export default {
         });
     },
     async addPlaylist() {
-      if (this.$store.getters['playlist/playlistsTitles'].indexOf(this.title) > -1) {
-        this.errMsg = 'Playlist with this title already exists!';
-        return;
-      }
       this.$store.dispatch('playlist/addPlaylist', { title: this.title })
         .then((result) => {
           if (result.success) {
@@ -136,12 +132,12 @@ export default {
             this.$socket.emit('updatePlaylists', { playlists: result.playlists });
             this.$store.dispatch('mainplaylist/getPlaylist', { id: result.id });
             setTimeout(() => this.$router.push({ path: '/playlist' }), 250);
+            this.isExtended = false;
           } else {
             this.successMsg = '';
             this.errMsg = result.errMsg;
           }
         });
-      this.isExtended = false;
     },
     async goToPlaylist(id) {
       this.$store.commit('mainplaylist/setId', { id });

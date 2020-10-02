@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import PlaylistService from '../../services/playlist.service';
 import DataService from '../../services/data.service';
+// import vm from '../../main';
 /* eslint-disable no-shadow */
 const state = () => ({
   idsArray: [],
@@ -43,33 +44,41 @@ const actions = {
   async SOCKET_toggleOngoingPlaylist({ commit }, payload) {
     commit('setOngoingPlaylistPause', { paused: payload.paused });
   },
-  async SOCKET_updatePlaylist({ commit, state }, payload) {
+  async SOCKET_updatePlaylist({ commit, state, rootState }, payload) {
+    // if I am not in playlist updated, don't change the state
     if (payload.id !== state.id) {
       return;
     }
-    commit('setPlaylist', { items: payload.idsArray });
     if (payload.type === 'addition') {
-      if (payload.alreadyIn) {
-        const itemsData = [...state.items.filter(item => item.id !== payload.itemData.id),
-          payload.itemData];
-        commit('setItems', { items: itemsData });
-      } else if (state.items.length < state.setCount * state.itemCount) {
+      if (state.items.length < state.setCount * state.itemCount) {
         const itemsData = [...state.items, payload.itemData];
+        commit('setPlaylist', { items: payload.idsArray });
         commit('setItems', { items: itemsData });
+      } else {
+        commit('setPlaylist', { items: payload.idsArray });
       }
     }
     if (payload.type === 'deletion') {
-      if (state.items.filter(item => item.id === payload.itemData).length === 1) {
-        const itemsData = state.items.filter(item => item.id !== payload.itemData);
-        if (state.idsArray.length >= state.setCount * state.itemCount) {
-          const { data } = await DataService.getVideos(
-            state.idsArray[state.setCount * state.itemCOunt]);
-          const item = data.data.items[0];
-          commit('setItems', { items: [...itemsData, item] });
-          return;
-        }
-        commit('setItems', { items: [...itemsData] });
+      // if it is a moderator, no need to change index, as it has already been changed
+      const needToChangeIndex = rootState.group.member.name !== rootState.group.moderator
+      && state.nowPlayingVideoIndex > state.idsArray.indexOf(payload.itemData);
+      const index = needToChangeIndex ? state.nowPlayingVideoIndex - 1 : state.nowPlayingVideoIndex;
+      const items = payload.idsArray;
+      // eslint-disable-next-line no-console
+      console.log(payload, 'payloadd');
+      const itemsPreData = state.items.filter(item => item.id !== payload.itemData);
+      let itemsData;
+      // if I have loaded certain sets, I don't hide them;
+      // though if set lacks one item, I load it from another set
+      if (items.length >= state.setCount * state.itemCount) {
+        const { data } = await DataService.getVideos(
+          state.idsArray[state.setCount * state.itemCount]);
+        const item = data.data.items[0];
+        itemsData = [...itemsPreData, item];
+      } else {
+        itemsData = itemsPreData;
       }
+      commit('setIdsItemsIndex', { items, itemsData, index });
     }
   },
   async getPlaylist({ commit }, payload) {
@@ -102,19 +111,22 @@ const actions = {
   },
   async addItemToPlaylist({ state }, payload) {
     // if video is already in playlist, just move it to the end
+    // if (state.idsArray.indexOf(payload.item) > -1) {
+    //   await PlaylistService.removeItem({ id: state.id, items: [payload.item] });
+    //   const { data } = await PlaylistService.add({ id: state.id, item: payload.item });
+    //   if (!data.success) {
+    //     return { success: false, errMsg: 'Could not add item to playlist!' };
+    //   }
+    //   const index = state.idsArray.indexOf(payload.item);
+    //   const items = [...state.idsArray.slice(0, index),
+    //     ...state.idsArray.slice(index + 1), payload.item];
+    //   const itemData = state.items.filter(item => item.id === payload.item)[0];
+    //   // const itemsData = [...state.items.filter(item => item.id !== payload.item), item];
+    //   // return { success: true, items, itemsData };
+    //   return { success: true, itemData, items, alreadyIn: true, id: state.id };
+    // }
     if (state.idsArray.indexOf(payload.item) > -1) {
-      await PlaylistService.removeItem({ id: state.id, items: [payload.item] });
-      const { data } = await PlaylistService.add({ id: state.id, item: payload.item });
-      if (!data.success) {
-        return { success: false, errMsg: 'Could not add item to playlist!' };
-      }
-      const index = state.idsArray.indexOf(payload.item);
-      const items = [...state.idsArray.slice(0, index),
-        ...state.idsArray.slice(index + 1), payload.item];
-      const itemData = state.items.filter(item => item.id === payload.item)[0];
-      // const itemsData = [...state.items.filter(item => item.id !== payload.item), item];
-      // return { success: true, items, itemsData };
-      return { success: true, itemData, items, alreadyIn: true, id: state.id };
+      return { success: false, errMsg: 'Item is already in the playlist!' };
     }
     const { data } = await PlaylistService.add({ id: state.id, item: payload.item });
     if (!data.success) {
@@ -123,7 +135,6 @@ const actions = {
     const items = [...state.idsArray, payload.item];
     const datum = await DataService.getVideos(payload.item);
     const itemData = datum.data.data.items[0];
-    // const itemsData = [...state.items, item];
     return { success: true, itemData, items, alreadyIn: false, id: state.id };
   },
   async removeItemFromPlaylist({ state }, payload) {
@@ -150,6 +161,11 @@ const mutations = {
   setItems(state, payload) {
     state.items = payload.items;
   },
+  setIdsItemsIndex(state, payload) {
+    state.idsArray = payload.items;
+    state.items = payload.itemsData;
+    state.nowPlayingVideoIndex = payload.index;
+  },
   setId(state, payload) {
     state.id = payload.id;
   },
@@ -172,6 +188,9 @@ const mutations = {
   },
   setSetCount(state) {
     state.setCount += 1;
+  },
+  makeSetCount(state, set) {
+    state.setCount = set;
   },
   resetSetCount(state) {
     state.setCount = 0;

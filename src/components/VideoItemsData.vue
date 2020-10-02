@@ -78,8 +78,6 @@ export default {
   },
   watch: {
     activeIndex(newValue, oldValue) {
-      // eslint-disable-next-line no-console
-      console.log(oldValue, newValue);
       if (newValue > oldValue) {
         if (this.isIndexAheadOfData) {
           this.loadMore();

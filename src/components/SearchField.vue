@@ -6,7 +6,7 @@
     <p class="search__message--success"
     v-if="successMessage && !chosenVideoId">{{successMessage}}</p>
     <div class="search__search-field">
-      <input type="text" v-model="queryOrId" class=search__input>
+      <input type="text" v-model="queryOrId" @input="typing" class=search__input>
       <button @click="search" class="search__button">Search</button>
     </div>
 
@@ -181,6 +181,17 @@ export default {
       this.nextPageToken = data.data.data.nextPageToken || '';
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    },
+    typing() {
+      this.playlists = [];
+      this.items = [];
+      if (this.queryOrId.substring(0, 2) === 'PL') {
+        this.picked = 'searchPlaylistItems';
+      } else if (this.queryOrId.substring(0, 2) === 'UC') {
+        this.picked = 'searchPlaylists';
+      } else {
+        this.picked = 'searchAll';
+      }
     },
     backToList() {
       this.picked = 'searchPlaylists';
