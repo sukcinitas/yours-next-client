@@ -129,7 +129,6 @@ export default {
           if (result.success) {
             this.errMsg = '';
             this.successMsg = result.successMsg;
-            this.$socket.emit('updatePlaylists', { playlists: result.playlists });
             this.$store.dispatch('mainplaylist/getPlaylist', { id: result.id });
             setTimeout(() => this.$router.push({ path: '/playlist' }), 250);
             this.isExtended = false;

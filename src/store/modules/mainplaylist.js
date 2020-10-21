@@ -110,21 +110,6 @@ const actions = {
     return { success: true, increaseSetCount: true };
   },
   async addItemToPlaylist({ state }, payload) {
-    // if video is already in playlist, just move it to the end
-    // if (state.idsArray.indexOf(payload.item) > -1) {
-    //   await PlaylistService.removeItem({ id: state.id, items: [payload.item] });
-    //   const { data } = await PlaylistService.add({ id: state.id, item: payload.item });
-    //   if (!data.success) {
-    //     return { success: false, errMsg: 'Could not add item to playlist!' };
-    //   }
-    //   const index = state.idsArray.indexOf(payload.item);
-    //   const items = [...state.idsArray.slice(0, index),
-    //     ...state.idsArray.slice(index + 1), payload.item];
-    //   const itemData = state.items.filter(item => item.id === payload.item)[0];
-    //   // const itemsData = [...state.items.filter(item => item.id !== payload.item), item];
-    //   // return { success: true, items, itemsData };
-    //   return { success: true, itemData, items, alreadyIn: true, id: state.id };
-    // }
     if (state.idsArray.indexOf(payload.item) > -1) {
       return { success: false, errMsg: 'Item is already in the playlist!' };
     }
@@ -135,7 +120,14 @@ const actions = {
     const items = [...state.idsArray, payload.item];
     const datum = await DataService.getVideos(payload.item);
     const itemData = datum.data.data.items[0];
-    return { success: true, itemData, items, alreadyIn: false, id: state.id };
+    this._vm.$socket.emit('updatePlaylist', {
+      idsArray: items,
+      itemData,
+      type: 'addition',
+      alreadyIn: false,
+      id: state.id,
+    });
+    return { success: true, successMsg: 'Successfully added!' };
   },
   async removeItemFromPlaylist({ state }, payload) {
     const { videoId } = payload;

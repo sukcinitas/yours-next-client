@@ -1,19 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap');
 .header {
   text-align: center;
-  padding: 50px;
+  padding: 50px 50px 70px;
   &__heading {
     font-family: 'Montserrat Subrayada', sans-serif;
     font-weight: 700;
-    font-size: 60px;
-    color: #333;
+    font-size: 5rem;
+    // color: #333;
+    background: -webkit-linear-gradient(#eee, #333);
+    background-size: 300%;
+    background-clip: text;
+    background-position: left;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 1s;
+    -webkit-transition: background-position 1s;
+    &:hover {
+      background-position: right;
+      transition: background-position 1s;
+      -webkit-transition: background-position 1s;
+    }
   }
 }
 .entry-forms {
-  margin: 120px auto 20px;
+  position: fixed;
+  top: calc(50% - 48px);
+  width: 100%;
+  margin: auto;
 }
-@media only screen and (max-width: 768px)  {
+@media only screen and (max-width: 500px)  {
   .entry-forms {
-    margin: 80px auto 50px;
+    position: static;
+    margin-top: 20px;
+  }
+}
+@media only screen and (max-height: 500px)  {
+  .entry-forms {
+    position: static;
+    margin-top: 20px;
   }
 }

@@ -30,6 +30,7 @@ const actions = {
     });
     if (data.success) {
       const playlists = [...state.playlists, data.playlist];
+      this._vm.$socket.emit('updatePlaylists', { playlists });
       return { success: true, successMsg: data.message, playlists, id: data.playlist._id };
     }
     return { success: false, errMsg: data.message };

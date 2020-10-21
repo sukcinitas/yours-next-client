@@ -59,7 +59,7 @@ export default {
       this.message = '';
     },
     addEmoji(emoji) {
-      this.message = `${this.message}${emoji}`;
+      this.message = `${this.message} ${emoji}`;
       this.$refs.textarea.focus();
     },
     scrollTop() {

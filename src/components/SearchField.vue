@@ -66,11 +66,11 @@ v-if="successMessage && chosenVideoId === item.snippet.resourceId.videoId">{{suc
 
     <div v-show="nextPageToken !== '' || prevPageToken !== ''" class="search__pages">
       <button
-        @click="getPrevPage" v-show="prevPageToken !== ''"
+        @click="getPage('prev')" v-show="prevPageToken !== ''"
         class="search__button--small search__button--left">Back
       </button>
       <button
-        @click="getNextPage" v-show="nextPageToken !== '' && items.length !== 0"
+        @click="getPage('next')" v-show="nextPageToken !== '' && items.length !== 0"
         class="search__button--small search__button--right">Next
       </button>
     </div>
@@ -89,6 +89,7 @@ export default {
     return {
       picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems
       queryOrId: 'PLcCyuE3mscVFQbqG4SbusOGJbrkaJoeY4',
+      channelId: '',
       items: [],
       playlists: [],
       prevPageToken: '',
@@ -108,6 +109,7 @@ export default {
       } else if (this.picked === 'searchPlaylists') {
         data = await DataService.getPlaylists(this.queryOrId);
         this.playlists = data.data.data.items;
+        this.channelId = this.queryOrId;
       } else if (this.picked === 'searchPlaylistItems') {
         data = await DataService.getPlaylistItems(this.queryOrId);
         this.items = data.data.data.items;
@@ -116,27 +118,19 @@ export default {
       this.nextPageToken = data.data.data.nextPageToken || '';
     },
     async add(videoId) {
+      this.chosenVideoId = videoId;
       await this.$store.dispatch('mainplaylist/addItemToPlaylist', { item: videoId })
         .then((result) => {
           if (!result.success) {
             this.errorMessage = result.errMsg;
-            this.chosenVideoId = videoId;
           } else {
-            this.$socket.emit('updatePlaylist', {
-              idsArray: result.items,
-              itemData: result.itemData,
-              type: 'addition',
-              alreadyIn: result.alreadyIn,
-              id: result.id,
-            });
-            this.successMessage = 'Successfully added!';
-            this.chosenVideoId = videoId;
-            setTimeout(() => {
-              this.errorMessage = '';
-              this.successMessage = '';
-              this.chosenVideoId = '';
-            }, 500);
+            this.successMessage = result.successMsg;
           }
+          setTimeout(() => {
+            this.errorMessage = '';
+            this.successMessage = '';
+            this.chosenVideoId = '';
+          }, 550);
         });
     },
     async explorePlaylist(id) {
@@ -148,33 +142,16 @@ export default {
       this.queryOrId = id;
       this.isExploring = true;
     },
-    async getNextPage() {
+    async getPage(direction) {
       let data;
       if (this.picked === 'searchAll') {
-        data = await DataService.search(this.queryOrId, this.nextPageToken);
+        data = await DataService.search(this.queryOrId, direction === 'next' ? this.nextPageToken : this.prevPageToken);
         this.items = data.data.data.items;
       } else if (this.picked === 'searchPlaylists') {
-        data = await DataService.getPlaylists(this.queryOrId, this.nextPageToken);
+        data = await DataService.getPlaylists(this.queryOrId, direction === 'next' ? this.nextPageToken : this.prevPageToken);
         this.playlists = data.data.data.items;
       } else if (this.picked === 'searchPlaylistItems') {
-        data = await DataService.getPlaylistItems(this.queryOrId, this.nextPageToken);
-        this.items = data.data.data.items;
-      }
-      this.prevPageToken = data.data.data.prevPageToken || '';
-      this.nextPageToken = data.data.data.nextPageToken || '';
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    },
-    async getPrevPage() {
-      let data;
-      if (this.picked === 'searchAll') {
-        data = await DataService.search(this.queryOrId, this.prevPageToken);
-        this.items = data.data.data.items;
-      } else if (this.picked === 'searchPlaylists') {
-        data = await DataService.getPlaylists(this.queryOrId, this.prevPageToken);
-        this.playlists = data.data.data.items;
-      } else if (this.picked === 'searchPlaylistItems') {
-        data = await DataService.getPlaylistItems(this.queryOrId, this.prevPageToken);
+        data = await DataService.getPlaylistItems(this.queryOrId, direction === 'next' ? this.nextPageToken : this.prevPageToken);
         this.items = data.data.data.items;
       }
       this.prevPageToken = data.data.data.prevPageToken || '';
@@ -195,6 +172,7 @@ export default {
     },
     backToList() {
       this.picked = 'searchPlaylists';
+      this.queryOrId = this.channelId;
       this.isExploring = false;
     },
     goHome() {
