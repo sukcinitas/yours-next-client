@@ -75,16 +75,18 @@ v-if="successMessage && chosenVideoId === item.snippet.resourceId.videoId">{{suc
       </button>
     </div>
     <members-list :isBottom="false"></members-list>
+    <message-box></message-box>
   </div>
 </template>
 
 <script>
 import DataService from '../services/data.service';
 import MembersList from './MembersList';
+import MessageBox from './MessageBox';
 
 export default {
   name: 'SearchField',
-  components: { MembersList },
+  components: { MembersList, MessageBox },
   data() {
     return {
       picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems

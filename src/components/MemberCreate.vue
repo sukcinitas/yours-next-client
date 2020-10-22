@@ -10,7 +10,8 @@
           v-model="name"
           type="text"
           placeholder=""
-          class="create-member-form__input"
+          :class="['create-member-form__input', errMsg ? 'input--error' : '']"
+          @input="checkIfEmptyAndDeleteErr"
         >
         <button
           class="create-member-form__button--small"
@@ -44,7 +45,7 @@
         :disabled="!selectedEmoji || !name"
       >>
       </button>
-      <p v-if="errMsg && !isShowingEmojiSelection"
+      <p v-if="errMsg && !isShowingEmojiSelection && name"
       class="create-member-form__message--error">{{errMsg}}</p>
     </form>
 </template>
@@ -95,13 +96,15 @@ export default {
       this.$socket.emit('addMember', { name: this.name, emoji: this.selectedEmoji });
       this.$router.push({ name: 'MainPage' });
     },
+    checkIfEmptyAndDeleteErr() {
+      if (this.name === '') {
+        this.errMsg = '';
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
   @import '@/scss/member-create.scss';
-  .wrapper {
-    display: flex;
-  }
 </style>

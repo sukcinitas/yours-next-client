@@ -2,16 +2,6 @@
 @import '@/scss/shared-styles-buttons.scss';
 @import '@/scss/shared-styles-forms.scss';
 .main {
-  display: grid;
-  height: 100vh;
-  margin: 0;
-  grid-template-areas: "header header"
-             "playlists messages"
-             "members members";
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 60px auto 32px;
-  justify-content: space-between;
-  &--chat-off {
     display: grid;
     height: 100vh;
     margin: 0;
@@ -19,9 +9,8 @@
                "playlists"
                "members";
     grid-template-columns: 1fr;
-    grid-template-rows: 60px auto 32px;
+    grid-template-rows: 60px auto 40px;
     justify-content: space-between;
-  }
 }
 
 .header {
@@ -131,21 +120,13 @@
   }
 }
 
-@media only screen and (max-width: 768px)  {
+@media only screen and (max-width: 550px)  {
   .main {
     height: auto;
     padding: 5px 10px;
     grid-template-areas: "header"
-               "playlists"
-               "messages"
-               "members";
-    grid-template-columns: 1fr;
-    grid-template-rows: 60px auto calc(100vh - 42px) 42px;
-    &--chat-off {
-      height: auto;
-      padding: 5px 10px;
-      grid-template-rows: 60px calc(100vh - 78px) 42px;
-    }
+                         "playlists";
+    grid-template-rows: 60px auto;
   }
   .playlists {
     min-height: 400px;

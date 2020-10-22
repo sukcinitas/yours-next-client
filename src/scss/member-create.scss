@@ -42,6 +42,18 @@
   }
 }
 
+.wrapper {
+  display: flex;
+  margin: 40px auto 0px;
+}
+
+.input--error {
+  border: 2px solid rgba(189, 80, 80, 0.9);
+  &:hover, &:focus {
+    border: 2px solid rgba(189, 80, 80, 0.9);
+  }
+}
+
 @media only screen and (max-width: 400px) {
   .create-member-form {
     margin-top: 20px;

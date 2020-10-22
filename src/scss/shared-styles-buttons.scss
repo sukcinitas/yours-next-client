@@ -21,12 +21,13 @@
   transition: background-color 0.2s,
               color 0.2s;
 
-  &:hover {
+  &:hover, &:focus {
     cursor: pointer;
     background-color: #e8e4aa;
     color: rgb(116, 107, 61);
     transition: background-color 0.3s,
                 color 0.3s;
+    outline: none;
   }
   &--small {
     @extend .btn;
@@ -66,6 +67,42 @@
     margin: 10px;
     padding: 2px 16px;
   }
+  &--turn-on{
+    @extend .btn;
+    position: absolute;
+    left: -20px;
+    top: calc(50%);
+    background-color: transparent;
+    padding: 0;
+    width: auto;
+    @media only screen and (max-width: 550px)  { 
+      display: inline-block;
+      margin: 0 auto;
+      left:0;
+      right: 0;
+      top: -20px;
+    }
+  }
+  &--turn-off{
+    @extend .btn;
+    position: absolute;
+    left: 20px;
+    top: calc(50%);
+    background-color: transparent;
+    padding: 0;
+    width: auto;
+    @media only screen and (max-width: 550px)  { 
+      left: 0;
+      right: 0;
+      display: inline-block;
+      margin: 0 auto;
+      bottom: -20px;
+      top: calc(100% - 20px);
+    }
+  }
+  &--hidden {
+    display: none;
+  }
 }
 .inpt {
   @extend .btn;
@@ -84,6 +121,7 @@
     transition: background-color 0.01s,
     color 0.01s
     width 0.15s linear;
+    outline: none;
   }
   &--medium {
     @extend .inpt;
@@ -95,7 +133,7 @@
 }
 .input--error {
   border: 2px solid rgba(189, 80, 80, 0.9);
-  &:hover {
+  &:hover, &:focus {
     border: 2px solid rgba(189, 80, 80, 0.9);
   }
 }
@@ -108,8 +146,6 @@
   text-align: center;
   font-family: 'Anton', sans-serif;
   color: white;
-  // position: absolute;
-  // top: 190px;
   padding: 4px 30px;
   &--error {
     @extend .message;

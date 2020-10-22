@@ -9,9 +9,6 @@ $form-transition-time: 0.15s;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  &--extended {
-    @extend .entry-form;
-  }
   &__button {
     @extend .btn;
   }
@@ -28,6 +25,9 @@ $form-transition-time: 0.15s;
       @extend .inpt;
       transition: width 0.15s  linear;
       -webkit-transition: width 0.15s  linear;
+    }
+    &:focus {
+      outline: none;
     }
   }
   &__input-2 {

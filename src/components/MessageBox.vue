@@ -1,8 +1,11 @@
 <template>
-  <div class="message-box">
+  <div :class="['message-box', {'message-box--off': !isMessagesTurnedOn}]">
     <div class="message-box__messages" ref="messages">
       <div class="message-box__message" v-for="(message, index) in messages" :key="index">
-        <p class="message-box__message-name">{{message.name}}</p>
+        <div class="message-box__message-member">
+          <p class="message-box__message-name">{{message.member.name}}</p>
+          <p class="message-box__message-emoji">{{message.member.emoji}}</p>
+        </div>
         <p class="message-box__message-content">{{message.message}}</p>
       </div>
     </div>
@@ -24,6 +27,20 @@
       </div>
       <button class="message-box__button" type="submit" :disabled="!message">Submit</button>
     </form>
+    <button
+      :class="[isMessagesTurnedOn ? 'btn--turn-off' : 'btn--hidden']"
+      type="button"
+      @click="turnOffMessages"
+    >
+      >
+    </button>
+    <button
+    :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
+    type="button"
+    @click="turnOnMessages"
+    >
+      --
+    </button>
 </div>
 
 </template>
@@ -44,8 +61,11 @@ export default {
     emojis() {
       return this.$store.state.group.messageEmojis;
     },
-    memberName() {
-      return this.$store.state.group.member.name;
+    member() {
+      return this.$store.state.group.member;
+    },
+    isMessagesTurnedOn() {
+      return this.$store.getters['group/chatState'];
     },
   },
   watch: {
@@ -55,7 +75,7 @@ export default {
   },
   methods: {
     handleSubmit() {
-      this.$socket.emit('sendMessage', { message: this.message, member: this.memberName });
+      this.$socket.emit('sendMessage', { message: this.message, member: this.member });
       this.message = '';
     },
     addEmoji(emoji) {
@@ -65,6 +85,12 @@ export default {
     scrollTop() {
       this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
        + this.$refs.messages.clientHeight;
+    },
+    turnOffMessages() {
+      this.$store.commit('group/setChatState', { state: false });
+    },
+    turnOnMessages() {
+      this.$store.commit('group/setChatState', { state: true });
     },
   },
   updated() {
@@ -80,5 +106,7 @@ export default {
 </script>
 
 <style lang="scss">
+
+  @import '@/scss/shared-styles-buttons.scss';
   @import '@/scss/message-box';
 </style>

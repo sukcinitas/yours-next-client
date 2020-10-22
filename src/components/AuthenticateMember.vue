@@ -2,7 +2,7 @@
   <div>
     <form
       @submit.prevent="handleSubmit"
-      :class="[isExtended ? 'entry-form--extended' : 'entry-form']"
+      :class="['entry-form', isExtended ? 'entry-form--extended' : '']"
     >
       <button
         @click="toggleExtended"
@@ -11,21 +11,22 @@
       >Join a group
       </button>
       <input
-        ref="input"
+        ref="name"
         v-model="name"
         type="text"
         placeholder="Enter the group name"
         :class="[isExtended ? 'entry-form__input-1--extended' : 'entry-form__input-1',
         err.type === 'name' ? 'input--error' : '']"
-        @click="deleteErr('name')"
+        @input="checkIfEmpty('name')"
       >
       <input
+        ref="passcode"
         v-model="passcode"
         type="password"
         placeholder="Enter the passcode"
         :class="[isExtended ? 'entry-form__input-2--extended' : 'entry-form__input-2',
         err.type === 'passcode' ? 'input--error' : '']"
-        @click="deleteErr('passcode')"
+        @input="checkIfEmpty('passcode')"
       >
       <button
         type="submit"
@@ -71,7 +72,7 @@ export default {
       this.name = '';
       this.passcode = '';
       if (this.isExtended) {
-        this.$refs.input.focus();
+        this.$refs.name.focus();
       }
     },
     async handleSubmit() {
@@ -85,8 +86,18 @@ export default {
               message: result.errMsg,
               type: result.errType,
             };
+            if (result.errType === 'name') {
+              this.$refs.name.focus();
+            } else {
+              this.$refs.passcode.focus();
+            }
           }
         });
+    },
+    checkIfEmpty(type) {
+      if (this[type] === '') {
+        this.deleteErr(type);
+      }
     },
     deleteErr(type) {
       if (this.err.type === type) {

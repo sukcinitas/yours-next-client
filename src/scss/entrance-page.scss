@@ -6,20 +6,11 @@
     font-family: 'Montserrat Subrayada', sans-serif;
     font-weight: 700;
     font-size: 5rem;
-    // color: #333;
-    background: -webkit-linear-gradient(#eee, #333);
-    background-size: 300%;
-    background-clip: text;
-    background-position: left;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: background-position 1s;
-    -webkit-transition: background-position 1s;
-    &:hover {
-      background-position: right;
-      transition: background-position 1s;
-      -webkit-transition: background-position 1s;
-    }
+    color: #333;
+    // background: -webkit-linear-gradient(#eee, #333);
+    // background-clip: text;
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
   }
 }
 .entry-forms {

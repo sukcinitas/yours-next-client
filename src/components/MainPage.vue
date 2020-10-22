@@ -1,11 +1,8 @@
 <template>
-  <main :class="{main: !isMessagesTurnedOff, 'main--chat-off': isMessagesTurnedOff}">
+  <main class="main">
     <div class=header>
       <button class="header__button" @click="leave">
         Leave
-      </button>
-      <button class="header__button" @click="toggleMessages">
-      {{isMessagesTurnedOff ? 'Turn on chat' : 'Turn off chat'}}
       </button>
     </div>
     <div class="playlists">
@@ -21,9 +18,6 @@
             <button
             class="playlists__name"
             @click="goToPlaylist(playlist._id)">{{playlist.title}}
-              <!-- <span class="playlists__date">
-                {{formatDate(playlist.updatedAt)}}
-              </span> -->
             </button>
             <button
               class="playlists__remove-button"
@@ -59,10 +53,8 @@
         </button>
       </form>
     </div>
-    <message-box :class="{'message-box': !isMessagesTurnedOff,
-     'message-box--off': isMessagesTurnedOff}">
-    </message-box>
     <members-list :isBottom="true"></members-list>
+    <message-box></message-box>
   </main>
 </template>
 

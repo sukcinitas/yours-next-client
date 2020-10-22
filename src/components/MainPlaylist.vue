@@ -20,6 +20,7 @@
       ></video-items-data>
     </template>
     <members-list :isBottom="false"></members-list>
+    <message-box></message-box>
   </div>
 </template>
 
@@ -27,10 +28,11 @@
 import OngoingVideoPlayer from './OngoingVideoPlayer';
 import VideoItemsData from './VideoItemsData';
 import MembersList from './MembersList';
+import MessageBox from './MessageBox';
 
 export default {
   name: 'MainPlaylist',
-  components: { OngoingVideoPlayer, VideoItemsData, MembersList },
+  components: { OngoingVideoPlayer, VideoItemsData, MembersList, MessageBox },
   data() {
     return {
     };

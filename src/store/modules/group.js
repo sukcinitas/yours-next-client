@@ -17,7 +17,7 @@ const state = () => ({
     0x1F98A, 0x1F43A, 0x1F344, 0x1F346, 0x1F469, 0x2600, 0x1F987,
     0x1F419, 0x1F483, 0x1F984, 0x1F996, 0x1F478],
   messageEmojis: ['😀', '😍', '🤣', '🍕', '👿', '🤘', '😑', '🌈'],
-  isChatTurnedOff: false,
+  isChatTurnedOn: false,
 });
 
 // actions
@@ -47,12 +47,6 @@ const actions = {
   },
   resetState({ commit }) {
     commit('resetState');
-  },
-  async SOCKET_connect() {
-    console.log('connected');
-  },
-  async SOCKET_disconnect() {
-    console.log('disconnected');
   },
   async SOCKET_reconnecting() {
     console.log('reconnected'); // after disconnecting, does it always try to reconnect?
@@ -93,7 +87,7 @@ const mutations = {
     state.member = payload;
   },
   setMessage(state, payload) {
-    state.messages = [...state.messages, { message: payload.message, name: payload.member }];
+    state.messages = [...state.messages, { message: payload.message, member: payload.member }];
   },
   removeMember(state, payload) {
     state.activeMembers = state.activeMembers.filter(member => member.name !== payload.name);
@@ -115,7 +109,7 @@ const mutations = {
     state.isChatTurnedOf = false;
   },
   setChatState(state, payload) {
-    state.isChatTurnedOff = payload.state;
+    state.isChatTurnedOn = payload.state;
   },
 };
 
@@ -147,7 +141,7 @@ const getters = {
     return filtered;
   },
   chatState(state) {
-    return state.isChatTurnedOff;
+    return state.isChatTurnedOn;
   },
 };
 
