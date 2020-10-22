@@ -7,10 +7,6 @@
     font-weight: 700;
     font-size: 5rem;
     color: #333;
-    // background: -webkit-linear-gradient(#eee, #333);
-    // background-clip: text;
-    // -webkit-background-clip: text;
-    // -webkit-text-fill-color: transparent;
   }
 }
 .entry-forms {
@@ -19,13 +15,7 @@
   width: 100%;
   margin: auto;
 }
-@media only screen and (max-width: 500px)  {
-  .entry-forms {
-    position: static;
-    margin-top: 20px;
-  }
-}
-@media only screen and (max-height: 500px)  {
+@media only screen and (max-width: 500px), screen and (max-height: 500px)  {
   .entry-forms {
     position: static;
     margin-top: 20px;

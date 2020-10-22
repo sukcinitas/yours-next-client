@@ -16,7 +16,7 @@
         v-model="name"
         type="text"
         placeholder="Enter a group name"
-        :class="[isExtended ? 'entry-form__input-1--extended' : 'entry-form__input-1',
+        :class="[isExtended ? 'entry-form--extended__input' : 'entry-form__input',
         err.type === 'name' ? 'input--error' : '']"
         @input="checkIfEmpty('name')"
       >
@@ -25,15 +25,14 @@
         v-model="passcode"
         type="password"
         placeholder="Enter a passcode"
-        :class="[isExtended ? 'entry-form__input-2--extended' : 'entry-form__input-2',
+        :class="[isExtended ? 'entry-form--extended__input' : 'entry-form__input',
         err.type === 'passcode' ? 'input--error' : '']"
         @input="checkIfEmpty('passcode')"
       >
       <button
         type="submit"
         :disabled="!name || !passcode"
-        :class="[{'entry-form__button--small--extended': isExtended},
-        {'entry-form__button--small':!isExtended}]"
+        :class="[isExtended ? 'entry-form--extended__button--small' : 'entry-form__button--small']"
       >
       >
       </button>

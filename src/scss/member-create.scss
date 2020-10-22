@@ -16,6 +16,9 @@
   }
   &__button--emoji {
     @extend .btn--emoji;
+    &:hover, &:focus {
+      transition: background-color 0.1s;
+    }
   }
   &__button--selected-emoji {
     @extend .btn--selected-emoji;
