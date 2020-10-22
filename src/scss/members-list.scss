@@ -60,7 +60,7 @@
     }
   }
 }
-@media only screen and (max-width: 768px)  {
+@media only screen and (max-width: 768px) and (min-width: 550px)  {
   .members {
     align-items: flex-start;
     &--bottom {

@@ -20,6 +20,7 @@
       v-model="picked" name="searchParameters">
       <label for="searchPlaylistItems" class="search__label">by playlist id</label>
     </div>
+
     <div v-if="picked === 'searchAll'" class="search__search-results">
       <div v-for="item in items" :key="item.id.videoId" class="search__search-result">
         <p class="search__message--error"
@@ -40,13 +41,21 @@ v-if="successMessage && chosenVideoId === item.id.videoId">{{successMessage}}</p
         <img class="search__img" :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
         <button class="search__button--add"
-        @click="explorePlaylist(item.id)">Explore playlist</button>
+        @click="explorePlaylist(item.id, item.snippet.title)">Explore playlist</button>
       </div>
     </div>
 
     <div v-else-if="picked === 'searchPlaylistItems'" class="search__search-results">
-      <button v-if="isExploring" class="search__button--centered" @click="backToList">
-        Back to playlist list</button>
+      <template v-if="isExploring">
+        <h6 class="search__subheading">{{playlistName}}</h6>
+        <button
+          v-if="isExploring"
+          class="search__button--centered"
+          @click="backToList"
+        >
+          Back to playlist list
+        </button>
+      </template>
       <div
         class="search__search-result"
         v-for="item in items"
@@ -92,6 +101,7 @@ export default {
       picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems
       queryOrId: 'PLcCyuE3mscVFQbqG4SbusOGJbrkaJoeY4',
       channelId: '',
+      playlistName: '',
       items: [],
       playlists: [],
       prevPageToken: '',
@@ -135,13 +145,14 @@ export default {
           }, 550);
         });
     },
-    async explorePlaylist(id) {
+    async explorePlaylist(id, playlistName) {
       const data = await DataService.getPlaylistItems(id);
       this.items = data.data.data.items;
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
       this.picked = 'searchPlaylistItems';
       this.queryOrId = id;
+      this.playlistName = playlistName;
       this.isExploring = true;
     },
     async getPage(direction) {
@@ -175,6 +186,7 @@ export default {
     backToList() {
       this.picked = 'searchPlaylists';
       this.queryOrId = this.channelId;
+      this.playlistName = '';
       this.isExploring = false;
     },
     goHome() {

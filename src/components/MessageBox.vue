@@ -4,7 +4,9 @@
       <div class="message-box__message" v-for="(message, index) in messages" :key="index">
         <div class="message-box__message-member">
           <p class="message-box__message-name">{{message.member.name}}</p>
-          <p class="message-box__message-emoji">{{message.member.emoji}}</p>
+          <p class="message-box__message-emoji" :title="message.member.name">
+            {{message.member.emoji}}
+          </p>
         </div>
         <p class="message-box__message-content">{{message.message}}</p>
       </div>
@@ -39,7 +41,7 @@
     type="button"
     @click="turnOnMessages"
     >
-      --
+      {{'&lt;'}}
     </button>
 </div>
 
@@ -91,6 +93,7 @@ export default {
     },
     turnOnMessages() {
       this.$store.commit('group/setChatState', { state: true });
+      this.$refs.textarea.focus();
     },
   },
   updated() {
