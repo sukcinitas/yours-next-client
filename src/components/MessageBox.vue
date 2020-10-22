@@ -27,7 +27,9 @@
           </span>
         </div>
       </div>
-      <button class="message-box__button" type="submit" :disabled="!message">Submit</button>
+      <button class="message-box__button" type="submit" :disabled="!message">
+        <span>Submit</span>
+      </button>
     </form>
     <button
       :class="[isMessagesTurnedOn ? 'btn--turn-off' : 'btn--hidden']"
