@@ -1,3 +1,4 @@
+@use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 
 .members {
@@ -42,18 +43,18 @@
     }
   }
   &__you {  
-    border-top: 2px solid silver;
+    border-top: 2px solid variables.$tertiary-light;
   }
   &__moderator {
     border-bottom: 2px solid gold;
   }
   &__tooltip {
-    font-family: 'Oswald', sans-serif;
+    font-family: variables.$font-heading;
     font-size: 12px;
     position: absolute;
     top: 5px;
     left: 15px;
-    border: 2px solid silver;
+    border: 2px solid variables.$tertiary-light;
     background-color: rgba(255, 255, 255, 0.7);
     padding: 3px 7px;
     z-index: 101;

@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed&display=swap');
+// colors
+$primary-dark: #424242;
+$secondary-dark: #333;
+$tertiary-dark: #525252;
+$quoternary-dark: black;
+
+$primary-light: white;
+$secondary-light: #ddd;
+$tertiary-light: silver;
+
+$primary-bright:  #746b3d;
+$secondary-bright: #e8e4aa;
+$secondary-bright--transparent: #e8e4aa47; // #ffffe8;
+$tertiary-bright: goldenrod;
+
+$secondary-success: rgb(2, 44, 2);
+$primary-success: rgba(80, 189, 80, 0.9);;
+$primary-error: rgba(189, 80, 80, 0.9);
+
+// fonts
+$font-title: 'Montserrat Subrayada', sans-serif;
+$font-heading: 'Oswald', sans-serif;
+$font-btn: 'Anton', sans-serif;
+$font-messages: 'Barlow Semi Condensed', sans-serif;

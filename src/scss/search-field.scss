@@ -1,3 +1,4 @@
+@use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 .search {
   max-width: 60%;
@@ -22,14 +23,14 @@
     width: 334px;
   }
   &__search-result {
-    background-color: black;
+    background-color: variables.$quoternary-dark;
     text-align: center;
     margin: 10px 0;
     position: relative;
     &:hover .search__button--add {
       cursor: pointer;
-      background-color: #e8e4aa;
-      color: rgb(116, 107, 61);
+      background-color: variables.$secondary-bright;
+      color: variables.$primary-bright;
       transition: background-color 0.3s,
                   color 0.3s;
     }
@@ -38,16 +39,16 @@
     text-align: center;
     margin-bottom: 30px;
     font-size: 30px;
-    font-family: 'Anton', sans-serif;
+    font-family: variables.$font-btn;
     font-weight: 500;;    
-    color: #424242;
+    color: variables.$primary-dark;
   }
   &__input {
     @extend .inpt;
     height: 40px;
     font-size: 14px;
     margin-right: 0px;
-    border: 2px solid #ddd;
+    border: 2px solid variables.$secondary-light;
     width: 280px;
   } 
   &__button {
@@ -71,7 +72,7 @@
       z-index: 10;
       width: 100%;
       margin: 0;
-      border: 7px solid black;
+      border: 7px solid variables.$quoternary-dark;
       border-top: none;
       background-color: transparent;
       color: transparent;
@@ -79,9 +80,10 @@
   }
   &__label {
     font-size: 12px;
-    font-family: 'Anton', sans-serif;
+    font-family: variables.$font-btn;
     margin-top: 10px;
     margin-right: 5px;
+    color: variables.$secondary-dark;
   }
   &__button--small {
     @extend .btn--medium;
@@ -96,31 +98,31 @@
     margin-right: calc((100% - 326px)/4 - 25px);
   }
   &__heading {
-    color: silver;
+    color: variables.$tertiary-light;
     font-size: 14px;
-    background-color: black;
+    background-color: variables.$quoternary-dark;
     margin: 0;
     padding: 10px;
-    font-family: 'Oswald', sans-serif;
+    font-family: variables.$font-heading;
   }
   &__img {
-    border: 3px solid black;
+    border: 3px solid variables.$quoternary-dark;
   }
   &__message--error {
-    font-family: 'Anton', sans-serif;
-    color: white;
+    font-family: variables.$font-btn;
+    color: variables.$primary-light;
     position: absolute;
     left: 0;
     right: 0;
     top: 50px;
     width: auto;
     padding: 4px;
-    color: white;
-    background-color: rgba(189, 80, 80, 0.9);
+    color: variables.$primary-light;
+    background-color: variables.$primary-error;
   }
   &__message--success {
     @extend .search__message--error;
-    background-color: rgba(80, 189, 80, 0.9);
+    background-color: variables.$primary-success;
   }
   &__pages {
     position: fixed;

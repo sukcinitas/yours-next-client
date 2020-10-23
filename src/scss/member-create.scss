@@ -1,3 +1,4 @@
+@use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 @import '@/scss/shared-styles-forms.scss';
 .create-member-form {
@@ -7,7 +8,7 @@
   margin-top: 60px;
   &__input {
     @extend .inpt;
-    border: 2px solid #ddd;
+    border: 2px solid variables.$secondary-light;
     margin-right: 0;
   }
   &__button--small {
@@ -25,15 +26,15 @@
   }
   &__heading {
     @extend .heading;
-    color: #424242;
+    color: variables.$primary-dark;
     &--bold {
-      color: goldenrod;
+      color: variables.$tertiary-bright;
       text-transform: uppercase;
     }
   }
   &__subheading {
     @extend .subheading;    
-    color: #424242;
+    color: variables.$primary-dark;
   }
   &__emoji-box {
       margin: 40px auto;
@@ -51,9 +52,9 @@
 }
 
 .input--error {
-  border: 2px solid rgba(189, 80, 80, 0.9);
+  border: 2px solid variables.$primary-error;
   &:hover, &:focus {
-    border: 2px solid rgba(189, 80, 80, 0.9);
+    border: 2px solid variables.$primary-error;
   }
 }
 

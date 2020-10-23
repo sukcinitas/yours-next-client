@@ -1,3 +1,4 @@
+@use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 .main-playlist {
   max-width: 60%;
@@ -45,13 +46,13 @@
       right: 0;
       width: 100%;
       margin: 0;
-      border: 8px solid black;
+      border: 8px solid variables.$quoternary-dark;
       border-top: none;
       background-color: transparent;
       color: transparent;
       &--active {
         @extend .main-playlist__button--remove;
-        border: 7px solid goldenrod;
+        border: 7px solid variables.$tertiary-bright;
         border-top: none;
       }
     }
@@ -66,43 +67,43 @@
     overflow-y: scroll;
     scrollbar-width: none;
     max-height: calc(100vh - 200px);
-    border-top: 5px solid #424242;
-    border-bottom: 5px solid #424242;
+    border-top: 5px solid variables.$primary-dark;
+    border-bottom: 5px solid variables.$primary-dark;
     background-color: #fafafa;
   }
   &__video-item {
-    background-color: black;
+    background-color: variables.$quoternary-dark;
     text-align: center;
     margin: 10px auto;
     position: relative;
     width: 336px;
     &:hover .main-playlist__button--remove {
       cursor: pointer;
-      background-color: #e8e4aa;
-      color: rgb(116, 107, 61);
+      background-color: variables.$secondary-bright;
+      color: variables.$primary-bright;
       transition: background-color 0.3s,
                   color 0.3s;
     }
     &--active {
       @extend .main-playlist__video-item;
-      background-color: goldenrod;
+      background-color: variables.$tertiary-bright;
     }
   }
   &__title {
     @extend .heading;
-    color: #424242;
+    color: variables.$primary-dark;
     text-transform: uppercase;
     font-size: 40px;
     margin: 30px auto;
     &--ongoing {
       @extend .main-playlist__title;
-      color: goldenrod;
-      -webkit-text-stroke: 0.6px #424242;
+      color: variables.$tertiary-bright;
+      -webkit-text-stroke: 0.6px variables.$primary-dark;
     }
   }
   &__title--bg {
     @extend .heading;
-    color: #424242;
+    color: variables.$primary-dark;
     position: absolute;
     left: 0;
     right: 0;
@@ -116,16 +117,16 @@
   }
   &__heading {
     cursor: pointer;
-    color: silver;
+    color: variables.$tertiary-light;
     font-size: 14px;
-    background-color: black;
+    background-color: variables.$quoternary-dark;
     margin: 0;
     padding: 10px;
-    font-family: 'Oswald', sans-serif;
+    font-family: variables.$font-heading;
     &--active {
       @extend .main-playlist__heading;
-      background-color: goldenrod;
-      color: black;
+      background-color: variables.$tertiary-bright;
+      color: variables.$quoternary-dark;
       cursor: default;
       &--ongoing {
         cursor: default;
@@ -133,24 +134,24 @@
     }
   }
   &__img {
-    border: 3px solid black;
+    border: 3px solid variables.$quoternary-dark;
     &--active {
       @extend .main-playlist__img;
-      border: 3px solid goldenrod;
+      border: 3px solid variables.$tertiary-bright;
     }
   }
   &__message--error {
     text-align: center;
-    font-family: 'Anton', sans-serif;
-    color: white;
+    font-family: variables.$font-btn;
+    color: variables.$primary-light;
     position: absolute;
     left: 0;
     right: 0;
     top: 50px;
     width: auto;
     padding: 4px;
-    color: white;
-    background-color: rgba(189, 80, 80, 0.9);
+    color: variables.$primary-light;
+    background-color: variables.$primary-error;
   }
 }
 @media only screen and (max-width: 400px) {

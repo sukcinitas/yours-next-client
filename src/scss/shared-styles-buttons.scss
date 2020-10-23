@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&display=swap');
+@use 'variables';
+
 .html, body {
   margin: 0;
   padding: 0;
@@ -9,7 +9,7 @@
   background-color: rgb(228, 228, 228);
   color: rgb(82, 82, 82);
   border: none;
-  font-family: 'Anton', sans-serif;
+  font-family: variables.$font-btn;
   font-size: 24px;
   text-transform: uppercase;
   text-align: center;
@@ -23,8 +23,8 @@
 
   &:hover, &:focus {
     cursor: pointer;
-    background-color: #e8e4aa;
-    color: rgb(116, 107, 61);
+    background-color: variables.$secondary-bright;
+    color: variables.$primary-bright;
     transition: background-color 0.3s,
                 color 0.3s;
     outline: none;
@@ -56,8 +56,8 @@
     border-radius:50%;
     padding: 2px 8px;
     margin: 10px;
-    background-color: #e8e4aa;
-    color: rgb(116, 107, 61);
+    background-color: variables.$secondary-bright;
+    color: variables.$primary-bright;
   }
   &--medium {
     @extend .btn;
@@ -70,7 +70,7 @@
   &--turn-on{
     color: rgb(82, 82, 82);
     border: none;
-    font-family: 'Anton', sans-serif;
+    font-family: variables.$font-btn;
     font-size: 30px;
     position: absolute;
     left: -15px;
@@ -88,9 +88,9 @@
     }
   }
   &--turn-off{
-    color: #ddd;
+    color: variables.$secondary-light;
     border: none;
-    font-family: 'Anton', sans-serif;
+    font-family: variables.$font-btn;
     font-size: 30px;
     position: absolute;
     left: 30px;
@@ -115,8 +115,8 @@
   @extend .btn;
   border: 2px solid rgb(192, 192, 192);
   color: #272727;
-  background-color: white;
-  font-family: 'Oswald', sans-serif;
+  background-color: variables.$primary-light;
+  font-family: variables.$font-heading;
   font-weight: 400;
   font-size: 16px;
   text-transform: none;
@@ -139,9 +139,9 @@
   }
 }
 .input--error {
-  border: 2px solid rgba(189, 80, 80, 0.9);
+  border: 2px solid variables.$primary-error;
   &:hover, &:focus {
-    border: 2px solid rgba(189, 80, 80, 0.9);
+    border: 2px solid variables.$primary-error;
   }
 }
 .textarea {
@@ -151,12 +151,12 @@
   margin: 10px auto;
   max-width: 40%;
   text-align: center;
-  font-family: 'Anton', sans-serif;
-  color: white;
+  font-family: variables.$font-btn;
+  color: variables.$primary-light;
   padding: 4px 30px;
   &--error {
     @extend .message;
-    background-color: rgba(189, 80, 80, 0.9);
+    background-color: variables.$primary-error;
   }
   &--success {
     @extend .message;
@@ -168,14 +168,14 @@
   text-align: center;
   margin-bottom: 30px;
   font-size: 30px;
-  font-family: 'Anton', sans-serif;
+  font-family: variables.$font-btn;
   font-weight: 500;
 }
 .subheading {
   text-align: center;
   margin-bottom: 50px;
   font-size: 24px;
-  font-family: 'Anton', sans-serif;
+  font-family: variables.$font-btn;
   font-weight: 500;
 }
 

@@ -1,6 +1,6 @@
+@use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed&display=swap');
+
 .message-box {
   z-index: 11;
   justify-self: center;
@@ -19,20 +19,20 @@
   background-image: linear-gradient(#585144, #81745dc4);
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
-  box-shadow: 1px 2px 6px black;
+  box-shadow: 1px 2px 6px variables.$quoternary-dark;
   transition: right 0.2s ease-in;
   &--off {    
     right: -490px;
     transition: right 0.1s ease-in;
   }
   &__messages {
-    border-top: 1px solid #dddddd1f;
-    border-bottom: 1px solid #dddddd1f;
+    border-top: 1px solid variables.$secondary-light;
+    border-bottom: 1px solid variables.$secondary-light;
     margin: 0px auto 20px;
     padding-top: 10px;
     width: 300px;
     height: 100%;
-    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-family: variables.$font-messages;
     font-weight: 200;
     display: flex;
     flex-direction: column;
@@ -53,7 +53,7 @@
     max-width: 80%;
     margin: 14px 10px;
     padding: 5px;
-    background-color: #ddd;
+    background-color: variables.$secondary-light;
     border-radius: 20px;
     min-width: 150px;
     &:nth-child(odd) {
@@ -83,7 +83,7 @@
     padding: 4px 10px;
   }
   &__message-form {
-    border: 2px solid silver;
+    border: 2px solid variables.$tertiary-light;
     width: 80%;
     display: flex;
     flex-direction: row;
@@ -93,7 +93,7 @@
     width: 100%;
     height: 100%;
     margin: auto;
-    background-color: white;
+    background-color: variables.$primary-light;
   }
   &__textarea {
     @extend .textarea;
@@ -104,16 +104,16 @@
     text-align: left;
     font-size: 14px;
     height: 70px;
-    background-color: white;
+    background-color: variables.$primary-light;
     border: none;
     &:hover, &:focus {
-      background-color: white;
+      background-color: variables.$primary-light;
       border: none;
       outline: none;
     }
   }
   &__emojies {
-    background-color: white;
+    background-color: variables.$primary-light;
     margin: 0;
   }
   &__button {

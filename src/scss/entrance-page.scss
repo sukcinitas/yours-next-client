@@ -1,12 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap');
+@use 'variables';
+
 .header {
   text-align: center;
   padding: 50px 50px 70px;
   &__heading {
-    font-family: 'Montserrat Subrayada', sans-serif;
+    font-family: variables.$font-title;
     font-weight: 700;
     font-size: 5rem;
-    color: #333;
+    // color: variables.$secondary-dark;
+    color: variables.$secondary-dark;
   }
 }
 .entry-forms {

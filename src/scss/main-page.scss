@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap');
+@use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 @import '@/scss/shared-styles-forms.scss';
 .main {
@@ -31,9 +31,9 @@
 //     padding: 2px 16px;
 //   }
 //   &__heading {
-//     font-family: 'Montserrat Subrayada', sans-serif;
+//     font-family: variables.$font-title;
 //     font-size: 30px;
-//     color: silver;
+//     color: variables.$tertiary-light;
 //   }
 // }
 
@@ -45,9 +45,9 @@
   position: relative;
   &__heading {
     margin: 30px auto 40px;
-    font-family: 'Anton', sans-serif;
+    font-family: variables.$font-btn;
     text-transform: uppercase;
-    color: #424242;
+    color: variables.$primary-dark;
   }
   &__list {
     display: flex;
@@ -58,21 +58,21 @@
   }
   &__playlist {
     display: flex;
-    background-color: silver;
+    background-color: variables.$tertiary-light;
     margin: 10px;
     &--ongoing {
       @extend .playlists__playlist;
-      background-color: goldenrod;
+      background-color: variables.$tertiary-bright;
     }
   }
   &__name {
-    background-color: #ddd;
+    background-color: variables.$secondary-light;
     color: rgb(82, 82, 82);
-    font-family: 'Anton', sans-serif;
+    font-family: variables.$font-btn;
     font-size: 24px;
     text-transform: uppercase;
     text-align: center;
-    border: 2px solid silver;
+    border: 2px solid variables.$tertiary-light;
     transition: 
                 color 0.2s;
     font-size: 16px;
@@ -85,12 +85,12 @@
     }
     &--ongoing {
       @extend .playlists__name;
-      background-color: goldenrod;
+      background-color: variables.$tertiary-bright;
     }
     & span {
       padding-left: 16px;
       &:hover {
-        color: rgb(116, 107, 61);
+        color: variables.$primary-bright;
         transition: background-color 0.3s,
         color 0.3s;
       }
@@ -105,22 +105,22 @@
     @extend .btn--medium;  
     width: auto;
     margin: 0px;
-    background-color: silver;
-    border: 2px solid silver;
+    background-color: variables.$tertiary-light;
+    border: 2px solid variables.$tertiary-light;
     border-left: none;
     height: 40px;
   }
   &__message--error {
-    font-family: 'Anton', sans-serif;
-    color: white;
+    font-family: variables.$font-btn;
+    color: variables.$primary-light;
     width: auto;
     padding: 4px;
-    color: white;
-    background-color: rgba(189, 80, 80, 0.9);
+    color: variables.$primary-light;
+    background-color: variables.$primary-error;
   }
   &__message--success {
     @extend .playlists__message--error;
-    background-color: rgba(80, 189, 80, 0.9);
+    background-color: variables.$primary-success;
   }
 }
 
@@ -148,7 +148,6 @@
 
 @media only screen and (max-width: 550px)  {
   .main {
-    height: auto;
     padding: 5px 10px;
     grid-template-areas: 
                          "playlists";
