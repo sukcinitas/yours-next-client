@@ -95,7 +95,6 @@ export default {
     },
     turnOnMessages() {
       this.$store.commit('group/setChatState', { state: true });
-      this.$refs.textarea.focus();
     },
   },
   updated() {

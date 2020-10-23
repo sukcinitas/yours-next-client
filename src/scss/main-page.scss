@@ -50,6 +50,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    margin: 10px;
   }
   &__playlist {
     display: flex;
@@ -132,7 +133,7 @@
     min-height: 400px;
     max-width: 94%;
     width: 94%;
-    margin: 50px auto 20px;
+    margin: 20px auto 30px;
     &__name {
       font-size: 14px;
     }
