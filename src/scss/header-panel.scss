@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap');
+@import '@/scss/shared-styles-buttons.scss';
+.header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 60px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  &__button {
+    @extend .btn--medium;
+    margin: 10px;
+    padding: 2px 16px;
+  }
+}
+
+@media only screen and (max-width: 550px)  {
+  .header__button {
+    font-size: 14px;
+  }
+}

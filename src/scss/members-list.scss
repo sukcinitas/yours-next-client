@@ -12,12 +12,18 @@
   height: 60px;
   overflow: auto;
   scrollbar-width: none;
+  overflow: visible;
   &--bottom {
     grid-area: members;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
+  }
+  &--messages {
+    position: static;
+    width: 200px;
+    margin: auto auto 0px;
   }
   &__member {
     display: inline-block;
@@ -29,6 +35,7 @@
     text-align: center;
     border-bottom: 2px solid transparent;
     position: relative;
+    overflow: visible;
     &:hover {
       font-size: 17px;
       cursor: default;

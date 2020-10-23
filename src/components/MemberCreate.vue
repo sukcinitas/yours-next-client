@@ -43,6 +43,7 @@
         type="submit"
         class="create-member-form__button--small"
         :disabled="!selectedEmoji || !name"
+        ref="submitButton"
       >>
       </button>
       <p v-if="errMsg && !isShowingEmojiSelection && name"
@@ -84,6 +85,7 @@ export default {
     },
     chooseEmoji(emoji) {
       this.selectedEmoji = emoji;
+      this.$refs.submitButton.focus();
     },
     async addMember() {
       if (this.memberNameExists) { // extra if names are being created in parallel

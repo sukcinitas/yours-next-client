@@ -1,7 +1,6 @@
 <template>
   <div class="main-playlist">
-    <button @click="goBack" class="main-playlist__button--back">Back</button>
-    <button @click="goHome" class="main-playlist__button--home">Home</button>
+    <headerPanel :leaveBtn="false" :homeBtn="true" :backBtn="true"></headerPanel>
     <h4 class="main-playlist__title">{{title}}</h4>
     <button
       class="main-playlist__button"
@@ -27,10 +26,11 @@ import OrdinaryVideoPlayer from './OrdinaryVideoPlayer';
 import VideoItemsData from './VideoItemsData';
 import MembersList from './MembersList';
 import MessageBox from './MessageBox';
+import HeaderPanel from './HeaderPanel';
 
 export default {
   name: 'OrdinaryPlaylist',
-  components: { OrdinaryVideoPlayer, VideoItemsData, MembersList, MessageBox },
+  components: { OrdinaryVideoPlayer, VideoItemsData, MembersList, MessageBox, HeaderPanel },
   data() {
     return {
     };
@@ -46,12 +46,6 @@ export default {
   methods: {
     gotToSearch() {
       this.$router.push({ name: 'SearchField' });
-    },
-    goHome() {
-      this.$router.push({ name: 'MainPage' });
-    },
-    goBack() {
-      this.$router.go(-1);
     },
   },
 };

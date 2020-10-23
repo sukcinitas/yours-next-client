@@ -2,8 +2,9 @@
 .search {
   max-width: 60%;
   margin: 0 auto;
-  margin-top: 30px;
+  margin-top: 60px;
   padding-top: 50px;
+  padding-bottom: 150px;
   text-align: center;
   &__search-field {
     display: flex;
@@ -56,25 +57,13 @@
     font-size: 18px;
     width: 105px;
     &--centered {
-      @extend .search__button;
+      @extend .btn--medium;
       margin: 10px auto;
       width: auto;
       padding: 2px 16px;
     }
-    &--home {
-      @extend .btn--medium;
-      top: 0px;
-      position: absolute;
-      right: 0px;
-    }
-    &--back {
-      @extend .btn--medium;
-      top: 0px;
-      position: absolute;
-      left: 0px;
-    }
     &--add {
-      @extend .btn;
+      @extend .btn--medium;
       position: absolute;
       bottom: 0;
       left: 0;
@@ -96,7 +85,7 @@
   }
   &__button--small {
     @extend .btn--medium;
-    width: 70px;
+    width: 90px;
   }
   &__button--left {
     float: left;

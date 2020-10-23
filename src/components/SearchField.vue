@@ -1,7 +1,6 @@
 <template>
   <div class="search">
-    <button @click="goBack" class="search__button--back">Back</button>
-    <button @click="goHome" class="search__button--home">Home</button>
+    <headerPanel :leaveBtn="false" :homeBtn="true" :backBtn="true"></headerPanel>
     <p class="search__message--error" v-if="errorMessage && !chosenVideoId">{{errorMessage}}</p>
     <p class="search__message--success"
     v-if="successMessage && !chosenVideoId">{{successMessage}}</p>
@@ -76,7 +75,7 @@ v-if="successMessage && chosenVideoId === item.snippet.resourceId.videoId">{{suc
     <div v-show="nextPageToken !== '' || prevPageToken !== ''" class="search__pages">
       <button
         @click="getPage('prev')" v-show="prevPageToken !== ''"
-        class="search__button--small search__button--left">Back
+        class="search__button--small search__button--left">Previous
       </button>
       <button
         @click="getPage('next')" v-show="nextPageToken !== '' && items.length !== 0"
@@ -92,10 +91,11 @@ v-if="successMessage && chosenVideoId === item.snippet.resourceId.videoId">{{suc
 import DataService from '../services/data.service';
 import MembersList from './MembersList';
 import MessageBox from './MessageBox';
+import HeaderPanel from './HeaderPanel';
 
 export default {
   name: 'SearchField',
-  components: { MembersList, MessageBox },
+  components: { MembersList, MessageBox, HeaderPanel },
   data() {
     return {
       picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems
@@ -188,12 +188,6 @@ export default {
       this.queryOrId = this.channelId;
       this.playlistName = '';
       this.isExploring = false;
-    },
-    goHome() {
-      this.$router.push({ name: 'MainPage' });
-    },
-    goBack() {
-      this.$router.go(-1);
     },
   },
 };

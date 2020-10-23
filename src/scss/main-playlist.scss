@@ -3,7 +3,7 @@
   max-width: 60%;
   margin: 0 auto;
   padding-top: 50px;
-  padding-bottom: 100px;
+  padding-bottom: 160px;
   min-height: 100vh;
   &__youtube {
     position: relative;
@@ -27,20 +27,6 @@
     width: auto;
     margin: 20px auto;
     display: block;
-    &--home {
-      @extend .main-playlist__button;
-      position: absolute;
-      right: 0px;
-      top: 0px;
-      margin: 10px;
-    }
-    &--back {
-      @extend .main-playlist__button;
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      margin: 10px;
-    }
     &--controls {
       @extend .main-playlist__button;
       margin: 0px;
@@ -170,7 +156,6 @@
 @media only screen and (max-width: 400px) {
   .main-playlist {
     max-width: 98%;
-    padding-bottom: 10px;
     &__button--remove {
       background-color: rgb(228, 228, 228);
       color: rgb(82, 82, 82);

@@ -1,10 +1,6 @@
 <template>
   <main class="main">
-    <div class=header>
-      <button class="header__button" @click="leave">
-        Leave
-      </button>
-    </div>
+    <headerPanel :leaveBtn="true" :homeBtn="false" :backBtn="false"></headerPanel>
     <div class="playlists">
       <h2 class="playlists__heading">Playlists of group {{group}}</h2>
       <div class="playlists__list">
@@ -61,13 +57,15 @@
 <script>
 import MessageBox from './MessageBox';
 import MembersList from './MembersList';
+import HeaderPanel from './HeaderPanel';
 import formatDate from '../util/formatDate';
 
 export default {
   name: 'MainPage',
   components: {
-    'message-box': MessageBox,
-    'members-list': MembersList,
+    MessageBox,
+    MembersList,
+    HeaderPanel,
   },
   data() {
     return {
@@ -169,10 +167,6 @@ export default {
     toggleMessages() {
       this.$store.commit('group/setChatState', { state: !this.isMessagesTurnedOff });
     },
-    leave() {
-      this.$store.dispatch('group/resetState'); // for backup if reload does not work
-      this.$router.go(); // when no arguments are provided, it refreshes the page
-    },
     formatDate(date) {
       if (!date) {
         return '';
@@ -187,4 +181,5 @@ export default {
   @import '@/scss/shared-styles-forms.scss';
   @import '@/scss/shared-styles-buttons.scss';
   @import '@/scss/main-page.scss';
+  @import '@/scss/header-panel.scss';
 </style>

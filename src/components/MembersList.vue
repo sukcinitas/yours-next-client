@@ -1,10 +1,11 @@
 <template>
-    <div :class="[isBottom ? 'members--bottom' : 'members']">
+    <div :class="[isBottom ? 'members--bottom' : 'members', isMessages ? 'members--messages' : '']">
       <div
         v-for="member in activeMembers"
         :key="member.emoji"
-        :class="[{'members__moderator': moderator === member.name}, 'members__member',
-        {'members__you' : user === member.name}]"
+        :class="[{'members__moderator': moderator === member.name && !isMessages},
+        'members__member',
+        {'members__you' : user === member.name && !isMessages}]"
         @dblclick="makeModerator(member.name)"
         @mouseover="isTooltipDisplayed = true, target = $event.target.innerText"
         @mouseout="isTooltipDisplayed = false"
@@ -24,7 +25,7 @@
 <script>
 export default {
   name: 'MembersList',
-  props: ['isBottom'],
+  props: ['isBottom', 'isMessages'],
   data() {
     return {
       isTooltipDisplayed: false,

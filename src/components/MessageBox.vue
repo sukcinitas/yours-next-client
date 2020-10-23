@@ -1,5 +1,6 @@
 <template>
   <div :class="['message-box', {'message-box--off': !isMessagesTurnedOn}]">
+    <members-list :isMessages="true"></members-list>
     <div class="message-box__messages" ref="messages">
       <div class="message-box__message" v-for="(message, index) in messages" :key="index">
         <div class="message-box__message-member">
@@ -50,8 +51,11 @@
 </template>
 
 <script>
+import MembersList from './MembersList';
+
 export default {
   name: 'MemberCreate',
+  components: { MembersList },
   data() {
     return {
       message: '',
