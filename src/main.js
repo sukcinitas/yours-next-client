@@ -6,13 +6,15 @@ import VueYoutube from 'vue-youtube';
 import VueSocketIO from 'vue-socket.io';
 import SocketIO from 'socket.io-client';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faStepForward, faStepBackward, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faStepForward, faStepBackward, faPause, faPlay,
+  faAngleDoubleUp, faAngleDoubleDown, faAngleDoubleLeft, faAngleDoubleRight, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import store from './store';
 import App from './App';
 import router from './router';
 
-library.add(faStepForward, faStepBackward, faPause, faPlay);
+library.add(faStepForward, faStepBackward, faPause, faPlay, faWindowClose,
+  faAngleDoubleUp, faAngleDoubleDown, faAngleDoubleLeft, faAngleDoubleRight);
 
 Vue.use(VueYoutube);
 Vue.use(new VueSocketIO({
@@ -23,7 +25,7 @@ Vue.use(new VueSocketIO({
     actionPrefix: 'SOCKET_',
     mutationPrefix: 'SOCKET_',
   },
-  options: { path: '/' }, // Optional options
+  options: { path: '/' },
 }));
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;

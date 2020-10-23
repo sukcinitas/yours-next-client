@@ -73,7 +73,7 @@
     font-family: 'Anton', sans-serif;
     font-size: 30px;
     position: absolute;
-    left: -5px;
+    left: -15px;
     top: calc(50%);
     background-color: transparent;
     padding: 0;
@@ -83,12 +83,12 @@
       margin: 0 auto;
       left:0;
       right: 0;
-      top: -22px;
+      top: -25px;
       transform: rotate(90deg);
     }
   }
   &--turn-off{
-    color: rgb(82, 82, 82);
+    color: #ddd;
     border: none;
     font-family: 'Anton', sans-serif;
     font-size: 30px;
@@ -99,13 +99,12 @@
     padding: 0;
     width: auto;
     @media only screen and (max-width: 550px)  { 
-      left: 0;
       right: 0;
       display: inline-block;
       margin: 0 auto;
       bottom: 0px;
       top: calc(100% - 20px);
-      transform: rotate(270deg);
+      transform: rotate(90deg);
     }
   }
   &--hidden {

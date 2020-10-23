@@ -37,14 +37,14 @@
       type="button"
       @click="turnOffMessages"
     >
-      >
+      <font-awesome-icon :icon="['fas', 'angle-double-right']"></font-awesome-icon>
     </button>
     <button
     :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
     type="button"
     @click="turnOnMessages"
     >
-      {{'&lt;'}}
+      <font-awesome-icon :icon="['fas', 'angle-double-left']"></font-awesome-icon>
     </button>
 </div>
 
