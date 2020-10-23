@@ -6,8 +6,7 @@
   &__heading {
     font-family: variables.$font-title;
     font-weight: 700;
-    font-size: 5rem;
-    // color: variables.$secondary-dark;
+    font-size: 90px;
     color: variables.$secondary-dark;
   }
 }
@@ -24,6 +23,6 @@
     margin-bottom: 80px;
   }
   .header__heading {
-    font-size: 4rem;
+    font-size: 64px;
   }
 }

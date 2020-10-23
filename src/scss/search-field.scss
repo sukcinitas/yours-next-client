@@ -155,8 +155,8 @@
       font-size: 16px;
     }
     &__button--add {
-      background-color: rgb(228, 228, 228);
-      color: rgb(82, 82, 82);
+      background-color: variables.$secondary-light;
+      color: variables.$tertiary-dark;
       font-size: 16px;
     }
   }
@@ -183,8 +183,8 @@
       font-size: 16px;
     }
     &__button--add {
-      background-color: rgb(228, 228, 228);
-      color: rgb(82, 82, 82);
+      background-color: variables.$secondary-light;
+      color: variables.$tertiary-dark;
       font-size: 16px;
     }
   }

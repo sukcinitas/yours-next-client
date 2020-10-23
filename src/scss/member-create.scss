@@ -1,11 +1,24 @@
 @use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 @import '@/scss/shared-styles-forms.scss';
+
 .create-member-form {
-  @extend .entry-form;
+  // @extend .entry-form;
+  margin: 0 auto;
+  display: flex;
+  // flex-direction: row;
+  // justify-content: center;
   flex-direction: column;
   align-items: center;
   margin-top: 60px;
+  &__heading {
+    @extend .heading;
+    // color: variables.$primary-dark;
+    &--bold {
+      color: variables.$tertiary-bright;
+      text-transform: uppercase;
+    }
+  }
   &__input {
     @extend .inpt;
     border: 2px solid variables.$secondary-light;
@@ -24,17 +37,9 @@
   &__button--selected-emoji {
     @extend .btn--selected-emoji;
   }
-  &__heading {
-    @extend .heading;
-    color: variables.$primary-dark;
-    &--bold {
-      color: variables.$tertiary-bright;
-      text-transform: uppercase;
-    }
-  }
   &__subheading {
     @extend .subheading;    
-    color: variables.$primary-dark;
+    // color: variables.$primary-dark;
   }
   &__emoji-box {
       margin: 40px auto;

@@ -19,15 +19,6 @@
                 <font-awesome-icon :icon="['fas', 'window-close']"></font-awesome-icon>
               </span>
             </button>
-            <!-- <button
-              class="playlists__remove-button"
-              v-if="isModerator"
-              @click="deletePlaylist(playlist._id)"
-            > -->
-              <!-- <font-awesome-icon :icon="['fas', 'window-close']" v-if="isModerator"
-              @click="deletePlaylist(playlist._id)"
-              ></font-awesome-icon> -->
-            <!-- </button> -->
         </div>
       </div>
       <p v-if="errMsg" class="playlists__message--error">{{errMsg}}</p>

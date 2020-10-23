@@ -14,8 +14,6 @@
   width: 500px;
   position: fixed;
   right: 0;
-  // background-color: #716144c4;
-  // background-image: linear-gradient(#716144f7, #716144c4);
   background-image: linear-gradient(#585144, #81745dc4);
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
@@ -26,8 +24,8 @@
     transition: right 0.1s ease-in;
   }
   &__messages {
-    border-top: 1px solid variables.$secondary-light;
-    border-bottom: 1px solid variables.$secondary-light;
+    border-top: 1px solid variables.$secondary-bright--transparent;
+    border-bottom: 1px solid variables.$secondary-bright--transparent;
     margin: 0px auto 20px;
     padding-top: 10px;
     width: 300px;
@@ -69,7 +67,7 @@
   }
   &__message-name {
     font-size: 11px;
-    color: #545454;
+    color: variables.$tertiary-dark;
     display: none;
   }
   &__message-emoji {

@@ -1,6 +1,7 @@
 @use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 @import '@/scss/shared-styles-forms.scss';
+
 .main {
     display: grid;
     height: 100vh;
@@ -12,30 +13,6 @@
     grid-template-rows: auto 40px;
     justify-content: space-between;
 }
-
-// .header {
-//   position: absolute;
-//   left: 0;
-//   right: 0;
-//   top: 0;
-//   height: 60px;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   align-items: center;
-//   justify-content: space-between;
-//   &__button {
-//     @extend .btn--medium;
-//     font-size: 16px;
-//     margin: 10px;
-//     padding: 2px 16px;
-//   }
-//   &__heading {
-//     font-family: variables.$font-title;
-//     font-size: 30px;
-//     color: variables.$tertiary-light;
-//   }
-// }
 
 .playlists {
   grid-area: playlists;
@@ -67,7 +44,7 @@
   }
   &__name {
     background-color: variables.$secondary-light;
-    color: rgb(82, 82, 82);
+    color: variables.$tertiary-dark;
     font-family: variables.$font-btn;
     font-size: 24px;
     text-transform: uppercase;
@@ -95,11 +72,6 @@
         color 0.3s;
       }
     }
-  }
-  &__date {
-    display: block;
-    font-size: 10px;
-    text-transform: none;
   }
   &__remove-button {
     @extend .btn--medium;  
@@ -131,7 +103,6 @@
   flex-direction: row;
   &__input {
     @extend .inpt--medium;
-    border: 2px solid #e4e4e4;
   }
   &__button {
     @extend .btn--medium;
@@ -140,7 +111,6 @@
   }
   &__button--small {
     @extend .btn--medium;
-    border: 2px solid #e4e4e4;
     border-left: none;
     margin: 10px 0;
   }
@@ -148,9 +118,7 @@
 
 @media only screen and (max-width: 550px)  {
   .main {
-    padding: 5px 10px;
-    grid-template-areas: 
-                         "playlists";
+    grid-template-areas: "playlists";
     grid-template-rows: auto;
   }
   .playlists {
@@ -161,14 +129,8 @@
     &__name {
       font-size: 14px;
     }
-    &__date {
-      font-size: 9px;
+    &__playlist {
+      margin: 4px;
     }
   }
-  // .header__heading {
-  //   font-size: 20px;
-  // }
-  // .header__button {
-  //   font-size: 14px;
-  // }
 }

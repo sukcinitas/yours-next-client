@@ -69,7 +69,7 @@
     max-height: calc(100vh - 200px);
     border-top: 5px solid variables.$primary-dark;
     border-bottom: 5px solid variables.$primary-dark;
-    background-color: #fafafa;
+    background-color: variables.$secondary-light;
   }
   &__video-item {
     background-color: variables.$quoternary-dark;
@@ -100,20 +100,6 @@
       color: variables.$tertiary-bright;
       -webkit-text-stroke: 0.6px variables.$primary-dark;
     }
-  }
-  &__title--bg {
-    @extend .heading;
-    color: variables.$primary-dark;
-    position: absolute;
-    left: 0;
-    right: 0;
-    font-size: 400px;
-    color: rgba(192, 192, 192, 0.253);
-    text-align: center;
-    overflow: hidden;
-    white-space: pre-wrap;
-    z-index: -10;
-    margin: 0 auto;
   }
   &__heading {
     cursor: pointer;
@@ -158,8 +144,8 @@
   .main-playlist {
     max-width: 98%;
     &__button--remove {
-      background-color: rgb(228, 228, 228);
-      color: rgb(82, 82, 82);
+      background-color: variables.$secondary-light;
+      color: variables.$tertiary-dark;
       cursor: pointer;
     }
     &__button {
@@ -179,8 +165,8 @@
   .main-playlist {
     max-width: 90%;
     &__button--remove {
-      background-color: rgb(228, 228, 228);
-      color: rgb(82, 82, 82);
+      background-color: variables.$secondary-light;
+      color: variables.$tertiary-dark;
       cursor: pointer;
     }
     &__button {
