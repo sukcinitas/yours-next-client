@@ -55,7 +55,7 @@
     top: 5px;
     left: 15px;
     border: 2px solid variables.$tertiary-light;
-    background-color: variables.$primary-light--transparent(255, 255, 255, 0.7);
+    background-color: variables.$primary-light--transparent;
     padding: 3px 7px;
     z-index: 101;
     &--hidden {
