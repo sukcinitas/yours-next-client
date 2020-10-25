@@ -90,6 +90,10 @@
     overflow: auto;
     scrollbar-width: none;
   }
+  .members__tooltop--bottom {
+    bottom: auto;
+    top: 5px;
+  }
 }
 @media only screen and (min-width: 1024px)  {
   .members__member {

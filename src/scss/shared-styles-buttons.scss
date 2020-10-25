@@ -100,10 +100,11 @@
     width: auto;
     @media only screen and (max-width: 550px)  { 
       right: 0;
+      left: 0;
       display: inline-block;
       margin: 0 auto;
-      bottom: 0px;
-      top: calc(100% - 20px);
+      bottom: -10px;
+      top: auto;
       transform: rotate(90deg);
     }
   }

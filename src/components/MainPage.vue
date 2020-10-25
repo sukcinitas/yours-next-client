@@ -14,7 +14,7 @@
             <button
             class="playlists__name"
             @click="goToPlaylist(playlist._id)">{{playlist.title}}
-              <span  v-if="isModerator"
+              <span  v-if="isModerator" class="playlists__remove-button"
               @click.stop="deletePlaylist(playlist._id)">
                 <font-awesome-icon :icon="['fas', 'window-close']"></font-awesome-icon>
               </span>

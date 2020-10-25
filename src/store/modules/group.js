@@ -50,7 +50,7 @@ const actions = {
   },
   async SOCKET_reconnecting() {
     console.log('reconnected'); // after disconnecting, does it always try to reconnect?
-    // setTimeout(() => window.location.reload()); // to work in Firefox?
+    setTimeout(() => window.location.reload()); // to work in Firefox?
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
