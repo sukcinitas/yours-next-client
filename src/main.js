@@ -7,14 +7,14 @@ import VueSocketIO from 'vue-socket.io';
 import SocketIO from 'socket.io-client';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStepForward, faStepBackward, faPause, faPlay,
-  faAngleDoubleUp, faAngleDoubleDown, faAngleDoubleLeft, faAngleDoubleRight, faWindowClose } from '@fortawesome/free-solid-svg-icons';
+  faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import store from './store';
 import App from './App';
 import router from './router';
 
 library.add(faStepForward, faStepBackward, faPause, faPlay, faWindowClose,
-  faAngleDoubleUp, faAngleDoubleDown, faAngleDoubleLeft, faAngleDoubleRight);
+  faChevronUp, faChevronDown, faChevronLeft, faChevronRight);
 
 Vue.use(VueYoutube);
 Vue.use(new VueSocketIO({

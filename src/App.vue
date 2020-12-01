@@ -31,6 +31,7 @@ html, body {
   padding: 0;
   height: 100%;
   min-height: 100%;
+  scroll-behavior: smooth;
 }
 #app {
   height: 100%;

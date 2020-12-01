@@ -89,8 +89,9 @@
     justify-content: center;
     overflow: auto;
     scrollbar-width: none;
+    overflow: visible;
   }
-  .members__tooltop--bottom {
+  .members__tooltip--bottom {
     bottom: auto;
     top: 5px;
   }

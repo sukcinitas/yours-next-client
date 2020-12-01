@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 <template>
   <div class="search">
     <headerPanel :leaveBtn="false" :homeBtn="true" :backBtn="true"></headerPanel>
@@ -10,13 +11,14 @@
     </div>
 
     <div class="search__search-options">
-      <input type="radio" id="searchAll" name="searchParameters" value="searchAll" v-model="picked">
+      <input type="radio" id="searchAll" name="searchParameters" value="searchAll" v-model="picked"
+      @change="empty">
       <label for="searchAll" class="search__label">by phrase</label>
       <input type="radio" id="searchPlaylists" value="searchPlaylists"
-      v-model="picked" name="searchParameters" >
+      v-model="picked" name="searchParameters"  @change="empty">
       <label for="searchPlaylists" class="search__label">by channel id</label>
       <input type="radio" id="searchPlaylistItems" value="searchPlaylistItems"
-      v-model="picked" name="searchParameters">
+      v-model="picked" name="searchParameters"  @change="empty">
       <label for="searchPlaylistItems" class="search__label">by playlist id</label>
     </div>
 
@@ -27,7 +29,8 @@ v-if="errorMessage && chosenVideoId === item.id.videoId">{{errorMessage}}</p>
         <p class="search__message--success"
 v-if="successMessage && chosenVideoId === item.id.videoId">{{successMessage}}</p>
         <h1 class="search__heading">{{item.snippet.title}}</h1>
-        <img class="search__img" :src="item.snippet.thumbnails.medium.url"
+        <img class="search-img"
+        :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title">
         <button class="search__button--add"
         @click="add(item.id.videoId)">Add</button>
@@ -35,12 +38,17 @@ v-if="successMessage && chosenVideoId === item.id.videoId">{{successMessage}}</p
     </div>
 
     <div v-else-if="picked === 'searchPlaylists'" class="search__search-results">
-      <div v-for="item in playlists" :key="item.id" class="search__search-result">
-        <h1 class="search__heading">{{item.snippet.title}}</h1>
-        <img class="search__img" :src="item.snippet.thumbnails.medium.url"
-        :alt="item.snippet.title">
-        <button class="search__button--add"
-        @click="explorePlaylist(item.id, item.snippet.title)">Explore playlist</button>
+      <h6 class="search__subheading" v-if="playlists.length > 0">Playlists</h6>
+      <div v-for="item in playlists" :key="item.id"
+      class="search__search-result search__search-result--playlist">
+        <h1 class="search__heading search__heading--playlist">{{item.snippet.title}}</h1>
+        <!-- <img class="search__img search__img--playlist"
+        :src="item.snippet.thumbnails.medium.url"
+        :alt="item.snippet.title"> -->
+        <button class="search__button--playlist"
+        @click="explorePlaylist(item.id, item.snippet.title)">
+          <font-awesome-icon :icon="['fas', 'chevron-right']"></font-awesome-icon>
+        </button>
       </div>
     </div>
 
@@ -126,6 +134,8 @@ export default {
         data = await DataService.getPlaylistItems(this.queryOrId);
         this.items = data.data.data.items;
       }
+      // eslint-disable-next-line no-console
+      console.log(data);
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
     },
@@ -183,11 +193,21 @@ export default {
         this.picked = 'searchAll';
       }
     },
+    empty() {
+      this.playlists = [];
+      this.items = [];
+      this.queryOrId = '';
+      this.channelId = '';
+      this.prevPageToken = '';
+      this.nextPageToken = '';
+    },
     backToList() {
       this.picked = 'searchPlaylists';
       this.queryOrId = this.channelId;
       this.playlistName = '';
       this.isExploring = false;
+      this.prevPageToken = '';
+      this.nextPageToken = '';
     },
   },
 };

@@ -16,16 +16,27 @@
 
 .playlists {
   grid-area: playlists;
-  max-width: 70%;
-  margin: 80px auto 20px;
+  margin: 80px 80px 20px;
   text-align: center;
   position: relative;
   &__heading {
-    font-size: 30px;
-    margin: 30px auto 50px;
+    font-size: 200px;
+    margin: 30px auto 100px;
     font-family: variables.$font-btn;
     text-transform: uppercase;
     color: variables.$primary-dark;
+    text-shadow: 10px 10px 3px #e2e2e2;
+    &-detail {
+      display: block;
+      font-size: 50px;
+      margin: 30px auto 100px;
+      font-family: variables.$font-btn;
+      text-transform: uppercase;
+      color: variables.$primary-dark;
+      text-shadow: 10px 10px 3px #e2e2e2;
+      position: relative;
+      top: -70px;
+    }
   }
   &__list {
     display: flex;
@@ -44,13 +55,13 @@
     }
   }
   &__name {
-    background-color: variables.$primary-base;
-    color: variables.$secondary-light;
+    background-color: variables.$tertiary-bright;
+    color: variables.$secondary-dark;
     font-family: variables.$font-btn;
     font-size: 24px;
     text-transform: uppercase;
     text-align: center;
-    border: 2px solid variables.$tertiary-light;
+    border: 2px solid variables.$tertiary-bright;
     transition: 
                 color 0.2s;
     font-size: 16px;
@@ -77,10 +88,11 @@
   &__message--error {
     font-family: variables.$font-btn;
     color: variables.$primary-light;
-    width: auto;
+    max-width: 60%;
     padding: 4px;
     color: variables.$primary-light;
     background-color: variables.$primary-error;
+    margin: auto;
   }
   &__message--success {
     @extend .playlists__message--error;
@@ -149,6 +161,40 @@
     }
     &__playlist {
       margin: 4px;
+    }
+    &__heading {
+      font-size: 50px;
+      &-detail {
+        font-size: 30px;
+        top: -40px;
+      }
+    }
+    &__message--error {
+      max-width: 90%;
+    }
+  }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 620px)  {
+  .playlists {
+    &__heading {
+      font-size: 120px;
+      &-detail {
+        font-size: 40px;
+        top: -60px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 620px) and (min-width: 550px)  {
+  .playlists {
+    &__heading {
+      font-size: 90px;
+      &-detail {
+        font-size: 34px;
+        top: -60px;
+      }
     }
   }
 }

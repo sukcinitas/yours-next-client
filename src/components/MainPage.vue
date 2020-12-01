@@ -2,7 +2,9 @@
   <main class="main">
     <headerPanel :leaveBtn="true" :homeBtn="false" :backBtn="false"></headerPanel>
     <div class="playlists">
-      <h2 class="playlists__heading">Playlists of group {{group}}</h2>
+      <!-- <h2 class="playlists__heading">Playlists of group {{group}}</h2> -->
+            <h2 class="playlists__heading">Playlists<span
+            class="playlists__heading-detail">of group {{group}}</span></h2>
       <div class="playlists__list">
           <div class="playlists__playlist--ongoing" v-if="ongoingPlaylistId">
             <button
