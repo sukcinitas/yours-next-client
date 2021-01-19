@@ -96,6 +96,8 @@ export default {
       this.$socket.emit('setMember', { name: this.name, emoji: this.selectedEmoji }); // only this socket
       await this.$store.commit('group/setMember', { name: this.name, emoji: this.selectedEmoji });
       this.$socket.emit('addMember', { name: this.name, emoji: this.selectedEmoji });
+      sessionStorage.setItem('username', this.name);
+      sessionStorage.setItem('userEmoji', this.selectedEmoji);
       this.$router.push({ name: 'MainPage' });
     },
     checkIfEmptyAndDeleteErr() {

@@ -2,6 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unreachable */
 /* eslint-disable no-shadow */
+import vue from '../../main';
 import GroupService from '../../services/group.service';
 // initial state
 const state = () => ({
@@ -20,12 +21,29 @@ const state = () => ({
   isChatTurnedOn: false,
 });
 
+
+const persist = (commit) => {
+  const name = sessionStorage.getItem('groupName');
+  const username = sessionStorage.getItem('username');
+  const userEmoji = sessionStorage.getItem('userEmoji');
+  if (!name || !username || !userEmoji) {
+    return;
+  }
+  commit('setName', { name });
+  vue.$socket.emit('getInitialState', { name });
+  vue.$socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
+  commit('setMember', { name: username, emoji: userEmoji });
+  vue.$socket.emit('addMember', { name: username, emoji: userEmoji });
+  console.log('I add member');
+  // vue.$router.push({ name: 'MainPage' });
+};
 // actions
 const actions = {
   async authenticate({ commit }, payload) {
     const { data } = await GroupService.authenticate(payload);
     if (data.success) {
       commit('setName', { name: payload.name });
+      sessionStorage.setItem('groupName', payload.name);
       return { success: true };
     }
     let errType = 'else';
@@ -40,17 +58,25 @@ const actions = {
     const { data } = await GroupService.create(payload);
     if (data.success) {
       commit('setName', { name: payload.name });
+      sessionStorage.setItem('groupName', payload.name);
       return { success: true };
     }
     const errType = data.message === 'Name is already in use!' ? 'name' : 'else';
     return { success: false, errMsg: data.message, errType };
   },
   resetState({ commit }) {
+    sessionStorage.clear();
+    vue.$socket.disconnect();
     commit('resetState');
   },
-  async SOCKET_reconnecting() {
+  async SOCKET_connect({ commit }) {
+    persist(commit);
+    console.log('connecting');
+  },
+  async SOCKET_reconnecting({ commit }) {
+    persist(commit);
     console.log('reconnected'); // after disconnecting, does it always try to reconnect?
-    setTimeout(() => window.location.reload()); // to work in Firefox?
+    // setTimeout(() => window.location.reload()); // to work in Firefox?
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);

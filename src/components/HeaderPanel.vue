@@ -16,7 +16,8 @@ export default {
   methods: {
     leave() {
       this.$store.dispatch('group/resetState'); // for backup if reload does not work
-      this.$router.go(); // when no arguments are provided, it refreshes the page
+      // this.$router.go(); // when no arguments are provided, it refreshes the page
+      this.$router.push({ name: 'EntrancePage' });
     },
     goHome() {
       this.$router.push({ name: 'MainPage' });
