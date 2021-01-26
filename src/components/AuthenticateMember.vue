@@ -79,6 +79,7 @@ export default {
       this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })
         .then((result) => {
           if (result.success) {
+            this.$socket.connect();
             this.$socket.emit('getInitialState', { name: this.name });
             this.$router.push({ name: 'MemberCreate' });
           } else {

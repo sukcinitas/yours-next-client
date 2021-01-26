@@ -2,7 +2,9 @@
   <div :class="['message-box', {'message-box--off': !isMessagesTurnedOn}]">
     <members-list :isMessages="true"></members-list>
     <div class="message-box__messages" ref="messages">
-      <div class="message-box__message" v-for="(message, index) in messages" :key="index">
+      <div :class="['message-box__message',
+       {'message-box__message--right': member.name === message.member.name}]"
+           v-for="(message, index) in messages" :key="index">
         <div class="message-box__message-member">
           <p class="message-box__message-name">{{message.member.name}}</p>
           <p class="message-box__message-emoji" :title="message.member.name">

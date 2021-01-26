@@ -88,6 +88,7 @@ export default {
       this.$refs.submitButton.focus();
     },
     async addMember() {
+      console.log('adding');
       if (this.memberNameExists) { // extra if names are being created in parallel
         this.errMsg = 'Name is already in use!';
         this.isShowingEmojiSelection = false;
