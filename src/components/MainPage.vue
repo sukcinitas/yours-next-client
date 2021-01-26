@@ -75,7 +75,7 @@ export default {
       successMsg: '',
     };
   },
-  created() {
+  mounted() {
     return this.getPlaylists();
   },
   computed: {

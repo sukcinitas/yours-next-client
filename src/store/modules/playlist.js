@@ -11,8 +11,9 @@ const actions = {
   async SOCKET_updatePlaylists({ commit }, payload) {
     commit('setPlaylists', { playlists: payload.playlists });
   },
-  async getPlaylists({ rootState, commit }) {
-    const { data } = await PlaylistService.getAll(rootState.group.name);
+  async getPlaylists({ commit }) {
+    const name = sessionStorage.getItem('groupName');
+    const { data } = await PlaylistService.getAll(name);
     if (data.success) {
       if (data.playlists.length === 0) {
         return { success: false, errMsg: 'You have not created any playlists yet!' };

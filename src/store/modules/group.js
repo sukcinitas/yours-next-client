@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unreachable */
 /* eslint-disable no-shadow */
@@ -16,13 +15,13 @@ const state = () => ({
   moderator: '',
   initialEmojis: [0x1F429, 0x1F408, 0x1F98E,
     0x1F98A, 0x1F43A, 0x1F344, 0x1F346, 0x1F469, 0x2600, 0x1F987,
-    0x1F419, 0x1F483, 0x1F984, 0x1F996, 0x1F478],
+    0x1F419, 0x1F483, 0x1F984, 0x1F996, 0x1F478, 0x1F409, 0x1F988, 0x1F985, 0x1F415, 0x1F9DC],
   messageEmojis: ['😀', '😍', '🤣', '🍕', '👿', '🤘', '😑', '🌈'],
   isChatTurnedOn: false,
 });
 
 
-const persist = (commit) => {
+const persist = async (commit) => {
   const name = sessionStorage.getItem('groupName');
   const username = sessionStorage.getItem('username');
   const userEmoji = sessionStorage.getItem('userEmoji');
@@ -34,8 +33,6 @@ const persist = (commit) => {
   vue.$socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
   commit('setMember', { name: username, emoji: userEmoji });
   vue.$socket.emit('addMember', { name: username, emoji: userEmoji });
-  console.log('I add member');
-  // vue.$router.push({ name: 'MainPage' });
 };
 // actions
 const actions = {
@@ -71,12 +68,9 @@ const actions = {
   },
   async SOCKET_connect({ commit }) {
     persist(commit);
-    console.log('connecting');
   },
   async SOCKET_reconnecting({ commit }) {
     persist(commit);
-    console.log('reconnected'); // after disconnecting, does it always try to reconnect?
-    // setTimeout(() => window.location.reload()); // to work in Firefox?
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
@@ -157,8 +151,6 @@ const getters = {
   emojisFreeToSet(state) {
     const chosenEmojis = state.activeMembers.map(member => member.emoji);
     const filtered = [];
-    // eslint-disable-next-line no-console
-    console.log(chosenEmojis);
     for (let i = 0; i < state.initialEmojis.length; i += 1) {
       if (!chosenEmojis.includes(String.fromCodePoint(state.initialEmojis[i]))) {
         filtered.push(state.initialEmojis[i]);

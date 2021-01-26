@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import Vue from 'vue';
 import Router from 'vue-router';
 import MainPage from '../components/MainPage';
@@ -55,7 +56,10 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.state.group.name && !store.state.group.member.name
+    const name = sessionStorage.getItem('groupName');
+    const username = sessionStorage.getItem('username');
+    const userEmoji = sessionStorage.getItem('userEmoji');
+    if (!name && !username && !userEmoji && !store.state.group.name && !store.state.group.member.name
       && !store.state.group.member.emoji) {
       next({ name: 'EntrancePage' });
     } else if (store.state.group.name && !store.state.group.member.name) {
