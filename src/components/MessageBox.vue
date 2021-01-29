@@ -25,7 +25,7 @@
         >
         </textarea>
         <div class="message-box__emojies">
-          <span v-for="emoji in emojis" :key="emoji" @click="addEmoji(emoji)">
+          <span v-for="emoji in emojis" :key="emoji" @click.prevent="addEmoji(emoji)">
             {{emoji}}
           </span>
         </div>

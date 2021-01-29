@@ -3,6 +3,7 @@
 .header {
   text-align: center;
   padding: 50px 50px 70px;
+
   &__heading {
     font-family: variables.$font-title;
     font-weight: 700;
@@ -10,18 +11,22 @@
     color: variables.$secondary-dark;
   }
 }
+
 .entry-forms {
   position: fixed;
   top: calc(50% - 48px);
   width: 100%;
   margin: auto;
 }
+
 @media only screen and (max-width: 500px), screen and (max-height: 500px)  {
+
   .entry-forms {
     position: static;
     margin-top: 20px;
     margin-bottom: 80px;
   }
+  
   .header__heading {
     font-size: 64px;
   }

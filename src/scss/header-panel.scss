@@ -1,5 +1,6 @@
 @use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
+
 .header {
   position: absolute;
   left: 0;
@@ -9,6 +10,7 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
+
   &__button {
     @extend .btn--medium;
     margin: 10px;
@@ -17,6 +19,7 @@
 }
 
 @media only screen and (max-width: 550px)  {
+
   .header__button {
     font-size: 14px;
   }

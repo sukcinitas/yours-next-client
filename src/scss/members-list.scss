@@ -20,11 +20,17 @@
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.822);
   }
   &--messages {
     position: static;
-    width: 200px;
+    width: 300px;
     margin: auto auto 0px;
+    overflow: scroll;
   }
   &__member {
     display: inline-block;
@@ -46,7 +52,7 @@
     border-top: 2px solid variables.$tertiary-light;
   }
   &__moderator {
-    border-bottom: 2px solid gold;
+    border-bottom: 2px solid variables.$tertiary-bright
   }
   &__tooltip {
     font-family: variables.$font-heading;

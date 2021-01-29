@@ -4,7 +4,7 @@
 
 .main {
     display: grid;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     grid-template-areas: 
                "playlists"
@@ -16,12 +16,12 @@
 
 .playlists {
   grid-area: playlists;
-  margin: 80px 80px 20px;
+  margin: 80px 80px 120px;
   text-align: center;
   position: relative;
   &__heading {
-    font-size: 200px;
-    margin: 30px auto 100px;
+    font-size: 120px;
+    margin: 10px auto 10px;
     font-family: variables.$font-btn;
     text-transform: uppercase;
     color: variables.$primary-dark;
@@ -29,7 +29,7 @@
     &-detail {
       display: block;
       font-size: 50px;
-      margin: 30px auto 100px;
+      margin: 30px auto 10px;
       font-family: variables.$font-btn;
       text-transform: uppercase;
       color: variables.$primary-dark;
@@ -40,10 +40,12 @@
   }
   &__list {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin: 10px;
+    margin: 10px auto;
+    max-width: 600px;
   }
   &__playlist {
     display: flex;
@@ -88,16 +90,20 @@
   &__message--error {
     font-family: variables.$font-btn;
     color: variables.$primary-light;
-    max-width: 60%;
     padding: 4px;
     color: variables.$primary-light;
     background-color: variables.$primary-error;
     margin: auto;
+    max-width: 90%;
   }
   &__message--success {
     @extend .playlists__message--error;
     background-color: variables.$primary-success;
   }
+}
+.create-playlist {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .create-playlist-form {
@@ -141,7 +147,6 @@
   }
   &__button--small {
     @extend .btn--medium;
-    border-left: none;
     margin: 10px 0;
   }
 }
@@ -153,8 +158,8 @@
   }
   .playlists {
     min-height: 400px;
-    max-width: 94%;
-    width: 94%;
+    max-width: 90%;
+    width: 90%;
     margin: 60px auto 120px;
     &__name {
       font-size: 14px;
@@ -163,7 +168,7 @@
       margin: 4px;
     }
     &__heading {
-      font-size: 50px;
+      font-size: 70px;
       &-detail {
         font-size: 30px;
         top: -40px;
@@ -177,8 +182,9 @@
 
 @media only screen and (max-width: 1024px) and (min-width: 620px)  {
   .playlists {
+    margin: 60px auto 120px;
     &__heading {
-      font-size: 120px;
+      font-size: 100px;
       &-detail {
         font-size: 40px;
         top: -60px;
@@ -189,6 +195,7 @@
 
 @media only screen and (max-width: 620px) and (min-width: 550px)  {
   .playlists {
+    margin: 60px auto 120px;
     &__heading {
       font-size: 90px;
       &-detail {
