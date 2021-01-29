@@ -1,25 +1,47 @@
 <template>
-    <div :class="[isBottom ? 'members--bottom' : 'members', isMessages ? 'members--messages' : '']">
-      <div
-        v-for="member in activeMembers"
-        :key="member.emoji"
-        :class="[{'members__moderator': moderator === member.name && !isMessages},
+  <div
+    :class="[
+      isBottom ? 'members--bottom' : 'members',
+      isMessages ? 'members--messages' : '',
+    ]"
+  >
+    <div
+      v-for="member in activeMembers"
+      :key="member.emoji"
+      :class="[
+        { members__moderator: moderator === member.name && !isMessages },
         'members__member',
-        {'members__you' : user === member.name && !isMessages}]"
-        @dblclick="makeModerator(member.name)"
-        @mouseover="isTooltipDisplayed = true, target = $event.target.innerText"
-        @mouseout="isTooltipDisplayed = false"
+        { members__you: user === member.name && !isMessages },
+      ]"
+      @dblclick="makeModerator(member.name)"
+      @mouseover="
+        (isTooltipDisplayed = true), (target = $event.target.innerText)
+      "
+      @mousedown="
+        (isTooltipDisplayed = true), (target = $event.target.innerText)
+      "
+      @mouseout="isTooltipDisplayed = false"
+      @mouseup="isTooltipDisplayed = false"
+    >
+      <p>{{ member.emoji }}</p>
+      <p
+        :class="{
+          members__tooltip: isTooltipDisplayed && target === member.emoji,
+          'members__tooltip--hidden':
+            !isTooltipDisplayed || target !== member.emoji,
+          'members__tooltip--bottom':
+            isTooltipDisplayed && target === member.emoji && isBottom,
+        }"
       >
-        <p>{{member.emoji}}</p>
-        <p
-          :class="{'members__tooltip': isTooltipDisplayed && target === member.emoji,
-          'members__tooltip--hidden': !isTooltipDisplayed || target !== member.emoji,
-          'members__tooltip--bottom': isTooltipDisplayed && target === member.emoji && isBottom}"
-        >
-        {{naming(member.name)}}
-        </p>
-      </div>
+        {{ user === member.name ? 'you' : member.name }}
+        {{
+          isModerator && user !== member.name && !isMessages
+            ? `\n---\nDouble-click to make ${member.name} moderator`
+            : ''
+        }}
+      </p>
     </div>
+  </div>
 </template>
 
 <script>
@@ -48,25 +70,19 @@ export default {
   },
   methods: {
     makeModerator(name) {
-      if (this.isModerator) {
+      if (this.isModerator && !this.isMessages) {
         if (this.moderator === name) {
           return;
         }
         this.$socket.emit('setModerator', name);
       }
     },
-    naming(name) {
-      if (this.$store.state.group.member.name === name) {
-        return 'you';
-      }
-      return this.isModerator ? `Double-click to make ${name} moderator` : name;
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-forms.scss';
-  @import '@/scss/shared-styles-buttons.scss';
-  @import '@/scss/members-list.scss';
+@import '@/scss/shared-styles-forms.scss';
+@import '@/scss/shared-styles-buttons.scss';
+@import '@/scss/members-list.scss';
 </style>

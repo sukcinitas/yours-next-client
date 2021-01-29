@@ -1,41 +1,37 @@
 <template>
   <div class="create-playlist">
-      <button
-          v-if="!isExtended"
-          class="create-playlist-form__button--small"
-          @click="toggleExtended"
-          type="button"
-      >
+    <button
+      v-if="!isExtended"
+      class="create-playlist-form__button--small"
+      @click="toggleExtended"
+      type="button"
+    >
       +
-      </button>
-      <form
-        class="create-playlist-form"
-        @submit.prevent="addPlaylist" v-show="isExtended"
+    </button>
+    <form
+      class="create-playlist-form"
+      @submit.prevent="addPlaylist"
+      v-show="isExtended"
+    >
+      <input type="text" v-model="title" class="create-playlist-form__input" />
+      <button
+        class="create-playlist-form__button"
+        :type="title ? 'submit' : 'button'"
+        @click="toggleExtended"
       >
-        <input
-          type="text"
-          v-model="title"
-          class="create-playlist-form__input"
-        >
-        <button
-          class="create-playlist-form__button"
-          :type="title ? 'submit' : 'button'"
-          @click="toggleExtended"
-        >
-          {{title ? 'Add' : '-'}}
-        </button>
-      </form>
-      <p v-if="errMsg && isExtended" class="playlists__message--error">
-        {{errMsg}}
-      </p>
-      <p v-if="successMsg && isExtended" class="playlists__message--success">
-        {{successMsg}}
-      </p>
+        {{ title ? 'Add' : '-' }}
+      </button>
+    </form>
+    <p v-if="errMsg && isExtended && title" class="playlists__message--error">
+      {{ errMsg }}
+    </p>
+    <p v-if="successMsg && isExtended" class="playlists__message--success">
+      {{ successMsg }}
+    </p>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'CreatePlaylist',
   data() {
@@ -55,7 +51,8 @@ export default {
       }
     },
     async addPlaylist() {
-      this.$store.dispatch('playlist/addPlaylist', { title: this.title })
+      this.$store
+        .dispatch('playlist/addPlaylist', { title: this.title })
         .then((result) => {
           if (result.success) {
             this.errMsg = '';
@@ -74,5 +71,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/main-page.scss';
+@import '@/scss/main-page.scss';
 </style>

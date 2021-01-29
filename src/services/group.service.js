@@ -8,4 +8,3 @@ export default {
     return axios.post('/api/group/create', { name, passcode });
   },
 };
-

@@ -1,6 +1,7 @@
 @use 'variables';
 
-.html, body {
+.html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -18,15 +19,14 @@
   padding: 2px;
   margin: 2px;
   border: 2px solid variables.$secondary-light;
-  transition: background-color 0.2s,
-              color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     cursor: pointer;
     background-color: variables.$secondary-bright;
     color: variables.$primary-bright;
-    transition: background-color 0.3s,
-                color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
     outline: none;
   }
   &--small {
@@ -53,7 +53,7 @@
     font-size: 24px;
     width: 50px;
     height: 50px;
-    border-radius:50%;
+    border-radius: 50%;
     padding: 2px 8px;
     margin: 10px;
     background-color: variables.$secondary-bright;
@@ -67,7 +67,7 @@
     margin: 10px;
     padding: 2px 16px;
   }
-  &--turn-on{
+  &--turn-on {
     color: variables.$tertiary-dark;
     border: none;
     font-family: variables.$font-btn;
@@ -78,16 +78,16 @@
     background-color: transparent;
     padding: 0;
     width: auto;
-    @media only screen and (max-width: 550px)  { 
+    @media only screen and (max-width: 550px) {
       display: inline-block;
       margin: 0 auto;
-      left:0;
+      left: 0;
       right: 0;
       top: -25px;
       transform: rotate(90deg);
     }
   }
-  &--turn-off{
+  &--turn-off {
     color: variables.$secondary-light;
     border: none;
     font-family: variables.$font-btn;
@@ -98,7 +98,7 @@
     background-color: transparent;
     padding: 0;
     width: auto;
-    @media only screen and (max-width: 550px)  { 
+    @media only screen and (max-width: 550px) {
       right: 0;
       left: 0;
       display: inline-block;
@@ -121,14 +121,13 @@
   font-weight: 400;
   font-size: 16px;
   text-transform: none;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     border: 2px solid variables.$tertiary-light;
     background-color: variables.$secondary-bright--transparent;
     cursor: auto;
     color: variables.$secondary-dark;
-    transition: background-color 0.01s,
-    color 0.01s
-    width 0.15s linear;
+    transition: background-color 0.01s, color 0.01s width 0.15s linear;
     outline: none;
   }
   &--medium {
@@ -141,7 +140,8 @@
 }
 .input--error {
   border: 2px solid variables.$primary-error;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     border: 2px solid variables.$primary-error;
   }
 }
@@ -186,7 +186,7 @@
   .heading {
     font-size: 24px;
   }
-  .subheading { 
+  .subheading {
     font-size: 18px;
   }
   .emoji-box {
@@ -203,11 +203,11 @@
     top: 240px;
   }
 }
-@media only screen and (max-width: 768px) and (min-width: 400px)  {
+@media only screen and (max-width: 768px) and (min-width: 400px) {
   .heading {
     font-size: 24px;
   }
-  .subheading { 
+  .subheading {
     font-size: 18px;
   }
   .btn--emoji {

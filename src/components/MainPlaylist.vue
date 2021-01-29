@@ -1,17 +1,20 @@
 <template>
   <div class="main-playlist">
-    <headerPanel :leaveBtn="false" :homeBtn="true" :backBtn="true"></headerPanel>
-    <h4 class="main-playlist__title--ongoing">{{title}}</h4>
+    <headerPanel
+      :leaveBtn="false"
+      :homeBtn="true"
+      :backBtn="true"
+    ></headerPanel>
+    <h4 class="main-playlist__title--ongoing">{{ title }}</h4>
     <button
       v-if="isModerator"
       class="main-playlist__button"
       @click="gotToSearch"
-    >Add some videos!
+    >
+      Add some videos!
     </button>
     <template v-if="initialPlaylistLength !== 0">
-      <ongoing-video-player
-        class="main-playlist__video-player"
-      >
+      <ongoing-video-player class="main-playlist__video-player">
       </ongoing-video-player>
       <video-items-data
         :isOngoing="true"
@@ -32,10 +35,15 @@ import HeaderPanel from './HeaderPanel';
 
 export default {
   name: 'MainPlaylist',
-  components: { OngoingVideoPlayer, VideoItemsData, MembersList, MessageBox, HeaderPanel },
+  components: {
+    OngoingVideoPlayer,
+    VideoItemsData,
+    MembersList,
+    MessageBox,
+    HeaderPanel,
+  },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     initialPlaylistLength() {
@@ -54,5 +62,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/main-playlist.scss';
+@import '@/scss/main-playlist.scss';
 </style>

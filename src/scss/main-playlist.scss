@@ -81,8 +81,7 @@
       cursor: pointer;
       background-color: variables.$secondary-bright;
       color: variables.$primary-bright;
-      transition: background-color 0.3s,
-                  color 0.3s;
+      transition: background-color 0.3s, color 0.3s;
     }
     &--active {
       @extend .main-playlist__video-item;
@@ -94,7 +93,7 @@
     color: variables.$primary-dark;
     text-transform: uppercase;
     font-size: 40px;
-    margin: 30px auto;
+    margin: 30px;
     &--ongoing {
       @extend .main-playlist__title;
       color: variables.$tertiary-bright;
@@ -143,6 +142,15 @@
 @media only screen and (max-width: 400px) {
   .main-playlist {
     max-width: 98%;
+    &__video-items {
+      max-width: 260px;
+    }
+    &__video-item {
+      width: 248px;
+    }
+    &__video-item img {
+      width: 240px;
+    }
     &__button--remove {
       background-color: variables.$secondary-light;
       color: variables.$tertiary-dark;
@@ -161,7 +169,7 @@
     }
   }
 }
-@media only screen and (max-width: 768px) and (min-width: 400px)  {
+@media only screen and (max-width: 768px) and (min-width: 400px) {
   .main-playlist {
     max-width: 90%;
     &__button--remove {

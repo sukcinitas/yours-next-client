@@ -9,8 +9,8 @@
   text-align: center;
   &__search-field {
     display: flex;
-    flex-direction: row; 
-    justify-content: center; 
+    flex-direction: row;
+    justify-content: center;
   }
   &__search-optons {
     margin: 3px;
@@ -31,20 +31,19 @@
       cursor: pointer;
       background-color: variables.$secondary-bright;
       color: variables.$primary-bright;
-      transition: background-color 0.3s,
-                  color 0.3s;
+      transition: background-color 0.3s, color 0.3s;
     }
     &--playlist {
       display: flex;
       justify-content: space-between;
     }
-  }  
+  }
   &__subheading {
     text-align: center;
     margin-bottom: 30px;
     font-size: 30px;
     font-family: variables.$font-btn;
-    font-weight: 500;;    
+    font-weight: 500;
     color: variables.$primary-dark;
   }
   &__input {
@@ -54,7 +53,7 @@
     margin-right: 0px;
     border: 2px solid variables.$secondary-light;
     width: 280px;
-  } 
+  }
   &__button {
     @extend .btn;
     height: 40px;
@@ -100,11 +99,13 @@
   }
   &__button--left {
     float: left;
-    margin-left: calc((100% - 326px)/4 - 25px); //326px is main content, 25px is half of button width
+    margin-left: calc(
+      (100% - 326px) / 4 - 25px
+    ); //326px is main content, 25px is half of button width
   }
   &__button--right {
     float: right;
-    margin-right: calc((100% - 326px)/4 - 25px);
+    margin-right: calc((100% - 326px) / 4 - 25px);
   }
   &__heading {
     color: variables.$tertiary-light;
@@ -152,11 +153,19 @@
 @media only screen and (max-width: 400px) {
   .search {
     max-width: 98%;
+    &__search-results {
+      width: 248px;
+    }
+    &__search-result img {
+      width: 240px;
+    }
     &__pages {
       margin-bottom: 40px;
       position: static;
     }
-    &__button, &__button--home, &__button--small {
+    &__button,
+    &__button--home,
+    &__button--small {
       font-size: 16px;
     }
     &__input {
@@ -179,7 +188,7 @@
     }
   }
 }
-@media only screen and (max-width: 768px) and (min-width: 400px)  {
+@media only screen and (max-width: 768px) and (min-width: 400px) {
   .search {
     display: inherit;
     max-width: 80%;
@@ -187,7 +196,9 @@
       margin-bottom: 40px;
       position: static;
     }
-    &__button, &__button--home, &__button--small {
+    &__button,
+    &__button--home,
+    &__button--small {
       font-size: 16px;
     }
     &__button--left {

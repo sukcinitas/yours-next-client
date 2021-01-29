@@ -13,13 +13,31 @@ const state = () => ({
   },
   messages: [],
   moderator: '',
-  initialEmojis: [0x1F429, 0x1F408, 0x1F98E,
-    0x1F98A, 0x1F43A, 0x1F344, 0x1F346, 0x1F469, 0x2600, 0x1F987,
-    0x1F419, 0x1F483, 0x1F984, 0x1F996, 0x1F478, 0x1F409, 0x1F988, 0x1F985, 0x1F415, 0x1F9DC],
+  initialEmojis: [
+    0x1f429,
+    0x1f408,
+    0x1f98e,
+    0x1f98a,
+    0x1f43a,
+    0x1f344,
+    0x1f346,
+    0x1f469,
+    0x2600,
+    0x1f987,
+    0x1f419,
+    0x1f483,
+    0x1f984,
+    0x1f996,
+    0x1f478,
+    0x1f409,
+    0x1f988,
+    0x1f985,
+    0x1f415,
+    0x1f9dc,
+  ],
   messageEmojis: ['😀', '😍', '🤣', '🍕', '👿', '🤘', '😑', '🌈'],
   isChatTurnedOn: false,
 });
-
 
 const persist = async (commit) => {
   const name = sessionStorage.getItem('groupName');
@@ -58,7 +76,8 @@ const actions = {
       sessionStorage.setItem('groupName', payload.name);
       return { success: true };
     }
-    const errType = data.message === 'Name is already in use!' ? 'name' : 'else';
+    const errType =
+      data.message === 'Name is already in use!' ? 'name' : 'else';
     return { success: false, errMsg: data.message, errType };
   },
   resetState({ commit }) {
@@ -74,7 +93,9 @@ const actions = {
   },
   async SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
-    commit('mainplaylist/setOngoingPlaylist', payload.group.ongoingPlaylist, { root: true });
+    commit('mainplaylist/setOngoingPlaylist', payload.group.ongoingPlaylist, {
+      root: true,
+    });
   },
   async SOCKET_setModerator({ commit }, payload) {
     commit('setModerator', { name: payload.name });
@@ -82,7 +103,8 @@ const actions = {
   async SOCKET_addMember({ commit }, payload) {
     commit('setActiveMembers', { name: payload.name, emoji: payload.emoji });
   },
-  async SOCKET_setMember({ commit }, payload) { // only to this socket
+  async SOCKET_setMember({ commit }, payload) {
+    // only to this socket
     commit('setMember', { name: payload.name, emoji: payload.emoji });
   },
   async SOCKET_removeMember({ commit }, payload) {
@@ -101,16 +123,24 @@ const mutations = {
     state.moderator = payload.name;
   },
   setActiveMembers(state, payload) {
-    state.activeMembers = [...state.activeMembers, { name: payload.name, emoji: payload.emoji }];
+    state.activeMembers = [
+      ...state.activeMembers,
+      { name: payload.name, emoji: payload.emoji },
+    ];
   },
   setMember(state, payload) {
     state.member = payload;
   },
   setMessage(state, payload) {
-    state.messages = [...state.messages, { message: payload.message, member: payload.member }];
+    state.messages = [
+      ...state.messages,
+      { message: payload.message, member: payload.member },
+    ];
   },
   removeMember(state, payload) {
-    state.activeMembers = state.activeMembers.filter(member => member.name !== payload.name);
+    state.activeMembers = state.activeMembers.filter(
+      member => member.name !== payload.name,
+    );
   },
   setInitialState(state, payload) {
     state.activeMembers = payload.activeMembers;
@@ -145,14 +175,18 @@ const getters = {
     if (state.member && state.moderator === state.member.name) {
       return 'you';
     }
-    const moderator = state.activeMembers.filter(member => member.name === state.moderator);
+    const moderator = state.activeMembers.filter(
+      member => member.name === state.moderator,
+    );
     return moderator.length === 0 ? '' : moderator[0].emoji;
   },
   emojisFreeToSet(state) {
     const chosenEmojis = state.activeMembers.map(member => member.emoji);
     const filtered = [];
     for (let i = 0; i < state.initialEmojis.length; i += 1) {
-      if (!chosenEmojis.includes(String.fromCodePoint(state.initialEmojis[i]))) {
+      if (
+        !chosenEmojis.includes(String.fromCodePoint(state.initialEmojis[i]))
+      ) {
         filtered.push(state.initialEmojis[i]);
       }
     }

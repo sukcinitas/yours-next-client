@@ -60,19 +60,25 @@ const actions = {
     }
     if (payload.type === 'deletion') {
       // if it is a moderator, no need to change index, as it has already been changed
-      const needToChangeIndex = rootState.group.member.name !== rootState.group.moderator
-      && state.nowPlayingVideoIndex > state.idsArray.indexOf(payload.itemData);
-      const index = needToChangeIndex ? state.nowPlayingVideoIndex - 1 : state.nowPlayingVideoIndex;
+      const needToChangeIndex =
+        rootState.group.member.name !== rootState.group.moderator &&
+        state.nowPlayingVideoIndex > state.idsArray.indexOf(payload.itemData);
+      const index = needToChangeIndex
+        ? state.nowPlayingVideoIndex - 1
+        : state.nowPlayingVideoIndex;
       const items = payload.idsArray;
       // eslint-disable-next-line no-console
       console.log(payload, 'payloadd');
-      const itemsPreData = state.items.filter(item => item.id !== payload.itemData);
+      const itemsPreData = state.items.filter(
+        item => item.id !== payload.itemData,
+      );
       let itemsData;
       // if I have loaded certain sets, I don't hide them;
       // though if set lacks one item, I load it from another set
       if (items.length >= state.setCount * state.itemCount) {
         const { data } = await DataService.getVideos(
-          state.idsArray[state.setCount * state.itemCount]);
+          state.idsArray[state.setCount * state.itemCount],
+        );
         const item = data.data.items[0];
         itemsData = [...itemsPreData, item];
       } else {
@@ -98,11 +104,19 @@ const actions = {
     if (state.idsArray.length === state.items.length) {
       return { success: true, increaseSetCount: false };
     }
-    const idsArrayOfItemCount = (state.idsArray.slice((state.setCount) *
-    state.itemCount, (state.setCount + 1) * state.itemCount)).join(',');
+    const idsArrayOfItemCount = state.idsArray
+      .slice(
+        state.setCount * state.itemCount,
+        (state.setCount + 1) * state.itemCount,
+      )
+      .join(',');
     const { data } = await DataService.getVideos(idsArrayOfItemCount);
     if (!data.success) {
-      return { success: false, errMsg: 'Could not retrieve playlist data!', increaseSetCount: false };
+      return {
+        success: false,
+        errMsg: 'Could not retrieve playlist data!',
+        increaseSetCount: false,
+      };
     }
     const items = data.data.items;
     const itemsData = [...state.items, ...items];
@@ -113,7 +127,10 @@ const actions = {
     if (state.idsArray.indexOf(payload.item) > -1) {
       return { success: false, errMsg: 'Item is already in the playlist!' };
     }
-    const { data } = await PlaylistService.add({ id: state.id, item: payload.item });
+    const { data } = await PlaylistService.add({
+      id: state.id,
+      item: payload.item,
+    });
     if (!data.success) {
       return { success: false, errMsg: 'Could not add item to playlist!' };
     }
@@ -131,7 +148,10 @@ const actions = {
   },
   async removeItemFromPlaylist({ state }, payload) {
     const { videoId } = payload;
-    const { data } = await PlaylistService.removeItem({ id: state.id, items: [videoId] });
+    const { data } = await PlaylistService.removeItem({
+      id: state.id,
+      items: [videoId],
+    });
     if (!data.success) {
       return { success: false, errMsg: 'Could not remove item!' };
     }
@@ -165,15 +185,17 @@ const mutations = {
     state.title = payload.title;
   },
   setOngoingPlaylistPause(state, payload) {
-    state.ongoingPlaylist = Object.assign(
-      {}, state.ongoingPlaylist, { paused: payload.paused });
+    state.ongoingPlaylist = Object.assign({}, state.ongoingPlaylist, {
+      paused: payload.paused,
+    });
   },
   setOngoingPlaylist(state, payload) {
     state.ongoingPlaylist = payload;
   },
   setOngoingPlaylistVideoIndex(state, payload) {
-    state.ongoingPlaylist = Object.assign(
-      {}, state.ongoingPlaylist, { videoIndex: payload.videoIndex });
+    state.ongoingPlaylist = Object.assign({}, state.ongoingPlaylist, {
+      videoIndex: payload.videoIndex,
+    });
   },
   setUserJoined(state, payload) {
     state.userJoined = payload.state;
@@ -197,7 +219,12 @@ const getters = {
     return state.ongoingPlaylist.paused;
   },
   isIndexAheadOfData(state) {
-    const { itemCount, setCount, nowPlayingVideoIndex, ongoingPlaylist } = state;
+    const {
+      itemCount,
+      setCount,
+      nowPlayingVideoIndex,
+      ongoingPlaylist,
+    } = state;
     // if I choose video which data is not loaded yet, I load another set
     // index will always be smaller than item counts if sets are not full
     if (ongoingPlaylist.id) {

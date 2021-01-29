@@ -4,11 +4,7 @@
       @submit.prevent="handleSubmit"
       :class="['entry-form', isExtended ? 'entry-form--extended' : '']"
     >
-      <button
-        @click="toggleExtended"
-        type="button"
-        class="entry-form__button"
-        >
+      <button @click="toggleExtended" type="button" class="entry-form__button">
         Create a group
       </button>
       <input
@@ -16,28 +12,38 @@
         v-model="name"
         type="text"
         placeholder="Enter a group name"
-        :class="[isExtended ? 'entry-form--extended__input' : 'entry-form__input',
-        err.type === 'name' ? 'input--error' : '']"
+        :class="[
+          isExtended ? 'entry-form--extended__input' : 'entry-form__input',
+          err.type === 'name' ? 'input--error' : '',
+        ]"
         @input="checkIfEmpty('name')"
-      >
+      />
       <input
         ref="passcode"
         v-model="passcode"
         type="password"
         placeholder="Enter a passcode"
-        :class="[isExtended ? 'entry-form--extended__input' : 'entry-form__input',
-        err.type === 'passcode' ? 'input--error' : '']"
+        :class="[
+          isExtended ? 'entry-form--extended__input' : 'entry-form__input',
+          err.type === 'passcode' ? 'input--error' : '',
+        ]"
         @input="checkIfEmpty('passcode')"
-      >
+      />
       <button
         type="submit"
         :disabled="!name || !passcode"
-        :class="[isExtended ? 'entry-form--extended__button--small' : 'entry-form__button--small']"
+        :class="[
+          isExtended
+            ? 'entry-form--extended__button--small'
+            : 'entry-form__button--small',
+        ]"
       >
-      >
+        >
       </button>
     </form>
-    <p v-if="err.message && isExtended" class="entry-form__message--error">{{err.message}}</p>
+    <p v-if="err.message && isExtended" class="entry-form__message--error">
+      {{ err.message }}
+    </p>
   </div>
 </template>
 
@@ -76,7 +82,11 @@ export default {
         };
         return;
       }
-      this.$store.dispatch('group/createGroup', { name: this.name, passcode: this.passcode })
+      this.$store
+        .dispatch('group/createGroup', {
+          name: this.name,
+          passcode: this.passcode,
+        })
         .then((result) => {
           if (result.success) {
             this.$socket.connect();
@@ -113,5 +123,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-forms.scss';
+@import '@/scss/shared-styles-forms.scss';
 </style>

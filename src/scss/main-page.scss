@@ -3,29 +3,28 @@
 @import '@/scss/shared-styles-forms.scss';
 
 .main {
-    display: grid;
-    min-height: 100vh;
-    margin: 0;
-    grid-template-areas: 
-               "playlists"
-               "members";
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 40px;
-    justify-content: space-between;
+  display: grid;
+  min-height: 100vh;
+  margin: 0;
+  grid-template-areas:
+    'playlists'
+    'members';
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 40px;
+  justify-content: space-between;
 }
 
 .playlists {
   grid-area: playlists;
-  margin: 80px 80px 120px;
+  margin: 90px 80px 120px;
   text-align: center;
   position: relative;
   &__heading {
-    font-size: 120px;
-    margin: 10px auto 10px;
+    font-size: 90px;
+    margin: 0 auto 10px;
     font-family: variables.$font-btn;
     text-transform: uppercase;
     color: variables.$primary-dark;
-    text-shadow: 10px 10px 3px #e2e2e2;
     &-detail {
       display: block;
       font-size: 50px;
@@ -33,7 +32,7 @@
       font-family: variables.$font-btn;
       text-transform: uppercase;
       color: variables.$primary-dark;
-      text-shadow: 10px 10px 3px #e2e2e2;
+
       position: relative;
       top: -70px;
     }
@@ -64,8 +63,7 @@
     text-transform: uppercase;
     text-align: center;
     border: 2px solid variables.$tertiary-bright;
-    transition: 
-                color 0.2s;
+    transition: color 0.2s;
     font-size: 16px;
     height: 40px;
     width: auto;
@@ -82,8 +80,7 @@
       padding-left: 16px;
       &:hover {
         color: variables.$secondary-bright;
-        transition: background-color 0.3s,
-        color 0.3s;
+        transition: background-color 0.3s, color 0.3s;
       }
     }
   }
@@ -127,15 +124,14 @@
     padding: 2px;
     margin: 2px;
     border: 2px solid variables.$secondary-light;
-    transition: background-color 0.2s,
-                color 0.2s;
-  
-    &:hover, &:focus {
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover,
+    &:focus {
       cursor: pointer;
       background-color: variables.$secondary-bright;
       color: variables.$primary-bright;
-      transition: background-color 0.3s,
-                  color 0.3s;
+      transition: background-color 0.3s, color 0.3s;
       outline: none;
     }
     font-size: 16px;
@@ -151,16 +147,16 @@
   }
 }
 
-@media only screen and (max-width: 550px)  {
+@media only screen and (max-width: 550px) {
   .main {
-    grid-template-areas: "playlists";
+    grid-template-areas: 'playlists';
     grid-template-rows: auto;
   }
   .playlists {
     min-height: 400px;
     max-width: 90%;
     width: 90%;
-    margin: 60px auto 120px;
+    margin: 90px auto 120px;
     &__name {
       font-size: 14px;
     }
@@ -168,7 +164,7 @@
       margin: 4px;
     }
     &__heading {
-      font-size: 70px;
+      font-size: 40px;
       &-detail {
         font-size: 30px;
         top: -40px;
@@ -180,11 +176,14 @@
   }
 }
 
-@media only screen and (max-width: 1024px) and (min-width: 620px)  {
+@media only screen and (max-width: 1024px) and (min-width: 620px) {
   .playlists {
-    margin: 60px auto 120px;
+    margin: 90px 50px 20px;
+    &__list {
+      max-width: 500px;
+    }
     &__heading {
-      font-size: 100px;
+      font-size: 70px;
       &-detail {
         font-size: 40px;
         top: -60px;
@@ -193,14 +192,14 @@
   }
 }
 
-@media only screen and (max-width: 620px) and (min-width: 550px)  {
+@media only screen and (max-width: 620px) and (min-width: 550px) {
   .playlists {
-    margin: 60px auto 120px;
+    margin: 90px 50px 20px;
     &__heading {
-      font-size: 90px;
+      font-size: 50px;
       &-detail {
         font-size: 34px;
-        top: -60px;
+        top: -50px;
       }
     }
   }

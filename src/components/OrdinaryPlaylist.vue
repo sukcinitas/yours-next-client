@@ -1,18 +1,19 @@
 <template>
   <div class="main-playlist">
-    <headerPanel :leaveBtn="false" :homeBtn="true" :backBtn="true"></headerPanel>
-    <h4 class="main-playlist__title">{{title}}</h4>
-    <button
-      class="main-playlist__button"
-      @click="gotToSearch"
-    >Add some videos!
+    <headerPanel
+      :leaveBtn="false"
+      :homeBtn="true"
+      :backBtn="true"
+    ></headerPanel>
+    <h4 class="main-playlist__title">{{ title }}</h4>
+    <button class="main-playlist__button" @click="gotToSearch">
+      Add some videos!
     </button>
     <template v-if="initialPlaylistLength !== 0">
-      <ordinary-video-player
-        class="main-playlist__video-player"
-      >
+      <ordinary-video-player class="main-playlist__video-player">
       </ordinary-video-player>
-      <video-items-data :isOngoing="false"
+      <video-items-data
+        :isOngoing="false"
         class="main-playlist__video-items"
       ></video-items-data>
     </template>
@@ -30,10 +31,15 @@ import HeaderPanel from './HeaderPanel';
 
 export default {
   name: 'OrdinaryPlaylist',
-  components: { OrdinaryVideoPlayer, VideoItemsData, MembersList, MessageBox, HeaderPanel },
+  components: {
+    OrdinaryVideoPlayer,
+    VideoItemsData,
+    MembersList,
+    MessageBox,
+    HeaderPanel,
+  },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     initialPlaylistLength() {
@@ -52,5 +58,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/main-playlist.scss';
+@import '@/scss/main-playlist.scss';
 </style>

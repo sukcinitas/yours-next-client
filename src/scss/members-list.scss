@@ -1,36 +1,38 @@
 @use 'variables';
 @import '@/scss/shared-styles-buttons.scss';
 
+// '.members' class has two variants: '.members--bottom' and '.members--messages'
+
 .members {
-  grid-area: members;
   position: absolute;
   left: 90px;
   right: 90px;
   top: 5px;
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  height: 60px;
-  overflow: auto;
-  scrollbar-width: none;
+  height: 90px;
   overflow: visible;
+  flex-wrap: wrap;
   &--bottom {
-    grid-area: members;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: flex-end;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(255, 255, 255, 0.822);
+    max-height: 60px;
+    background-color: variables.$primary-light--transparent;
+    overflow: visible;
+    padding: 0 20px;
   }
   &--messages {
     position: static;
     width: 300px;
-    margin: auto auto 0px;
-    overflow: scroll;
+    margin: 0px auto;
+    height: auto;
+    overflow: unset;
   }
   &__member {
     display: inline-block;
@@ -43,16 +45,21 @@
     border-bottom: 2px solid transparent;
     position: relative;
     overflow: visible;
+    user-select: none; /* standard syntax */
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
     &:hover {
       font-size: 17px;
       cursor: default;
     }
   }
-  &__you {  
+  &__you {
     border-top: 2px solid variables.$tertiary-light;
   }
   &__moderator {
-    border-bottom: 2px solid variables.$tertiary-bright
+    border-bottom: 2px solid variables.$tertiary-bright;
   }
   &__tooltip {
     font-family: variables.$font-heading;
@@ -75,7 +82,7 @@
     }
   }
 }
-@media only screen and (max-width: 768px) and (min-width: 550px)  {
+@media only screen and (max-width: 768px) and (min-width: 550px) {
   .members {
     align-items: flex-start;
     &--bottom {
@@ -83,7 +90,7 @@
     }
   }
 }
-@media only screen and (max-width: 550px)  {
+@media only screen and (max-width: 550px) {
   .members--bottom {
     position: absolute;
     left: 90px;
@@ -93,16 +100,25 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    overflow: auto;
-    scrollbar-width: none;
     overflow: visible;
+    scrollbar-width: none;
+    padding: 0;
+  }
+  .members--messages {
+    width: 200px;
   }
   .members__tooltip--bottom {
     bottom: auto;
-    top: 5px;
+    top: 0px;
+    left: -15px;
+  }
+  .members__tooltip {
+    bottom: auto;
+    top: 0px;
+    left: -15px;
   }
 }
-@media only screen and (min-width: 1024px)  {
+@media only screen and (min-width: 1024px) {
   .members__member {
     font-size: 20px;
     height: 30px;

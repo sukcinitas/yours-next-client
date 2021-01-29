@@ -24,5 +24,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/entrance-page.scss';
+@import '@/scss/entrance-page.scss';
 </style>

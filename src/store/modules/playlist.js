@@ -16,7 +16,10 @@ const actions = {
     const { data } = await PlaylistService.getAll(name);
     if (data.success) {
       if (data.playlists.length === 0) {
-        return { success: false, errMsg: 'You have not created any playlists yet!' };
+        return {
+          success: false,
+          errMsg: 'You have not created any playlists yet!',
+        };
       }
       commit('setPlaylists', { playlists: data.playlists });
       return { success: true };
@@ -32,15 +35,26 @@ const actions = {
     if (data.success) {
       const playlists = [...state.playlists, data.playlist];
       this._vm.$socket.emit('updatePlaylists', { playlists });
-      return { success: true, successMsg: data.message, playlists, id: data.playlist._id };
+      return {
+        success: true,
+        successMsg: data.message,
+        playlists,
+        id: data.playlist._id,
+      };
     }
     return { success: false, errMsg: data.message };
   },
   async deletePlaylist({ state }, payload) {
     const { data } = await PlaylistService.delete(payload.id);
     if (data.success) {
-      const playlists = state.playlists.filter(playlist => playlist._id !== payload.id);
-      return { success: true, successMsg: 'Playlist has been successfully deleted!', playlists };
+      const playlists = state.playlists.filter(
+        playlist => playlist._id !== payload.id,
+      );
+      return {
+        success: true,
+        successMsg: 'Playlist has been successfully deleted!',
+        playlists,
+      };
     }
     return { success: false, errMsg: 'Could not delete playlist!' };
   },
@@ -54,7 +68,7 @@ const mutations = {
 
 const getters = {
   playlistsTitles(state) {
-    return state.playlists.map(playlist => (playlist.title).toLowerCase());
+    return state.playlists.map(playlist => playlist.title.toLowerCase());
   },
 };
 

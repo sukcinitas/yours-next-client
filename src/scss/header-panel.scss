@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   top: 0;
-  height: 60px;
+  height: 90px;
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
@@ -18,8 +18,7 @@
   }
 }
 
-@media only screen and (max-width: 550px)  {
-
+@media only screen and (max-width: 550px) {
   .header__button {
     font-size: 14px;
   }

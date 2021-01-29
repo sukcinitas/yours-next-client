@@ -1,17 +1,24 @@
 <template>
-  <div :class="['message-box', {'message-box--off': !isMessagesTurnedOn}]">
+  <div :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]">
     <members-list :isMessages="true"></members-list>
     <div class="message-box__messages" ref="messages">
-      <div :class="['message-box__message',
-       {'message-box__message--right': member.name === message.member.name}]"
-           v-for="(message, index) in messages" :key="index">
+      <div
+        :class="[
+          'message-box__message',
+          {
+            'message-box__message--right': member.name === message.member.name,
+          },
+        ]"
+        v-for="(message, index) in messages"
+        :key="index"
+      >
         <div class="message-box__message-member">
-          <p class="message-box__message-name">{{message.member.name}}</p>
+          <p class="message-box__message-name">{{ message.member.name }}</p>
           <p class="message-box__message-emoji" :title="message.member.name">
-            {{message.member.emoji}}
+            {{ message.member.emoji }}
           </p>
         </div>
-        <p class="message-box__message-content">{{message.message}}</p>
+        <p class="message-box__message-content">{{ message.message }}</p>
       </div>
     </div>
     <form @submit.prevent="handleSubmit" class="message-box__message-form">
@@ -20,13 +27,17 @@
           type="text"
           v-model="message"
           class="message-box__textarea"
-          rows=2
+          rows="2"
           ref="textarea"
         >
         </textarea>
         <div class="message-box__emojies">
-          <span v-for="emoji in emojis" :key="emoji" @click.prevent="addEmoji(emoji)">
-            {{emoji}}
+          <span
+            v-for="emoji in emojis"
+            :key="emoji"
+            @click.prevent="addEmoji(emoji)"
+          >
+            {{ emoji }}
           </span>
         </div>
       </div>
@@ -42,14 +53,13 @@
       <font-awesome-icon :icon="['fas', 'chevron-right']"></font-awesome-icon>
     </button>
     <button
-    :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
-    type="button"
-    @click="turnOnMessages"
+      :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
+      type="button"
+      @click="turnOnMessages"
     >
       <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
     </button>
-</div>
-
+  </div>
 </template>
 
 <script>
@@ -85,7 +95,10 @@ export default {
   },
   methods: {
     handleSubmit() {
-      this.$socket.emit('sendMessage', { message: this.message, member: this.member });
+      this.$socket.emit('sendMessage', {
+        message: this.message,
+        member: this.member,
+      });
       this.message = '';
     },
     addEmoji(emoji) {
@@ -93,8 +106,8 @@ export default {
       this.$refs.textarea.focus();
     },
     scrollTop() {
-      this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
-       + this.$refs.messages.clientHeight;
+      this.$refs.messages.scrollTop =
+        this.$refs.messages.scrollHeight + this.$refs.messages.clientHeight;
     },
     turnOffMessages() {
       this.$store.commit('group/setChatState', { state: false });
@@ -116,7 +129,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-  @import '@/scss/shared-styles-buttons.scss';
-  @import '@/scss/message-box';
+@import '@/scss/shared-styles-buttons.scss';
+@import '@/scss/message-box';
 </style>

@@ -4,46 +4,54 @@
       @submit.prevent="handleSubmit"
       :class="['entry-form', isExtended ? 'entry-form--extended' : '']"
     >
-      <button
-        @click="toggleExtended"
-        type="button"
-        class="entry-form__button"
-      >Join a group
+      <button @click="toggleExtended" type="button" class="entry-form__button">
+        Join a group
       </button>
       <input
         ref="name"
         v-model="name"
         type="text"
         placeholder="Enter the group name"
-        :class="[isExtended ? 'entry-form--extended__input' : 'entry-form__input',
-        err.type === 'name' ? 'input--error' : '']"
+        :class="[
+          isExtended ? 'entry-form--extended__input' : 'entry-form__input',
+          err.type === 'name' ? 'input--error' : '',
+        ]"
         @input="checkIfEmpty('name')"
-      >
+      />
       <input
         ref="passcode"
         v-model="passcode"
         type="password"
         placeholder="Enter the passcode"
-        :class="[isExtended ? 'entry-form--extended__input' : 'entry-form__input',
-        err.type === 'passcode' ? 'input--error' : '']"
+        :class="[
+          isExtended ? 'entry-form--extended__input' : 'entry-form__input',
+          err.type === 'passcode' ? 'input--error' : '',
+        ]"
         @input="checkIfEmpty('passcode')"
-      >
+      />
       <button
         type="submit"
         :disabled="!name || !passcode"
-        :class="[isExtended ? 'entry-form--extended__button--small' : 'entry-form__button--small']"
-      >>
+        :class="[
+          isExtended
+            ? 'entry-form--extended__button--small'
+            : 'entry-form__button--small',
+        ]"
+      >
+        >
       </button>
     </form>
     <p
       v-if="err.type === 'name' && isExtended"
       class="entry-form__message--error"
-    >{{err.message}}
+    >
+      {{ err.message }}
     </p>
     <p
       v-if="err.type === 'passcode' && isExtended"
       class="entry-form__message--error"
-    >{{err.message}}
+    >
+      {{ err.message }}
     </p>
   </div>
 </template>
@@ -76,7 +84,11 @@ export default {
       }
     },
     async handleSubmit() {
-      this.$store.dispatch('group/authenticate', { name: this.name, passcode: this.passcode })
+      this.$store
+        .dispatch('group/authenticate', {
+          name: this.name,
+          passcode: this.passcode,
+        })
         .then((result) => {
           if (result.success) {
             this.$socket.connect();
@@ -113,5 +125,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-forms.scss';
+@import '@/scss/shared-styles-forms.scss';
 </style>

@@ -14,19 +14,18 @@
 
 .entry-forms {
   position: fixed;
-  top: calc(50% - 48px);
+  top: calc(50% - 48px); // both forms - 96px
   width: 100%;
   margin: auto;
 }
 
-@media only screen and (max-width: 500px), screen and (max-height: 500px)  {
-
+@media only screen and (max-width: 700px), screen and (max-height: 500px) {
   .entry-forms {
     position: static;
     margin-top: 20px;
     margin-bottom: 80px;
   }
-  
+
   .header__heading {
     font-size: 64px;
   }

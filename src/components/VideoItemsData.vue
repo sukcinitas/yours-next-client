@@ -1,43 +1,70 @@
 <template>
   <div>
-    <p v-if="errMsg && !chosenVideoId" class="main-playlist__message--error">{{errMsg}}</p>
+    <p v-if="errMsg && !chosenVideoId" class="main-playlist__message--error">
+      {{ errMsg }}
+    </p>
     <div
-      :class="[{'main-playlist__video-item--active': item.id === playlist[activeIndex]},
-       'main-playlist__video-item']"
+      :class="[
+        {
+          'main-playlist__video-item--active':
+            item.id === playlist[activeIndex],
+        },
+        'main-playlist__video-item',
+      ]"
       v-for="(item, index) in items"
       :key="playlist[index]"
       :index="index"
     >
       <h3
         @click="changeIndex(index)"
-        :class="[{'main-playlist__heading--active': item.id === playlist[activeIndex]},
-       'main-playlist__heading', {'main-playlist__heading--active--ongoing':
-       isOngoing && !isModerator}]"
-      >{{item.snippet.title}}
+        :class="[
+          {
+            'main-playlist__heading--active': item.id === playlist[activeIndex],
+          },
+          'main-playlist__heading',
+          {
+            'main-playlist__heading--active--ongoing':
+              isOngoing && !isModerator,
+          },
+        ]"
+      >
+        {{ item.snippet.title }}
       </h3>
       <img
-        :class="[{'main-playlist__img--active': item.id === playlist[activeIndex]},
-       'main-playlist__img']"
+        :class="[
+          { 'main-playlist__img--active': item.id === playlist[activeIndex] },
+          'main-playlist__img',
+        ]"
         :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title"
-      >
+      />
       <button
-        :class="[{'main-playlist__button--remove--active': item.id === playlist[activeIndex]},
-       'main-playlist__button--remove']"
+        :class="[
+          {
+            'main-playlist__button--remove--active':
+              item.id === playlist[activeIndex],
+          },
+          'main-playlist__button--remove',
+        ]"
         v-if="isModerator"
         @click="removeItemFromPlaylist(item.id)"
       >
         Remove
       </button>
-      <p v-if="errMsg && chosenVideoId === item.id"
-      class="main-playlist__message--error">{{errMsg}}</p>
+      <p
+        v-if="errMsg && chosenVideoId === item.id"
+        class="main-playlist__message--error"
+      >
+        {{ errMsg }}
+      </p>
     </div>
     <button
       v-if="isThereMoreToLoad"
       type="button"
       class="main-playlist__button"
       @click="loadMore"
-    >Load more
+    >
+      Load more
     </button>
   </div>
 </template>
@@ -69,8 +96,10 @@ export default {
       return this.$store.getters['group/isModerator'];
     },
     isThereMoreToLoad() {
-      return this.$store.state.mainplaylist.idsArray.length >
-      this.$store.state.mainplaylist.items.length;
+      return (
+        this.$store.state.mainplaylist.idsArray.length >
+        this.$store.state.mainplaylist.items.length
+      );
     },
     isIndexAheadOfData() {
       return this.$store.getters['mainplaylist/isIndexAheadOfData'];
@@ -91,13 +120,16 @@ export default {
         return;
       }
       if (this.isModerator && this.isOngoing) {
-        this.$socket.emit('changeOngoingPlaylistVideoIndex', { videoIndex: index });
+        this.$socket.emit('changeOngoingPlaylistVideoIndex', {
+          videoIndex: index,
+        });
         return;
       }
       this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
     },
     removeItemFromPlaylist(videoId) {
-      this.$store.dispatch('mainplaylist/removeItemFromPlaylist', { videoId })
+      this.$store
+        .dispatch('mainplaylist/removeItemFromPlaylist', { videoId })
         .then((result) => {
           if (!result.success) {
             this.chosenVideoId = videoId;
@@ -116,7 +148,8 @@ export default {
             id: result.id,
           });
           this.$nextTick(() => {
-            const isRemovedBefore = this.playlist.indexOf(videoId) < this.activeIndex;
+            const isRemovedBefore =
+              this.playlist.indexOf(videoId) < this.activeIndex;
             if (isRemovedBefore) {
               this.changeIndex(this.activeIndex - 1);
             }
@@ -124,33 +157,30 @@ export default {
         });
     },
     loadMore() {
-      this.$store.dispatch('mainplaylist/getPlaylistData')
-        .then((result) => {
-          if (!result.success) {
-            this.errMsg = result.errMsg;
-          } else if (result.increaseSetCount) {
-            this.$store.commit('mainplaylist/setSetCount');
-          }
-        });
-    },
-  },
-  mounted() {
-    if (this.$store.state.mainplaylist.setCount >= 1) {
-      return;
-    }
-    this.$store.dispatch('mainplaylist/getPlaylistData')
-      .then((result) => {
+      this.$store.dispatch('mainplaylist/getPlaylistData').then((result) => {
         if (!result.success) {
           this.errMsg = result.errMsg;
         } else if (result.increaseSetCount) {
           this.$store.commit('mainplaylist/setSetCount');
         }
       });
+    },
+  },
+  mounted() {
+    if (this.$store.state.mainplaylist.setCount >= 1) {
+      return;
+    }
+    this.$store.dispatch('mainplaylist/getPlaylistData').then((result) => {
+      if (!result.success) {
+        this.errMsg = result.errMsg;
+      } else if (result.increaseSetCount) {
+        this.$store.commit('mainplaylist/setSetCount');
+      }
+    });
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/main-playlist.scss';
+@import '@/scss/main-playlist.scss';
 </style>
-

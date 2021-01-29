@@ -24,18 +24,18 @@
     @extend .message--error;
     max-width: 410px;
   }
-} 
+}
 
 .entry-form--extended {
   &__input {
     @extend .inpt;
     &:nth-child(2) {
-      transition: width 0.15s  linear;
-      -webkit-transition: width 0.15s  linear;
+      transition: width 0.15s linear;
+      -webkit-transition: width 0.15s linear;
     }
     &:nth-child(3) {
-      transition: width 0.15s  0.15s linear;
-      -webkit-transition: width 0.15s  0.15s linear;
+      transition: width 0.15s 0.15s linear;
+      -webkit-transition: width 0.15s 0.15s linear;
     }
   }
   &__button--small {
@@ -43,7 +43,7 @@
   }
 }
 
-@media only screen and (max-width: 768px)  {
+@media only screen and (max-width: 768px) {
   .entry-form {
     flex-direction: column;
     align-items: center;

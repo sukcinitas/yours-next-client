@@ -32,7 +32,8 @@
     padding: 10px;
     font-family: variables.$font-heading;
     & p {
-      color: variables.$secondary-dark;    }
+      color: variables.$secondary-dark;
+    }
   }
 
   &__buttons {
@@ -52,8 +53,7 @@
     &:hover {
       cursor: pointer;
       color: variables.$primary-bright;
-      transition: background-color 0.3s,
-      color 0.3s;
+      transition: background-color 0.3s, color 0.3s;
     }
   }
 
@@ -70,9 +70,8 @@
   }
 }
 
-@media only screen and (max-width: 550px)  {
+@media only screen and (max-width: 550px) {
   .playlist {
-
     &__name {
       font-size: 14px;
     }

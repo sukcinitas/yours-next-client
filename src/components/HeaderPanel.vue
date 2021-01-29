@@ -1,9 +1,9 @@
 <template>
-    <div class=header>
-      <button v-if="leaveBtn" @click="leave" class="header__button">Leave</button>
-      <button v-if="homeBtn" @click="goHome" class="header__button">Home</button>
-      <button v-if="backBtn" @click="goBack" class="header__button">Back</button>
-    </div>
+  <div class="header">
+    <button v-if="leaveBtn" @click="leave" class="header__button">Leave</button>
+    <button v-if="homeBtn" @click="goHome" class="header__button">Home</button>
+    <button v-if="backBtn" @click="goBack" class="header__button">Back</button>
+  </div>
 </template>
 
 <script>
@@ -15,8 +15,7 @@ export default {
   props: ['leaveBtn', 'backBtn', 'homeBtn'],
   methods: {
     leave() {
-      this.$store.dispatch('group/resetState'); // for backup if reload does not work
-      // this.$router.go(); // when no arguments are provided, it refreshes the page
+      this.$store.dispatch('group/resetState');
       this.$router.push({ name: 'EntrancePage' });
     },
     goHome() {
@@ -30,8 +29,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-forms.scss';
-  @import '@/scss/shared-styles-buttons.scss';
-  @import '@/scss/main-page.scss';
-  @import '@/scss/header-panel.scss';
+@import '@/scss/shared-styles-forms.scss';
+@import '@/scss/shared-styles-buttons.scss';
+@import '@/scss/main-page.scss';
+@import '@/scss/header-panel.scss';
 </style>

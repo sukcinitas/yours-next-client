@@ -1,22 +1,31 @@
 <template>
   <main class="main">
-    <headerPanel :leaveBtn="true" :homeBtn="false" :backBtn="false"></headerPanel>
+    <headerPanel
+      :leaveBtn="true"
+      :homeBtn="false"
+      :backBtn="false"
+    ></headerPanel>
     <div class="playlists">
-      <h2 class="playlists__heading">Playlists
-        <span
-          class="playlists__heading-detail">of group {{group}}
-        </span>
+      <h2 class="playlists__heading">
+        Playlists
+        <span class="playlists__heading-detail">of group {{ group }} </span>
       </h2>
       <create-playlist />
       <div class="playlists__list">
         <div class="playlists__playlist--ongoing" v-if="ongoingPlaylistId">
           <button
-          class="playlists__name--ongoing"
-          @click="goToOngoingPlaylist(ongoingPlaylistId)">Ongoing playlist
+            class="playlists__name--ongoing"
+            @click="goToOngoingPlaylist(ongoingPlaylistId)"
+          >
+            Ongoing playlist
           </button>
         </div>
-        <playlist-item v-for="playlist in playlists" :key="playlist.title" :playlist="playlist" />
-        <p v-if="errMsg" class="playlists__message--error">{{errMsg}}</p>
+        <playlist-item
+          v-for="playlist in playlists"
+          :key="playlist.title"
+          :playlist="playlist"
+        />
+        <p v-if="errMsg" class="playlists__message--error">{{ errMsg }}</p>
       </div>
     </div>
     <members-list :isBottom="true"></members-list>
@@ -68,16 +77,16 @@ export default {
   },
   methods: {
     async getPlaylists() {
-      this.$store.dispatch('playlist/getPlaylists')
-        .then((result) => {
-          if (!result.success) {
-            this.errMsg = result.errMsg;
-          }
-        });
+      this.$store.dispatch('playlist/getPlaylists').then((result) => {
+        if (!result.success) {
+          this.errMsg = result.errMsg;
+        }
+      });
     },
     async goToOngoingPlaylist(id) {
       this.$store.commit('mainplaylist/setId', { id });
-      this.$store.dispatch('mainplaylist/getPlaylist', { id })
+      this.$store
+        .dispatch('mainplaylist/getPlaylist', { id })
         .then((result) => {
           if (!result.success) {
             this.errMsg = result.errMsg;
@@ -87,15 +96,17 @@ export default {
         });
     },
     toggleMessages() {
-      this.$store.commit('group/setChatState', { state: !this.isMessagesTurnedOff });
+      this.$store.commit('group/setChatState', {
+        state: !this.isMessagesTurnedOff,
+      });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/shared-styles-forms.scss';
-  @import '@/scss/shared-styles-buttons.scss';
-  @import '@/scss/main-page.scss';
-  @import '@/scss/header-panel.scss';
+@import '@/scss/shared-styles-forms.scss';
+@import '@/scss/shared-styles-buttons.scss';
+@import '@/scss/main-page.scss';
+@import '@/scss/header-panel.scss';
 </style>

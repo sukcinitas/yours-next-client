@@ -1,38 +1,40 @@
 <template>
-<div>
-  <button
-    class="main-playlist__button"
-    v-if="isModerator"
-    @click="makePlaylistMain"
-  >Make this playlist main
-  </button>
-  <div class="main-playlist__youtube--ordinary">
-    <youtube
-      :video-id="videoId"
-      :player-vars="playerVars"
-      ref="youtube"
-      @ended="ended"
-      fitParent
-      resize
+  <div>
+    <button
+      class="main-playlist__button"
+      v-if="isModerator"
+      @click="makePlaylistMain"
     >
-    </youtube>
-  </div>
-  <div class="main-playlist__controls">
-    <button
-      v-if="index !== 0"
-      @click="prevVideo"
-      class="main-playlist__button--controls"
-    ><font-awesome-icon :icon="['fas', 'step-backward']"></font-awesome-icon>
+      Make this playlist main
     </button>
-    <button
-      v-if="index !== playlist.length - 1"
-      @click="nextVideo"
-      class="main-playlist__button--controls"
-    ><font-awesome-icon :icon="['fas', 'step-forward']"></font-awesome-icon>
-    </button>
+    <div class="main-playlist__youtube--ordinary">
+      <youtube
+        :video-id="videoId"
+        :player-vars="playerVars"
+        ref="youtube"
+        @ended="ended"
+        fitParent
+        resize
+      >
+      </youtube>
+    </div>
+    <div class="main-playlist__controls">
+      <button
+        v-if="index !== 0"
+        @click="prevVideo"
+        class="main-playlist__button--controls"
+      >
+        <font-awesome-icon :icon="['fas', 'step-backward']"></font-awesome-icon>
+      </button>
+      <button
+        v-if="index !== playlist.length - 1"
+        @click="nextVideo"
+        class="main-playlist__button--controls"
+      >
+        <font-awesome-icon :icon="['fas', 'step-forward']"></font-awesome-icon>
+      </button>
+    </div>
   </div>
-</div>
-
 </template>
 <script>
 export default {
@@ -69,7 +71,10 @@ export default {
       if (this.index === this.playlist.length - 1) {
         return;
       }
-      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
+      this.$store.commit(
+        'mainplaylist/changeNowPlayingVideoIndex',
+        this.index + 1,
+      );
     },
     async makePlaylistMain() {
       this.$socket.emit('setOngoingPlaylist', {
@@ -81,15 +86,21 @@ export default {
       this.$router.push({ path: '/mainplaylist' });
     },
     prevVideo() {
-      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index - 1);
+      this.$store.commit(
+        'mainplaylist/changeNowPlayingVideoIndex',
+        this.index - 1,
+      );
     },
     nextVideo() {
-      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', this.index + 1);
+      this.$store.commit(
+        'mainplaylist/changeNowPlayingVideoIndex',
+        this.index + 1,
+      );
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import '@/scss/main-playlist.scss';
+@import '@/scss/main-playlist.scss';
 </style>

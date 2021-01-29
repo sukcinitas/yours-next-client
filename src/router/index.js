@@ -59,8 +59,14 @@ router.beforeEach((to, from, next) => {
     const name = sessionStorage.getItem('groupName');
     const username = sessionStorage.getItem('username');
     const userEmoji = sessionStorage.getItem('userEmoji');
-    if (!name && !username && !userEmoji && !store.state.group.name && !store.state.group.member.name
-      && !store.state.group.member.emoji) {
+    if (
+      !name &&
+      !username &&
+      !userEmoji &&
+      !store.state.group.name &&
+      !store.state.group.member.name &&
+      !store.state.group.member.emoji
+    ) {
       next({ name: 'EntrancePage' });
     } else if (store.state.group.name && !store.state.group.member.name) {
       next({ name: 'MemberCreate' });
@@ -87,4 +93,3 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-
