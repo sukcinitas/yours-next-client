@@ -81,6 +81,12 @@
       left: 0;
     }
   }
+  &__line {
+    display: block;
+    height: 2px;
+    border-bottom: 1px solid variables.$secondary-dark;
+
+  }
 }
 @media only screen and (max-width: 768px) and (min-width: 550px) {
   .members {

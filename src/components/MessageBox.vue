@@ -48,16 +48,16 @@
     <button
       :class="[isMessagesTurnedOn ? 'btn--turn-off' : 'btn--hidden']"
       type="button"
-      @click="turnOffMessages"
+      @click="toggleChat"
     >
-      <font-awesome-icon :icon="['fas', 'chevron-right']"></font-awesome-icon>
+      <font-awesome-icon :icon="['fas', 'chevron-right']"> </font-awesome-icon>
     </button>
     <button
       :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
       type="button"
-      @click="turnOnMessages"
+      @click="toggleChat"
     >
-      <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
+      <font-awesome-icon :icon="['fas', 'chevron-left']"> </font-awesome-icon>
     </button>
   </div>
 </template>
@@ -66,7 +66,7 @@
 import MembersList from './MembersList';
 
 export default {
-  name: 'MemberCreate',
+  name: 'MessageBox',
   components: { MembersList },
   data() {
     return {
@@ -76,16 +76,16 @@ export default {
   },
   computed: {
     messages() {
-      return this.$store.state.group.messages;
+      return this.$store.getters['messages/messages'];
     },
     emojis() {
-      return this.$store.state.group.messageEmojis;
+      return this.$store.getters['messages/messageEmojis'];
     },
     member() {
-      return this.$store.state.group.member;
+      return this.$store.getters['group/member'];
     },
     isMessagesTurnedOn() {
-      return this.$store.getters['group/chatState'];
+      return this.$store.getters['messages/chatState'];
     },
   },
   watch: {
@@ -101,19 +101,19 @@ export default {
       });
       this.message = '';
     },
+
     addEmoji(emoji) {
       this.message = `${this.message} ${emoji}`;
       this.$refs.textarea.focus();
     },
+
     scrollTop() {
       this.$refs.messages.scrollTop =
         this.$refs.messages.scrollHeight + this.$refs.messages.clientHeight;
     },
-    turnOffMessages() {
-      this.$store.commit('group/setChatState', { state: false });
-    },
-    turnOnMessages() {
-      this.$store.commit('group/setChatState', { state: true });
+
+    toggleChat() {
+      this.$store.commit('messages/setChatState');
     },
   },
   updated() {

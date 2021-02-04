@@ -18,9 +18,11 @@ export default {
       this.$store.dispatch('group/resetState');
       this.$router.push({ name: 'EntrancePage' });
     },
+
     goHome() {
       this.$router.push({ name: 'MainPage' });
     },
+
     goBack() {
       this.$router.go(-1);
     },

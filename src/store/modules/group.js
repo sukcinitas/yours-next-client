@@ -3,6 +3,7 @@
 /* eslint-disable no-shadow */
 import vue from '../../main';
 import GroupService from '../../services/group.service';
+
 // initial state
 const state = () => ({
   name: '',
@@ -11,7 +12,6 @@ const state = () => ({
     name: '',
     emoji: '',
   },
-  messages: [],
   moderator: '',
   initialEmojis: [
     0x1f429,
@@ -21,25 +21,23 @@ const state = () => ({
     0x1f43a,
     0x1F98B,
     0x1F6C0,
-    0x1F331,
+    0x1F338,
     0x1F480,
     0x1f987,
     0x1f419,
     0x1f483,
     0x1f984,
     0x1f996,
-    0x1F99E,
+    0x1F999,
     0x1f409,
     0x1f988,
     0x1f985,
     0x1f415,
     0x1f9dc,
   ],
-  messageEmojis: ['😀', '😍', '🤣', '🍕', '👿', '🤘', '😑', '🌈', '🎶', '🍸'],
-  isChatTurnedOn: false,
 });
 
-const persist = async (commit) => {
+const persist = (commit) => {
   const name = sessionStorage.getItem('groupName');
   const username = sessionStorage.getItem('username');
   const userEmoji = sessionStorage.getItem('userEmoji');
@@ -52,68 +50,87 @@ const persist = async (commit) => {
   commit('setMember', { name: username, emoji: userEmoji });
   vue.$socket.emit('addMember', { name: username, emoji: userEmoji });
 };
+
 // actions
 const actions = {
   async authenticate({ commit }, payload) {
-    const { data } = await GroupService.authenticate(payload);
-    if (data.success) {
+    try {
+      await GroupService.authenticate(payload);
       commit('setName', { name: payload.name });
       sessionStorage.setItem('groupName', payload.name);
+      vue.$socket.connect();
+      vue.$socket.emit('getInitialState', { name: payload.name });
       return { success: true };
+    } catch (err) {
+      throw err;
     }
-    let errType = 'else';
-    if (data.message === 'Passcode is incorrect!') {
-      errType = 'passcode';
-    } else if (data.message === 'Group with this name is not found!') {
-      errType = 'name';
-    }
-    return { success: false, errMsg: data.message, errType };
   },
+
   async createGroup({ commit }, payload) {
-    const { data } = await GroupService.create(payload);
-    if (data.success) {
+    try {
+      await GroupService.create(payload);
       commit('setName', { name: payload.name });
       sessionStorage.setItem('groupName', payload.name);
+      vue.$socket.connect();
+      vue.$socket.emit('getInitialState', { name: payload.name });
       return { success: true };
+    } catch (err) {
+      throw err;
     }
-    const errType =
-      data.message === 'Name is already in use!' ? 'name' : 'else';
-    return { success: false, errMsg: data.message, errType };
+  },
+
+  addMember({ commit }, payload) {
+    const { name, emoji } = payload;
+    vue.$socket.emit('setMember', {
+      name,
+      emoji,
+    }); // only this socket
+    commit('setMember', { name, emoji });
+    vue.$socket.emit('addMember', { name, emoji });
+    sessionStorage.setItem('username', name);
+    sessionStorage.setItem('userEmoji', emoji);
   },
   resetState({ commit }) {
     sessionStorage.clear();
     vue.$socket.disconnect();
     commit('resetState');
+    commit('messages/setMessages', { messages: [] }, { root: true });
   },
-  async SOCKET_connect({ commit }) {
+
+  SOCKET_connect({ commit }) {
     persist(commit);
   },
-  async SOCKET_reconnecting({ commit }) {
+
+  SOCKET_reconnecting({ commit }) {
     persist(commit);
   },
-  async SOCKET_setInitialState({ commit }, payload) {
+
+  SOCKET_setInitialState({ commit }, payload) {
     commit('setInitialState', payload.group);
+    commit('messages/setMessages', { messages: payload.group.messages }, { root: true });
     commit('mainplaylist/setOngoingPlaylist', payload.group.ongoingPlaylist, {
       root: true,
     });
   },
-  async SOCKET_setModerator({ commit }, payload) {
+
+  SOCKET_setModerator({ commit }, payload) {
     commit('setModerator', { name: payload.name });
   },
-  async SOCKET_addMember({ commit }, payload) {
+
+  SOCKET_addMember({ commit }, payload) {
     commit('setActiveMembers', { name: payload.name, emoji: payload.emoji });
   },
-  async SOCKET_setMember({ commit }, payload) {
+
+  SOCKET_setMember({ commit }, payload) {
     // only to this socket
     commit('setMember', { name: payload.name, emoji: payload.emoji });
   },
-  async SOCKET_removeMember({ commit }, payload) {
+
+  SOCKET_removeMember({ commit }, payload) {
     commit('removeMember', { name: payload.client });
   },
-  async SOCKET_sendMessage({ commit }, payload) {
-    commit('setMessage', { message: payload.message, member: payload.member });
-  },
 };
+
 // mutations
 const mutations = {
   setName(state, payload) {
@@ -131,12 +148,6 @@ const mutations = {
   setMember(state, payload) {
     state.member = payload;
   },
-  setMessage(state, payload) {
-    state.messages = [
-      ...state.messages,
-      { message: payload.message, member: payload.member },
-    ];
-  },
   removeMember(state, payload) {
     state.activeMembers = state.activeMembers.filter(
       member => member.name !== payload.name,
@@ -144,7 +155,6 @@ const mutations = {
   },
   setInitialState(state, payload) {
     state.activeMembers = payload.activeMembers;
-    state.messages = payload.messages;
     state.moderator = payload.moderator;
   },
   resetState(state) {
@@ -154,17 +164,25 @@ const mutations = {
       name: '',
       emoji: '',
     };
-    state.messages = '';
     state.moderator = '';
     state.isChatTurnedOf = false;
-  },
-  setChatState(state, payload) {
-    state.isChatTurnedOn = payload.state;
   },
 };
 
 // getters
 const getters = {
+  name(state) {
+    return state.name;
+  },
+  member(state) {
+    return state.member;
+  },
+  moderator(state) {
+    return state.moderator;
+  },
+  activeMembers(state) {
+    return state.activeMembers;
+  },
   activeMembersNames(state) {
     return state.activeMembers.map(member => member.name);
   },
@@ -190,10 +208,8 @@ const getters = {
         filtered.push(state.initialEmojis[i]);
       }
     }
-    return filtered;
-  },
-  chatState(state) {
-    return state.isChatTurnedOn;
+    return filtered.map(emoji =>
+      String.fromCodePoint(emoji));
   },
 };
 

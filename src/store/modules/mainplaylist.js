@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable no-shadow */
 import PlaylistService from '../../services/playlist.service';
 import DataService from '../../services/data.service';
-// import vm from '../../main';
-/* eslint-disable no-shadow */
+
+// initial state
 const state = () => ({
   idsArray: [],
   nowPlayingVideoIndex: 0,
@@ -21,34 +22,34 @@ const state = () => ({
 });
 
 const actions = {
-  async SOCKET_setOngoingPlaylist({ commit }, payload) {
+  SOCKET_setOngoingPlaylist({ commit }, payload) {
     commit('setOngoingPlaylist', {
       id: payload.id,
       videoIndex: payload.videoIndex,
       time: payload.time,
       paused: false,
     });
-    if (!payload.id && window.location.hash === '#/mainplaylist') {
+    if (!payload.id && (/mainplaylist/).test(window.location.hash)) {
       window.history.back();
     }
   },
-  async SOCKET_userJoinsOngoingPlaylist({ rootState, commit }) {
+
+  SOCKET_userJoinsOngoingPlaylist({ rootState, commit }) {
     if (rootState.group.member.name === rootState.group.moderator) {
       commit('setUserJoined', { state: true });
     }
   },
-  async SOCKET_changeOngoingPlaylistVideoIndex({ commit }, payload) {
+
+  SOCKET_changeOngoingPlaylistVideoIndex({ commit }, payload) {
     commit('setOngoingPlaylistVideoIndex', { videoIndex: payload.videoIndex });
     commit('setOngoingPlaylistPause', { paused: false });
   },
-  async SOCKET_toggleOngoingPlaylist({ commit }, payload) {
+
+  SOCKET_toggleOngoingPlaylist({ commit }, payload) {
     commit('setOngoingPlaylistPause', { paused: payload.paused });
   },
+
   async SOCKET_updatePlaylist({ commit, state, rootState }, payload) {
-    // if I am not in playlist updated, don't change the state
-    if (payload.id !== state.id) {
-      return;
-    }
     if (payload.type === 'addition') {
       if (state.items.length < state.setCount * state.itemCount) {
         const itemsData = [...state.items, payload.itemData];
@@ -67,8 +68,6 @@ const actions = {
         ? state.nowPlayingVideoIndex - 1
         : state.nowPlayingVideoIndex;
       const items = payload.idsArray;
-      // eslint-disable-next-line no-console
-      console.log(payload, 'payloadd');
       const itemsPreData = state.items.filter(
         item => item.id !== payload.itemData,
       );
@@ -87,79 +86,82 @@ const actions = {
       commit('setIdsItemsIndex', { items, itemsData, index });
     }
   },
+
   async getPlaylist({ commit }, payload) {
-    const { data } = await PlaylistService.get(payload.id);
-    if (data.success) {
-      commit('setPlaylist', { items: data.playlist.items });
-      commit('setId', { id: data.playlist._id });
-      commit('setTitle', { title: data.playlist.title });
+    try {
+      const { data: { playlist: { items, _id, title } } } = await PlaylistService.get(payload.id);
+      commit('setPlaylist', { items });
+      commit('setId', { _id });
+      commit('setTitle', { title });
       commit('resetSetCount');
       commit('resetNowPlayingVideoIndex');
       commit('setItems', { items: [] });
-      return { success: true };
+    } catch (err) {
+      throw err;
     }
-    return { success: false, errMsg: data.error };
   },
+
   async getPlaylistData({ commit, state }) {
-    if (state.idsArray.length === state.items.length) {
-      return { success: true, increaseSetCount: false };
+    try {
+      if (state.idsArray.length === state.items.length) {
+        return { increaseSetCount: false };
+      }
+      const idsArrayOfItemCount = state.idsArray
+        .slice(
+          state.setCount * state.itemCount,
+          (state.setCount + 1) * state.itemCount,
+        )
+        .join(',');
+      const { data: { data: { items } } } = await DataService.getVideos(idsArrayOfItemCount);
+      const itemsData = [...state.items, ...items];
+      commit('setItems', { items: itemsData });
+      return { increaseSetCount: true }; // first time from 0 to 1
+    } catch (err) {
+      throw err;
     }
-    const idsArrayOfItemCount = state.idsArray
-      .slice(
-        state.setCount * state.itemCount,
-        (state.setCount + 1) * state.itemCount,
-      )
-      .join(',');
-    const { data } = await DataService.getVideos(idsArrayOfItemCount);
-    if (!data.success) {
-      return {
-        success: false,
-        errMsg: 'Could not retrieve playlist data!',
-        increaseSetCount: false,
-      };
-    }
-    const items = data.data.items;
-    const itemsData = [...state.items, ...items];
-    commit('setItems', { items: itemsData });
-    return { success: true, increaseSetCount: true };
   },
-  async addItemToPlaylist({ state }, payload) {
-    if (state.idsArray.indexOf(payload.item) > -1) {
-      return { success: false, errMsg: 'Item is already in the playlist!' };
+
+  async addItemToPlaylist({ state, dispatch }, payload) {
+    try {
+      await dispatch('getPlaylist', { id: payload.id });
+      if (state.idsArray.indexOf(payload.item) > -1) {
+        throw new Error('Item is already in the playlist!');
+      }
+      await PlaylistService.add({
+        id: payload.id,
+        item: payload.item,
+      });
+      const items = [...state.idsArray, payload.item];
+      const datum = await DataService.getVideos(payload.item);
+      const itemData = datum.data.data.items[0];
+      this._vm.$socket.emit('updatePlaylist', {
+        idsArray: items,
+        itemData,
+        type: 'addition',
+        alreadyIn: false,
+        id: payload.id,
+      });
+      return { successMsg: 'Successfully added!' };
+    } catch (err) {
+      throw err;
     }
-    const { data } = await PlaylistService.add({
-      id: state.id,
-      item: payload.item,
-    });
-    if (!data.success) {
-      return { success: false, errMsg: 'Could not add item to playlist!' };
-    }
-    const items = [...state.idsArray, payload.item];
-    const datum = await DataService.getVideos(payload.item);
-    const itemData = datum.data.data.items[0];
-    this._vm.$socket.emit('updatePlaylist', {
-      idsArray: items,
-      itemData,
-      type: 'addition',
-      alreadyIn: false,
-      id: state.id,
-    });
-    return { success: true, successMsg: 'Successfully added!' };
   },
-  async removeItemFromPlaylist({ state }, payload) {
-    const { videoId } = payload;
-    const { data } = await PlaylistService.removeItem({
-      id: state.id,
-      items: [videoId],
-    });
-    if (!data.success) {
-      return { success: false, errMsg: 'Could not remove item!' };
+
+  async removeItemFromPlaylist({ state }, { videoId, id }) {
+    try {
+      await PlaylistService.removeItem({
+        id,
+        items: [videoId],
+      });
+      const items = state.idsArray.filter(item => item !== videoId);
+      return { items, id };
+    } catch (err) {
+      throw new Error('Could not remove item!');
     }
-    const items = state.idsArray.filter(item => item !== videoId);
-    return { success: true, items, id: state.id };
   },
 };
 
+// mutations
 const mutations = {
   changeNowPlayingVideoIndex(state, index) {
     state.nowPlayingVideoIndex = index;
@@ -211,7 +213,26 @@ const mutations = {
   },
 };
 
+// getters
 const getters = {
+  playlist(state) {
+    return state.idsArray;
+  },
+  items(state) {
+    return state.items;
+  },
+  length(state) {
+    return state.items.length;
+  },
+  title(state) {
+    return state.title;
+  },
+  ongoingPlaylist(state) {
+    return state.ongoingPlaylist;
+  },
+  nowPlayingVideoIndex(state) {
+    return state.nowPlayingVideoIndex;
+  },
   isMainAnOngoingPlaylist(state) {
     return state.ongoingPlaylist.id === state.id;
   },

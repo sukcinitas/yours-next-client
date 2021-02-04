@@ -16,6 +16,8 @@ import {
   faChevronLeft,
   faChevronRight,
   faWindowClose,
+  faPlus,
+  faMinus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import store from './store';
@@ -32,6 +34,8 @@ library.add(
   faChevronDown,
   faChevronLeft,
   faChevronRight,
+  faPlus,
+  faMinus,
 );
 
 Vue.use(VueYoutube);

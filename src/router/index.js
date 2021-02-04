@@ -20,19 +20,19 @@ const router = new Router({
       meta: { requiresAuth: true },
     },
     {
-      path: '/mainplaylist',
+      path: '/mainplaylist/:id',
       name: 'MainPlaylist',
       component: MainPlaylist,
       meta: { requiresAuth: true },
     },
     {
-      path: '/playlist',
+      path: '/playlist/:id',
       name: 'OrdinaryPlaylist',
       component: OrdinaryPlaylist,
       meta: { requiresAuth: true },
     },
     {
-      path: '/search',
+      path: '/search/:id',
       name: 'SearchField',
       component: SearchField,
       meta: { requiresAuth: true },

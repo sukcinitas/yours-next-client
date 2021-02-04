@@ -48,6 +48,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'CreateGroup',
   data() {
@@ -74,6 +75,7 @@ export default {
         this.$refs.name.focus();
       }
     },
+
     async handleSubmit() {
       if (this.passcode.length < 8) {
         this.err = {
@@ -82,29 +84,29 @@ export default {
         };
         return;
       }
-      this.$store
-        .dispatch('group/createGroup', {
-          name: this.name,
-          passcode: this.passcode,
-        })
-        .then((result) => {
-          if (result.success) {
-            this.$socket.connect();
-            this.$socket.emit('getInitialState', { name: this.name });
-            this.$router.push({ name: 'MemberCreate' });
-          } else {
-            this.err = {
-              message: result.errMsg,
-              type: result.errType,
-            };
-            if (result.errType === 'name') {
-              this.$refs.name.focus();
-            } else {
-              this.$refs.passcode.focus();
-            }
-          }
-        });
+      try {
+        const result = await this.$store
+          .dispatch('group/createGroup', {
+            name: this.name,
+            passcode: this.passcode,
+          });
+        if (result.success) {
+          this.$router.push({ name: 'MemberCreate' });
+        }
+      } catch (err) {
+        const { message, type } = err.response.data;
+        this.err = {
+          message,
+          type,
+        };
+        if (type === 'name') {
+          this.$refs.name.focus();
+        } else {
+          this.$refs.passcode.focus();
+        }
+      }
     },
+
     deleteErr(type) {
       if (this.err.type === type) {
         this.err = {
@@ -113,6 +115,7 @@ export default {
         };
       }
     },
+
     checkIfEmpty(type) {
       if (this[type] === '') {
         this.deleteErr(type);

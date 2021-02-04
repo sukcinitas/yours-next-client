@@ -4,12 +4,13 @@
       :leaveBtn="false"
       :homeBtn="true"
       :backBtn="true"
-    ></headerPanel>
+    >
+    </headerPanel>
     <h4 class="main-playlist__title--ongoing">{{ title }}</h4>
     <button
       v-if="isModerator"
       class="main-playlist__button"
-      @click="gotToSearch"
+      @click="() => $router.push({ name: 'SearchField' })"
     >
       Add some videos!
     </button>
@@ -47,16 +48,52 @@ export default {
   },
   computed: {
     initialPlaylistLength() {
-      return this.$store.state.mainplaylist.idsArray.length;
+      return this.$store.getters['mainplaylist/length'];
     },
     title() {
-      return this.$store.state.mainplaylist.title;
+      return this.$store.getters['mainplaylist/title'];
+    },
+    isModerator() {
+      return this.$store.getters['group/isModerator'];
     },
   },
-  methods: {
-    gotToSearch() {
-      this.$router.push({ name: 'SearchField' });
-    },
+
+  async mounted() {
+    const { id } = this.$route.params;
+    if (this.isModerator) {
+      this.$socket.emit('setOngoingPlaylist', {
+        id,
+        videoIndex: 0,
+        time: 0,
+        paused: false,
+      });
+    }
+    try {
+      this.$store.commit('mainplaylist/setId', { id });
+      await this.$store
+        .dispatch('mainplaylist/getPlaylist', { id });
+      if (this.$store.state.mainplaylist.setCount >= 1) {
+        // because only one set of items is loaded
+        return;
+      }
+      const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
+      if (increaseSetCount) {
+        this.$store.commit('mainplaylist/setSetCount');
+      }
+    } catch (err) {
+      this.errMsg = err.response.data.message;
+    }
+  },
+
+  beforeDestroy() {
+    if (this.isModerator) {
+      this.$socket.emit('setOngoingPlaylist', {
+        id: '',
+        videoIndex: 0,
+        time: 0,
+        paused: false,
+      });
+    }
   },
 };
 </script>

@@ -4,18 +4,27 @@
       :leaveBtn="false"
       :homeBtn="true"
       :backBtn="true"
-    ></headerPanel>
-    <h4 class="main-playlist__title">{{ title }}</h4>
-    <button class="main-playlist__button" @click="gotToSearch">
+    >
+    </headerPanel>
+    <h4 class="main-playlist__title"
+    >
+      {{ title }}
+    </h4>
+    <button class="main-playlist__button"
+      @click="() => $router.push({ path: `/search/${$route.params.id}` })"
+    >
       Add some videos!
     </button>
     <template v-if="initialPlaylistLength !== 0">
-      <ordinary-video-player class="main-playlist__video-player">
+      <ordinary-video-player
+        class="main-playlist__video-player"
+      >
       </ordinary-video-player>
       <video-items-data
         :isOngoing="false"
         class="main-playlist__video-items"
-      ></video-items-data>
+      >
+      </video-items-data>
     </template>
     <members-list :isBottom="false"></members-list>
     <message-box></message-box>
@@ -43,16 +52,29 @@ export default {
   },
   computed: {
     initialPlaylistLength() {
-      return this.$store.state.mainplaylist.idsArray.length;
+      return this.$store.getters['mainplaylist/length'];
     },
     title() {
-      return this.$store.state.mainplaylist.title;
+      return this.$store.getters['mainplaylist/title'];
     },
   },
-  methods: {
-    gotToSearch() {
-      this.$router.push({ name: 'SearchField' });
-    },
+  async mounted() {
+    try {
+      const { id } = this.$route.params;
+      this.$store.commit('mainplaylist/setId', { id });
+      await this.$store
+        .dispatch('mainplaylist/getPlaylist', { id });
+      if (this.$store.state.mainplaylist.setCount >= 1) {
+        // because only one set of items is loaded
+        return;
+      }
+      const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
+      if (increaseSetCount) {
+        this.$store.commit('mainplaylist/setSetCount');
+      }
+    } catch (err) {
+      this.errMsg = err.response.data.message;
+    }
   },
 };
 </script>

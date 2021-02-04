@@ -6,20 +6,36 @@
       @click="toggleExtended"
       type="button"
     >
-      +
+      <font-awesome-icon :icon="['fas', 'plus']"> </font-awesome-icon>
     </button>
     <form
       class="create-playlist-form"
       @submit.prevent="addPlaylist"
       v-show="isExtended"
     >
-      <input type="text" v-model="title" class="create-playlist-form__input" />
+      <input
+        type="text"
+        v-model="title"
+        :class="['create-playlist-form__input',
+          errMsg ? 'input--error' : '',
+        ]"
+        @input="() => errMsg = ''"
+      />
       <button
+        v-if="title"
         class="create-playlist-form__button"
-        :type="title ? 'submit' : 'button'"
+        type="submit"
         @click="toggleExtended"
       >
-        {{ title ? 'Add' : '-' }}
+        Add
+      </button>
+      <button
+        v-else
+        class="create-playlist-form__button"
+        type="button"
+        @click="toggleExtended"
+      >
+        <font-awesome-icon :icon="['fas', 'minus']"> </font-awesome-icon>
       </button>
     </form>
     <p v-if="errMsg && isExtended && title" class="playlists__message--error">
@@ -50,21 +66,20 @@ export default {
         this.isExtended = !this.isExtended;
       }
     },
+
     async addPlaylist() {
-      this.$store
-        .dispatch('playlist/addPlaylist', { title: this.title })
-        .then((result) => {
-          if (result.success) {
-            this.errMsg = '';
-            this.successMsg = result.successMsg;
-            this.$store.dispatch('mainplaylist/getPlaylist', { id: result.id });
-            setTimeout(() => this.$router.push({ path: '/playlist' }), 250);
-            this.isExtended = false;
-          } else {
-            this.successMsg = '';
-            this.errMsg = result.errMsg;
-          }
-        });
+      try {
+        const result = await this.$store
+          .dispatch('playlist/addPlaylist', { title: this.title });
+        if (result.success) {
+          this.errMsg = '';
+          this.successMsg = result.successMsg;
+          setTimeout(() => this.$router.push({ path: `/playlist/${result.id}` }), 250);
+        }
+      } catch (err) {
+        this.successMsg = '';
+        this.errMsg = err.response.data.message;
+      }
     },
   },
 };

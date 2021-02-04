@@ -96,7 +96,7 @@ export default {
     async userJoined() {
       const time = await this.$refs.youtube.player.getCurrentTime();
       this.$socket.emit('setOngoingPlaylist', {
-        id: this.$store.state.mainplaylist.id,
+        id: this.$route.params.id,
         videoIndex: this.index,
         time,
         paused: false,
@@ -108,22 +108,28 @@ export default {
     async ended() {
       this.end();
     },
+
     pause() {
       this.$socket.emit('toggleOngoingPlaylist', { paused: true });
     },
+
     play() {
       this.$socket.emit('toggleOngoingPlaylist', { paused: false });
     },
+
     fixatePause() {
       this.paused = true;
     },
+
     fixatePlay() {
       this.paused = false;
     },
+
     fixateReady() {
       this.$refs.youtube.player.playVideo();
       // always start page from playing; substitute if autoplay does not work
     },
+
     end() {
       if (this.index === this.playlist.length - 1) {
         return;
@@ -134,6 +140,7 @@ export default {
         });
       }
     },
+
     prevVideo() {
       if (this.isModerator) {
         this.$socket.emit('changeOngoingPlaylistVideoIndex', {
@@ -141,6 +148,7 @@ export default {
         });
       }
     },
+
     nextVideo() {
       if (this.isModerator) {
         this.$socket.emit('changeOngoingPlaylistVideoIndex', {
@@ -148,6 +156,7 @@ export default {
         });
       }
     },
+
     async seekTo(time) {
       this.$refs.youtube.player.seekTo(time, true);
     },
@@ -178,16 +187,6 @@ export default {
     if (this.timeWillBeUpdated) {
       this.seekTo(this.time);
       this.timeWillBeUpdated = false;
-    }
-  },
-  beforeDestroy() {
-    if (this.isModerator) {
-      this.$socket.emit('setOngoingPlaylist', {
-        id: '',
-        videoIndex: 0,
-        time: 0,
-        paused: false,
-      });
     }
   },
 };

@@ -4,7 +4,11 @@
       @submit.prevent="handleSubmit"
       :class="['entry-form', isExtended ? 'entry-form--extended' : '']"
     >
-      <button @click="toggleExtended" type="button" class="entry-form__button">
+      <button
+        @click="toggleExtended"
+        type="button"
+        class="entry-form__button"
+      >
         Join a group
       </button>
       <input
@@ -41,16 +45,7 @@
         >
       </button>
     </form>
-    <p
-      v-if="err.type === 'name' && isExtended"
-      class="entry-form__message--error"
-    >
-      {{ err.message }}
-    </p>
-    <p
-      v-if="err.type === 'passcode' && isExtended"
-      class="entry-form__message--error"
-    >
+    <p v-if="err.message && isExtended" class="entry-form__message--error">
       {{ err.message }}
     </p>
   </div>
@@ -84,28 +79,27 @@ export default {
       }
     },
     async handleSubmit() {
-      this.$store
-        .dispatch('group/authenticate', {
-          name: this.name,
-          passcode: this.passcode,
-        })
-        .then((result) => {
-          if (result.success) {
-            this.$socket.connect();
-            this.$socket.emit('getInitialState', { name: this.name });
-            this.$router.push({ name: 'MemberCreate' });
-          } else {
-            this.err = {
-              message: result.errMsg,
-              type: result.errType,
-            };
-            if (result.errType === 'name') {
-              this.$refs.name.focus();
-            } else {
-              this.$refs.passcode.focus();
-            }
-          }
-        });
+      try {
+        const result = await this.$store
+          .dispatch('group/authenticate', {
+            name: this.name,
+            passcode: this.passcode,
+          });
+        if (result.success) {
+          this.$router.push({ name: 'MemberCreate' });
+        }
+      } catch (err) {
+        const { message, type } = err.response.data;
+        this.err = {
+          message,
+          type,
+        };
+        if (type === 'name') {
+          this.$refs.name.focus();
+        } else {
+          this.$refs.passcode.focus();
+        }
+      }
     },
     checkIfEmpty(type) {
       if (this[type] === '') {

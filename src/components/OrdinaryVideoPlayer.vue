@@ -3,7 +3,7 @@
     <button
       class="main-playlist__button"
       v-if="isModerator"
-      @click="makePlaylistMain"
+      @click="() => $router.push({ path: `/mainplaylist/${$route.params.id}` })"
     >
       Make this playlist main
     </button>
@@ -54,19 +54,20 @@ export default {
       return this.$store.getters['group/isModerator'];
     },
     index() {
-      return this.$store.state.mainplaylist.nowPlayingVideoIndex;
+      return this.$store.getters['mainplaylist/nowPlayingVideoIndex'];
     },
     videoId() {
       return this.playlist[this.index];
     },
     playlist() {
-      return this.$store.state.mainplaylist.idsArray;
+      return this.$store.getters['mainplaylist/playlist'];
     },
   },
   methods: {
-    async ended() {
+    ended() {
       this.end();
     },
+
     end() {
       if (this.index === this.playlist.length - 1) {
         return;
@@ -76,21 +77,14 @@ export default {
         this.index + 1,
       );
     },
-    async makePlaylistMain() {
-      this.$socket.emit('setOngoingPlaylist', {
-        id: this.$store.state.mainplaylist.id,
-        videoIndex: 0,
-        time: 0,
-        paused: false,
-      });
-      this.$router.push({ path: '/mainplaylist' });
-    },
+
     prevVideo() {
       this.$store.commit(
         'mainplaylist/changeNowPlayingVideoIndex',
         this.index - 1,
       );
     },
+
     nextVideo() {
       this.$store.commit(
         'mainplaylist/changeNowPlayingVideoIndex',

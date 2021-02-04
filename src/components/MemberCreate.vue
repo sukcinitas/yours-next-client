@@ -16,7 +16,7 @@
         type="text"
         placeholder=""
         :class="['create-member-form__input', errMsg ? 'input--error' : '']"
-        @input="checkIfEmptyAndDeleteErr"
+        @input="() => {if(!name) this.errMsg = '' }"
       />
       <button
         class="create-member-form__button--small"
@@ -71,19 +71,17 @@ export default {
   data() {
     return {
       name: '',
+      selectedEmoji: '',
       errMsg: '',
       isShowingEmojiSelection: false,
-      selectedEmoji: '',
     };
   },
   computed: {
     group() {
-      return this.$store.state.group.name;
+      return this.$store.getters['group/name'];
     },
     emojisFreeToSet() {
-      return this.$store.getters['group/emojisFreeToSet'].map(emoji =>
-        String.fromCodePoint(emoji),
-      );
+      return this.$store.getters['group/emojisFreeToSet'];
     },
     memberNameExists() {
       const name = this.name.toLowerCase();
@@ -101,38 +99,31 @@ export default {
         this.isShowingEmojiSelection = true;
       }
     },
+
     chooseEmoji(emoji) {
       this.selectedEmoji = emoji;
       this.$refs.submitButton.focus();
     },
-    async addMember() {
+
+    addMember() {
       if (this.memberNameExists) {
         // extra if names are being created in parallel
-        this.errMsg = 'Name is already in use!';
+        this.errMsg = 'Another member at this very moment used this name! Please try another one!';
         this.isShowingEmojiSelection = false;
         return;
       }
-      this.$socket.emit('setMember', {
-        name: this.name,
-        emoji: this.selectedEmoji,
-      }); // only this socket
-      await this.$store.commit('group/setMember', {
+      this.$store.dispatch('group/addMember', {
         name: this.name,
         emoji: this.selectedEmoji,
       });
-      this.$socket.emit('addMember', {
-        name: this.name,
-        emoji: this.selectedEmoji,
-      });
-      sessionStorage.setItem('username', this.name);
-      sessionStorage.setItem('userEmoji', this.selectedEmoji);
       this.$router.push({ name: 'MainPage' });
     },
-    checkIfEmptyAndDeleteErr() {
-      if (this.name === '') {
-        this.errMsg = '';
-      }
-    },
+
+    // checkIfEmptyAndDeleteErr() {
+    //   if (this.name === '') {
+    //     this.errMsg = '';
+    //   }
+    // },
   },
 };
 </script>

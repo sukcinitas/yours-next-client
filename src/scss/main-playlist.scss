@@ -34,7 +34,7 @@
       border: none;
       background-color: transparent;
       font-size: 30px;
-      &:hover {
+      &:hover, &:focus {
         background-color: transparent;
       }
     }

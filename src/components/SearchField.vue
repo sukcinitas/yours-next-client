@@ -224,28 +224,27 @@ export default {
         data = await DataService.getPlaylistItems(this.queryOrId);
         this.items = data.data.data.items;
       }
-      // eslint-disable-next-line no-console
-      console.log(data);
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
     },
+
     async add(videoId) {
-      this.chosenVideoId = videoId;
-      await this.$store
-        .dispatch('mainplaylist/addItemToPlaylist', { item: videoId })
-        .then((result) => {
-          if (!result.success) {
-            this.errorMessage = result.errMsg;
-          } else {
-            this.successMessage = result.successMsg;
-          }
-          setTimeout(() => {
-            this.errorMessage = '';
-            this.successMessage = '';
-            this.chosenVideoId = '';
-          }, 550);
-        });
+      try {
+        this.chosenVideoId = videoId;
+        const { successMsg } = await this.$store
+          .dispatch('mainplaylist/addItemToPlaylist', { item: videoId, id: this.$route.params.id });
+        this.successMessage = successMsg;
+      } catch (err) {
+        this.errorMessage = err.response ? err.response.data.message : err.message;
+      } finally {
+        setTimeout(() => {
+          this.errorMessage = '';
+          this.successMessage = '';
+          this.chosenVideoId = '';
+        }, 550);
+      }
     },
+
     async explorePlaylist(id, playlistName) {
       const data = await DataService.getPlaylistItems(id);
       this.items = data.data.data.items;
@@ -256,6 +255,7 @@ export default {
       this.playlistName = playlistName;
       this.isExploring = true;
     },
+
     async getPage(direction) {
       let data;
       if (this.picked === 'searchAll') {
@@ -279,9 +279,12 @@ export default {
       }
       this.prevPageToken = data.data.data.prevPageToken || '';
       this.nextPageToken = data.data.data.nextPageToken || '';
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      // document.body.scrollTop = 0; // For Safari
+      // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      window.scrollTo(0, 0);
+      document.scrollTop(0, 0);
     },
+
     typing() {
       this.playlists = [];
       this.items = [];
@@ -293,6 +296,7 @@ export default {
         this.picked = 'searchAll';
       }
     },
+
     empty() {
       this.playlists = [];
       this.items = [];
@@ -301,6 +305,7 @@ export default {
       this.prevPageToken = '';
       this.nextPageToken = '';
     },
+
     backToList() {
       this.picked = 'searchPlaylists';
       this.queryOrId = this.channelId;

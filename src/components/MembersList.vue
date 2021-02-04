@@ -34,9 +34,11 @@
         }"
       >
         {{ user === member.name ? 'you' : member.name }}
+        <span v-if="isModerator && user !== member.name && !isMessages" class="members__line"
+        ></span>
         {{
           isModerator && user !== member.name && !isMessages
-            ? `\n---\nDouble-click to make ${member.name} moderator`
+            ? `double-click to make ${member.name} moderator`
             : ''
         }}
       </p>
@@ -56,25 +58,24 @@ export default {
   },
   computed: {
     activeMembers() {
-      return this.$store.state.group.activeMembers.map(member => member);
+      return this.$store.getters['group/activeMembers'];
     },
     isModerator() {
       return this.$store.getters['group/isModerator'];
     },
     moderator() {
-      return this.$store.state.group.moderator;
+      return this.$store.getters['group/moderator'];
     },
     user() {
-      return this.$store.state.group.member.name;
+      return this.$store.getters['group/member'].name;
     },
   },
   methods: {
     makeModerator(name) {
       if (this.isModerator && !this.isMessages) {
-        if (this.moderator === name) {
-          return;
+        if (this.moderator !== name) {
+          this.$socket.emit('setModerator', name);
         }
-        this.$socket.emit('setModerator', name);
       }
     },
   },

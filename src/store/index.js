@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import mainplaylist from './modules/mainplaylist';
 import group from './modules/group';
 import playlist from './modules/playlist';
+import messages from './modules/messages';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     mainplaylist,
     group,
     playlist,
+    messages,
   },
   strict: debug,
 });

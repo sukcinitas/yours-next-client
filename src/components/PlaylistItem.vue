@@ -7,7 +7,9 @@
     </div>
     <p v-if="errMsg" class="playlist__message--error">{{ errMsg }}</p>
     <div class="playlist__buttons">
-      <button class="playlist__button" @click="goToPlaylist(playlist._id)">
+      <button class="playlist__button"
+        @click="() => $router.push({ path: `/playlist/${playlist._id}` })"
+      >
         <font-awesome-icon :icon="['fas', 'chevron-right']" />
       </button>
       <button
@@ -38,27 +40,15 @@ export default {
     },
   },
   methods: {
-    async goToPlaylist(id) {
-      this.$store.commit('mainplaylist/setId', { id });
-      this.$store
-        .dispatch('mainplaylist/getPlaylist', { id })
-        .then((result) => {
-          if (!result.success) {
-            this.errMsg = result.errMsg;
-            return;
-          }
-          this.$router.push({ path: '/playlist' });
-        });
-    },
     async deletePlaylist(id) {
-      this.$store.dispatch('playlist/deletePlaylist', { id }).then((result) => {
-        if (!result.success) {
-          this.errMsg = result.errMsg;
-        } else {
-          this.$socket.emit('updatePlaylists', { playlists: result.playlists });
-        }
-      });
+      try {
+        const { playlists } = await this.$store.dispatch('playlist/deletePlaylist', { id });
+        this.$socket.emit('updatePlaylists', { playlists });
+      } catch (err) {
+        this.errMsg = err.response.data.message;
+      }
     },
+
     formatDate(date) {
       if (!date) {
         return '';

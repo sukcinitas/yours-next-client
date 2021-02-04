@@ -8,55 +8,54 @@ const state = () => ({
 });
 
 const actions = {
-  async SOCKET_updatePlaylists({ commit }, payload) {
-    commit('setPlaylists', { playlists: payload.playlists });
+  SOCKET_updatePlaylists({ commit }, { playlists }) {
+    commit('setPlaylists', { playlists });
   },
+
   async getPlaylists({ commit }) {
-    const name = sessionStorage.getItem('groupName');
-    const { data } = await PlaylistService.getAll(name);
-    if (data.success) {
-      if (data.playlists.length === 0) {
+    try {
+      const name = sessionStorage.getItem('groupName');
+      const { data: { playlists } } = await PlaylistService.getAll(name);
+      commit('setPlaylists', { playlists });
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  async addPlaylist({ rootState, state }, { title }) {
+    try {
+      const { data } = await PlaylistService.post({
+        title,
+        createdBy: rootState.group.name,
+      });
+      if (data.success) {
+        const playlists = [...state.playlists, data.playlist];
+        this._vm.$socket.emit('updatePlaylists', { playlists });
         return {
-          success: false,
-          errMsg: 'You have not created any playlists yet!',
+          success: true,
+          successMsg: data.message,
+          playlists,
+          id: data.playlist._id,
         };
       }
-      commit('setPlaylists', { playlists: data.playlists });
-      return { success: true };
+      return { success: false };
+    } catch (err) {
+      throw err;
     }
-    return { success: false, errMsg: data.message };
   },
-  async addPlaylist({ rootState, state, dispatch }, payload) {
-    dispatch('getPlaylists');
-    const { data } = await PlaylistService.post({
-      title: payload.title,
-      createdBy: rootState.group.name,
-    });
-    if (data.success) {
-      const playlists = [...state.playlists, data.playlist];
-      this._vm.$socket.emit('updatePlaylists', { playlists });
-      return {
-        success: true,
-        successMsg: data.message,
-        playlists,
-        id: data.playlist._id,
-      };
-    }
-    return { success: false, errMsg: data.message };
-  },
+
   async deletePlaylist({ state }, payload) {
-    const { data } = await PlaylistService.delete(payload.id);
-    if (data.success) {
+    try {
+      await PlaylistService.delete(payload.id);
       const playlists = state.playlists.filter(
         playlist => playlist._id !== payload.id,
       );
       return {
-        success: true,
-        successMsg: 'Playlist has been successfully deleted!',
         playlists,
       };
+    } catch (err) {
+      throw err;
     }
-    return { success: false, errMsg: 'Could not delete playlist!' };
   },
 };
 
@@ -67,6 +66,10 @@ const mutations = {
 };
 
 const getters = {
+  playlists(state) {
+    return state.playlists;
+  },
+
   playlistsTitles(state) {
     return state.playlists.map(playlist => playlist.title.toLowerCase());
   },

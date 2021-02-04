@@ -1,8 +1,8 @@
 <template>
   <div>
-    <p v-if="errMsg && !chosenVideoId" class="main-playlist__message--error">
+    <!-- <p v-if="errMsg && !chosenVideoId" class="main-playlist__message--error">
       {{ errMsg }}
-    </p>
+    </p> -->
     <div
       :class="[
         {
@@ -82,24 +82,21 @@ export default {
   computed: {
     activeIndex() {
       if (this.isOngoing) {
-        return this.$store.state.mainplaylist.ongoingPlaylist.videoIndex;
+        return this.$store.getters['mainplaylist/ongoingPlaylist'].videoIndex;
       }
-      return this.$store.state.mainplaylist.nowPlayingVideoIndex;
+      return this.$store.getters['mainplaylist/nowPlayingVideoIndex'];
     },
     playlist() {
-      return this.$store.state.mainplaylist.idsArray;
+      return this.$store.getters['mainplaylist/playlist'];
     },
     items() {
-      return this.$store.state.mainplaylist.items;
+      return this.$store.getters['mainplaylist/items'];
     },
     isModerator() {
       return this.$store.getters['group/isModerator'];
     },
     isThereMoreToLoad() {
-      return (
-        this.$store.state.mainplaylist.idsArray.length >
-        this.$store.state.mainplaylist.items.length
-      );
+      return this.playlist.length > this.items.length;
     },
     isIndexAheadOfData() {
       return this.$store.getters['mainplaylist/isIndexAheadOfData'];
@@ -116,67 +113,55 @@ export default {
   },
   methods: {
     changeIndex(index) {
-      if (!this.isModerator && this.isOngoing) {
-        return;
-      }
-      if (this.isModerator && this.isOngoing) {
-        this.$socket.emit('changeOngoingPlaylistVideoIndex', {
-          videoIndex: index,
-        });
-        return;
-      }
-      this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
-    },
-    removeItemFromPlaylist(videoId) {
-      this.$store
-        .dispatch('mainplaylist/removeItemFromPlaylist', { videoId })
-        .then((result) => {
-          if (!result.success) {
-            this.chosenVideoId = videoId;
-            this.errMsg = result.errMsg;
-            setTimeout(() => {
-              this.errorMsg = '';
-              this.chosenVideoId = '';
-            }, 500);
-            return;
-          }
-          this.$socket.emit('updatePlaylist', {
-            idsArray: result.items,
-            itemData: videoId,
-            type: 'deletion',
-            alreadyIn: false,
-            id: result.id,
+      if (this.isOngoing) {
+        if (this.isModerator) {
+          this.$socket.emit('changeOngoingPlaylistVideoIndex', {
+            videoIndex: index,
           });
-          this.$nextTick(() => {
-            const isRemovedBefore =
+        }
+      } else {
+        this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
+      }
+    },
+
+    async removeItemFromPlaylist(videoId) {
+      try {
+        const { items, id } = await this.$store
+          .dispatch('mainplaylist/removeItemFromPlaylist', { videoId, id: this.$route.params.id });
+        this.$socket.emit('updatePlaylist', {
+          idsArray: items,
+          itemData: videoId,
+          type: 'deletion',
+          alreadyIn: false,
+          id,
+        });
+        this.$nextTick(() => {
+          const isRemovedBefore =
               this.playlist.indexOf(videoId) < this.activeIndex;
-            if (isRemovedBefore) {
-              this.changeIndex(this.activeIndex - 1);
-            }
-          });
+          if (isRemovedBefore) {
+            this.changeIndex(this.activeIndex - 1);
+          }
         });
+      } catch (err) {
+        this.errMsg = err.message;
+        this.chosenVideoId = videoId;
+        setTimeout(() => {
+          this.errorMsg = '';
+          this.chosenVideoId = '';
+        }, 500);
+      }
     },
-    loadMore() {
-      this.$store.dispatch('mainplaylist/getPlaylistData').then((result) => {
-        if (!result.success) {
-          this.errMsg = result.errMsg;
-        } else if (result.increaseSetCount) {
+
+    async loadMore() {
+      try {
+        const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
+        if (increaseSetCount) {
           this.$store.commit('mainplaylist/setSetCount');
         }
-      });
-    },
-  },
-  mounted() {
-    if (this.$store.state.mainplaylist.setCount >= 1) {
-      return;
-    }
-    this.$store.dispatch('mainplaylist/getPlaylistData').then((result) => {
-      if (!result.success) {
-        this.errMsg = result.errMsg;
-      } else if (result.increaseSetCount) {
-        this.$store.commit('mainplaylist/setSetCount');
+      } catch (err) {
+        this.errorMsg = err.response.data.message;
       }
-    });
+    },
   },
 };
 </script>

@@ -60,45 +60,29 @@ export default {
   },
   computed: {
     playlists() {
-      return this.$store.state.playlist.playlists;
-    },
-    isMessagesTurnedOff() {
-      return this.$store.getters['group/chatState'];
+      return this.$store.getters['playlist/playlists'];
     },
     isMainAnOngoingPlaylist() {
       return this.$store.getters['mainplaylist/isMainAnOngoingPlaylist'];
     },
     ongoingPlaylistId() {
-      return this.$store.state.mainplaylist.ongoingPlaylist.id;
+      return this.$store.getters['mainplaylist/ongoingPlaylist'].id;
     },
     group() {
-      return this.$store.state.group.name;
+      return this.$store.getters['group/name'];
     },
   },
   methods: {
     async getPlaylists() {
-      this.$store.dispatch('playlist/getPlaylists').then((result) => {
-        if (!result.success) {
-          this.errMsg = result.errMsg;
-        }
-      });
+      try {
+        await this.$store.dispatch('playlist/getPlaylists');
+      } catch (err) {
+        this.errMsg = err.message || err.response.data.message;
+      }
     },
-    async goToOngoingPlaylist(id) {
-      this.$store.commit('mainplaylist/setId', { id });
-      this.$store
-        .dispatch('mainplaylist/getPlaylist', { id })
-        .then((result) => {
-          if (!result.success) {
-            this.errMsg = result.errMsg;
-            return;
-          }
-          this.$router.push({ path: '/mainplaylist' });
-        });
-    },
-    toggleMessages() {
-      this.$store.commit('group/setChatState', {
-        state: !this.isMessagesTurnedOff,
-      });
+
+    async goToOngoingPlaylist() {
+      this.$router.push({ path: `/mainplaylist/${this.ongoingPlaylistId}` });
     },
   },
 };
