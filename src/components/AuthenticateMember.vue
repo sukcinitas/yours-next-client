@@ -38,8 +38,8 @@
         :disabled="!name || !passcode"
         :class="[
           isExtended
-            ? 'entry-form--extended__button--small'
-            : 'entry-form__button--small',
+            ? 'entry-form--extended__button--narrow'
+            : 'entry-form__button--narrow',
         ]"
       >
         >

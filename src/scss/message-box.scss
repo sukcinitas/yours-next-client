@@ -2,27 +2,26 @@
 @import '@/scss/shared-styles-buttons.scss';
 
 .message-box {
-  z-index: 11;
-  justify-self: center;
-  align-self: end;
-  padding: 20px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: fixed;
   top: 10px;
   bottom: 10px;
-  width: 500px;
-  position: fixed;
   right: 0;
+  width: 500px;
   background-image: linear-gradient(#433e35, #81745dc4);
+  padding: 20px;
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
   box-shadow: 1px 2px 6px variables.$quoternary-dark;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   transition: right 0.3s ease-in;
+
   &--off {
     right: -490px;
     transition: right 0.3s ease-in;
   }
+
   &__messages {
     border-top: 1px solid variables.$secondary-bright--transparent;
     border-bottom: 1px solid variables.$secondary-bright--transparent;
@@ -45,59 +44,57 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
   &__message {
     display: flex;
     align-items: center;
     flex-direction: row;
     max-width: 80%;
-    margin: 14px 10px;
+    margin: 10px 0px;
     padding: 5px;
     background-color: variables.$secondary-light;
     border-radius: 20px;
     align-self: flex-start;
+
     &--right {
       align-self: flex-end;
       flex-direction: row-reverse;
     }
-    // &:nth-child(odd) {
-    //   align-self: flex-start;
-    // }
-    // &:nth-child(even) {
-    //   align-self: flex-end;
-    //   flex-direction: row-reverse;
-    // }
   }
-  &__message-member {
-    margin: auto 6px;
-  }
+
   &__message-name {
     font-size: 11px;
     color: variables.$tertiary-dark;
     display: none;
   }
+
   &__message-emoji {
     display: inline;
     font-size: 24px;
     padding: 0px 2px;
   }
+
   &__message-content {
     word-wrap: anywhere;
     font-size: 14px;
     padding: 4px 10px;
   }
+
   &__message-form {
     border: 2px solid variables.$tertiary-light;
-    width: 80%;
+    width: 70%;
     display: flex;
     flex-direction: row;
     margin: 10px auto 20px;
   }
+
   &__input {
     width: 100%;
     height: 100%;
     margin: auto;
     background-color: variables.$primary-light;
   }
+
   &__textarea {
     @extend .textarea;
     width: 100%;
@@ -128,6 +125,7 @@
     -khtml-user-select: none; /* webkit (konqueror) browsers */
     -ms-user-select: none; /* IE10+ */
   }
+
   &__button {
     @extend .btn;
     margin: 0;
@@ -136,12 +134,18 @@
     width: 10%;
     height: auto;
     text-align: center;
+    
     & span {
       writing-mode: vertical-rl;
       text-orientation: upright;
       margin: auto;
     }
+
+    &:hover, &:focus {
+      border: 2px solid variables.$secondary-light;
+    }
   }
+
 }
 
 @media only screen and (max-width: 550px) {
@@ -156,18 +160,22 @@
     border-bottom-left-radius: 0px;
     margin: 0 auto;
     transition: top 0.2s ease-in;
-    &__message-emoji {
-      font-size: 20px;
-    }
-    &__message-content {
-      font-size: 14px;
-    }
+
     &--off {
       top: calc(100% - 10px);
       transition: top 0.1s ease-in;
     }
+
+    &__message-emoji {
+      font-size: 20px;
+    }
+
+    &__message-content {
+      font-size: 14px;
+    }
+
     &__message-form {
-      width: 100%;
+      width: 90%;
     }
   }
 }

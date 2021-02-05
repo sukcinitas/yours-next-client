@@ -7,14 +7,17 @@
   padding-top: 50px;
   padding-bottom: 150px;
   text-align: center;
+
   &__search-field {
     display: flex;
     flex-direction: row;
     justify-content: center;
   }
+
   &__search-optons {
     margin: 3px;
   }
+
   &__search-results {
     margin: 50px auto;
     display: flex;
@@ -22,17 +25,22 @@
     justify-content: center;
     width: 334px;
   }
+
   &__search-result {
     background-color: variables.$quoternary-dark;
     text-align: center;
     margin: 10px 0;
     position: relative;
+
     &:hover .search__button--add {
       cursor: pointer;
       background-color: variables.$secondary-bright;
       color: variables.$primary-bright;
       transition: background-color 0.3s, color 0.3s;
+      border: 7px solid variables.$quoternary-dark;
+      border-top: none;
     }
+
     &--playlist {
       background-color: variables.$primary-bright;
       display: flex;
@@ -40,6 +48,7 @@
       border-radius: 5px;
     }
   }
+
   &__subheading {
     text-align: center;
     margin-bottom: 30px;
@@ -48,6 +57,7 @@
     font-weight: 500;
     color: variables.$primary-dark;
   }
+
   &__input {
     @extend .inpt;
     height: 40px;
@@ -56,18 +66,21 @@
     border: 2px solid variables.$secondary-light;
     width: 280px;
   }
+
   &__button {
     @extend .btn;
     height: 40px;
     margin-left: 0px;
     font-size: 18px;
     width: 105px;
+
     &--centered {
       @extend .btn--medium;
       margin: 10px auto;
       width: auto;
       padding: 2px 16px;
     }
+
     &--add {
       @extend .btn--medium;
       position: absolute;
@@ -82,12 +95,14 @@
       background-color: transparent;
       color: transparent;
     }
+
     &--playlist {
       @extend .btn--medium;
       width: auto;
       align-self: center;
     }
   }
+
   &__label {
     font-size: 12px;
     font-family: variables.$font-btn;
@@ -95,20 +110,24 @@
     margin-right: 5px;
     color: variables.$secondary-dark;
   }
+
   &__button--small {
     @extend .btn--medium;
     width: 90px;
   }
+
   &__button--left {
     float: left;
     margin-left: calc(
       (100% - 326px) / 4 - 25px
     ); //326px is main content, 25px is half of button width
   }
+
   &__button--right {
     float: right;
     margin-right: calc((100% - 326px) / 4 - 25px);
   }
+
   &__heading {
     color: variables.$tertiary-light;
     font-size: 14px;
@@ -125,12 +144,14 @@
       background-color: variables.$primary-bright;
     }
   }
+
   &__img {
     border: 3px solid variables.$quoternary-dark;
     &--playlist {
       height: 0px;
     }
   }
+
   &__message--error {
     font-family: variables.$font-btn;
     color: variables.$primary-light;
@@ -143,10 +164,12 @@
     color: variables.$primary-light;
     background-color: variables.$primary-error;
   }
+
   &__message--success {
     @extend .search__message--error;
     background-color: variables.$primary-success;
   }
+
   &__pages {
     position: fixed;
     top: calc(50% - 20px); // 20px is half of button height
@@ -154,37 +177,45 @@
     right: 0;
   }
 }
+
 @media only screen and (max-width: 400px) {
   .search {
     max-width: 98%;
     &__search-results {
       width: 248px;
     }
+
     &__search-result img {
       width: 240px;
     }
+
     &__pages {
       margin-bottom: 40px;
       position: static;
     }
+
     &__button,
     &__button--home,
     &__button--small {
-      font-size: 16px;
+      font-size: 14px;
     }
+
     &__input {
       width: 205px;
     }
+
     &__button--left {
       float: none;
       margin-left: 2px;
       font-size: 16px;
     }
+
     &__button--right {
       float: none;
       margin-right: 2px;
       font-size: 16px;
     }
+
     &__button--add {
       background-color: variables.$secondary-light;
       color: variables.$tertiary-dark;
@@ -196,25 +227,30 @@
   .search {
     display: inherit;
     max-width: 80%;
+
     &__pages {
       margin-bottom: 40px;
       position: static;
     }
+
     &__button,
     &__button--home,
     &__button--small {
       font-size: 16px;
     }
+
     &__button--left {
       float: none;
       margin-left: 2px;
       font-size: 16px;
     }
+
     &__button--right {
       float: none;
       margin-right: 2px;
       font-size: 16px;
     }
+    
     &__button--add {
       background-color: variables.$secondary-light;
       color: variables.$tertiary-dark;

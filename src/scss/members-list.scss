@@ -13,20 +13,22 @@
   height: 90px;
   overflow: visible;
   flex-wrap: wrap;
+
   &--bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-end;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
     max-height: 60px;
     background-color: variables.$primary-light--transparent;
     overflow: visible;
     padding: 0 20px;
   }
+
   &--messages {
     position: static;
     width: 300px;
@@ -34,6 +36,7 @@
     height: auto;
     overflow: unset;
   }
+
   &__member {
     display: inline-block;
     font-size: 16px;
@@ -50,17 +53,21 @@
     -moz-user-select: none; /* mozilla browsers */
     -khtml-user-select: none; /* webkit (konqueror) browsers */
     -ms-user-select: none; /* IE10+ */
+    
     &:hover {
       font-size: 17px;
       cursor: default;
     }
   }
+
   &__you {
     border-top: 2px solid variables.$tertiary-light;
   }
+
   &__moderator {
     border-bottom: 2px solid variables.$tertiary-bright;
   }
+
   &__tooltip {
     font-family: variables.$font-heading;
     font-size: 12px;
@@ -71,9 +78,11 @@
     background-color: variables.$primary-light--transparent;
     padding: 3px 7px;
     z-index: 101;
+
     &--hidden {
       display: none;
     }
+
     &--bottom {
       @extend .members__tooltip;
       bottom: 5px;
@@ -81,6 +90,7 @@
       left: 0;
     }
   }
+
   &__line {
     display: block;
     height: 2px;
@@ -88,14 +98,17 @@
 
   }
 }
+
 @media only screen and (max-width: 768px) and (min-width: 550px) {
   .members {
     align-items: flex-start;
+
     &--bottom {
       align-items: flex-end;
     }
   }
 }
+
 @media only screen and (max-width: 550px) {
   .members--bottom {
     position: absolute;
@@ -110,20 +123,24 @@
     scrollbar-width: none;
     padding: 0;
   }
+
   .members--messages {
     width: 200px;
   }
+
   .members__tooltip--bottom {
     bottom: auto;
     top: 0px;
     left: -15px;
   }
+
   .members__tooltip {
     bottom: auto;
     top: 0px;
     left: -15px;
   }
 }
+
 @media only screen and (min-width: 1024px) {
   .members__member {
     font-size: 20px;
@@ -131,6 +148,7 @@
     width: 30px;
     padding: 2px;
     position: relative;
+
     &:hover {
       font-size: 22px;
     }

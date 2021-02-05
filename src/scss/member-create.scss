@@ -3,50 +3,55 @@
 @import '@/scss/shared-styles-forms.scss';
 
 .create-member-form {
-  // @extend .entry-form;
   margin: 0 auto;
   display: flex;
-  // flex-direction: row;
-  // justify-content: center;
   flex-direction: column;
   align-items: center;
   margin-top: 60px;
+
   &__heading {
     @extend .heading;
-    // color: variables.$primary-dark;
+
     &--bold {
       color: variables.$tertiary-bright;
       text-transform: uppercase;
     }
   }
+
   &__input {
     @extend .inpt;
     border: 2px solid variables.$secondary-light;
     margin-right: 0;
   }
-  &__button--small {
-    @extend .btn--small;
+
+  &__button--narrow {
+    @extend .btn--narrow;
     margin-left: 0;
   }
+
   &__button--emoji {
     @extend .btn--emoji;
+
     &:hover,
     &:focus {
       transition: background-color 0.1s;
     }
   }
+
   &__button--selected-emoji {
     @extend .btn--selected-emoji;
   }
+
   &__subheading {
     @extend .subheading;
-    // color: variables.$primary-dark;
   }
+
   &__emoji-box {
     margin: 40px auto;
     max-width: 400px;
     text-align: center;
   }
+
   &__message--error {
     @extend .message--error;
   }
@@ -59,6 +64,7 @@
 
 .input--error {
   border: 2px solid variables.$primary-error;
+
   &:hover,
   &:focus {
     border: 2px solid variables.$primary-error;
@@ -68,38 +74,47 @@
 @media only screen and (max-width: 400px) {
   .create-member-form {
     margin: 20px 15px 60px;
+
     &__heading {
       font-size: 24px;
       margin-top: 20px;
     }
+
     &__subheading {
       font-size: 18px;
       margin-bottom: 20px;
     }
+
     &__emoji-box {
       width: auto;
       margin: 40px 10px;
     }
+
     &__button--emoji {
       margin: 6px;
     }
   }
 }
+
 @media only screen and (max-width: 768px) and (min-width: 400px) {
   .create-member-form {
     margin: 20px 15px 60px;
+
     &__heading {
       font-size: 24px;
       margin-top: 50px;
     }
+
     &__subheading {
       font-size: 18px;
       margin-bottom: 40px;
     }
+
     &__emoji-box {
       width: auto;
       margin: 40px 10px;
     }
+    
     &__button--emoji {
       margin: 6px;
     }

@@ -19,7 +19,7 @@
         @input="() => {if(!name) this.errMsg = '' }"
       />
       <button
-        class="create-member-form__button--small"
+        class="create-member-form__button--narrow"
         @click="checkIfMemberNameExists"
         @keyup.enter="checkIfMemberNameExists"
         :disabled="!name"
@@ -50,7 +50,7 @@
     <button
       v-show="isShowingEmojiSelection"
       type="submit"
-      class="create-member-form__button--small"
+      class="create-member-form__button--narrow"
       :disabled="!selectedEmoji || !name"
       ref="submitButton"
     >
