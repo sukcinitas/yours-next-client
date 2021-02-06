@@ -57,7 +57,6 @@ const actions = {
     try {
       await GroupService.authenticate(payload);
       commit('setName', { name: payload.name });
-      sessionStorage.setItem('groupName', payload.name);
       vue.$socket.connect();
       vue.$socket.emit('getInitialState', { name: payload.name });
       return { success: true };
@@ -70,7 +69,6 @@ const actions = {
     try {
       await GroupService.create(payload);
       commit('setName', { name: payload.name });
-      sessionStorage.setItem('groupName', payload.name);
       vue.$socket.connect();
       vue.$socket.emit('getInitialState', { name: payload.name });
       return { success: true };
@@ -79,7 +77,7 @@ const actions = {
     }
   },
 
-  addMember({ commit }, payload) {
+  addMember({ state, commit }, payload) {
     const { name, emoji } = payload;
     vue.$socket.emit('setMember', {
       name,
@@ -87,6 +85,7 @@ const actions = {
     }); // only this socket
     commit('setMember', { name, emoji });
     vue.$socket.emit('addMember', { name, emoji });
+    sessionStorage.setItem('groupName', state.name);
     sessionStorage.setItem('username', name);
     sessionStorage.setItem('userEmoji', emoji);
   },

@@ -27,7 +27,7 @@
   &--narrow {
     @extend .btn;
     width: 40px;
-    justify-content: center;
+    // justify-content: center;
   }
 
   &--emoji {
@@ -41,6 +41,11 @@
     border-radius: 50%;
     padding: 2px 8px;
     margin: 10px;
+
+    &:hover,
+    &:focus {
+      transition: background-color 0.1s;
+    }
   }
 
   &--selected-emoji {

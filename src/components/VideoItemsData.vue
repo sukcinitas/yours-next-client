@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-on:scroll.passive="handleScroll">
     <!-- <p v-if="errMsg && !chosenVideoId" class="main-playlist__message--error">
       {{ errMsg }}
     </p> -->
@@ -58,25 +58,32 @@
         {{ errMsg }}
       </p>
     </div>
-    <button
+    <!-- <button
       v-if="isThereMoreToLoad"
       type="button"
       class="main-playlist__button"
       @click="loadMore"
     >
       Load more
-    </button>
+    </button> -->
+    <loading-animation v-if="loading"/>
   </div>
 </template>
 
 <script>
+import LoadingAnimation from './LoadingAnimation';
+
 export default {
   name: 'VideoItemsData',
   data() {
     return {
       errMsg: '',
       chosenVideoId: '',
+      loading: false,
     };
+  },
+  components: {
+    LoadingAnimation,
   },
   props: ['isOngoing'],
   computed: {
@@ -154,12 +161,22 @@ export default {
 
     async loadMore() {
       try {
+        this.loading = true;
         const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
         if (increaseSetCount) {
           this.$store.commit('mainplaylist/setSetCount');
         }
       } catch (err) {
         this.errorMsg = err.response.data.message;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    handleScroll(e) {
+      if (e.target.scrollHeight - e.target.offsetHeight < e.target.scrollTop
+      && this.isThereMoreToLoad) {
+        this.loadMore();
       }
     },
   },

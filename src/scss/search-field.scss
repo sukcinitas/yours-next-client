@@ -32,7 +32,8 @@
     margin: 10px 0;
     position: relative;
 
-    &:hover .search__button--add {
+    &:hover .search__button--add,
+    &:focus .search__button--add {
       cursor: pointer;
       background-color: variables.$secondary-bright;
       color: variables.$primary-bright;

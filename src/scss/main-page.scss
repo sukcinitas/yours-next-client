@@ -3,26 +3,16 @@
 @import '@/scss/shared-styles-forms.scss';
 
 .main {
-  display: grid;
-  min-height: 100vh;
-  margin: 0;
-  grid-template-areas:
-    'playlists'
-    'members';
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 40px;
-  justify-content: space-between;
+  min-height: calc(100vh - 90px);
 }
 
 .playlists {
-  grid-area: playlists;
-  margin: 90px 80px 120px;
+  margin: 100px auto 120px;
   text-align: center;
-  position: relative;
+  max-width: 700px;
 
   &__heading {
     font-size: 90px;
-    margin: 0 auto 10px;
     font-family: variables.$font-btn;
     text-transform: uppercase;
     color: variables.$primary-dark;
@@ -34,7 +24,6 @@
       font-family: variables.$font-btn;
       text-transform: uppercase;
       color: variables.$primary-dark;
-
       position: relative;
       top: -70px;
     }
@@ -47,19 +36,18 @@
     justify-content: center;
     align-items: center;
     margin: 10px auto;
-    max-width: 600px;
   }
 
-  &__playlist {
-    display: flex;
-    background-color: variables.$tertiary-light;
-    margin: 10px;
+  // &__playlist {
+  //   display: flex;
+  //   background-color: variables.$tertiary-light;
+  //   margin: 10px;
 
-    &--ongoing {
-      @extend .playlists__playlist;
-      background-color: variables.$tertiary-bright;
-    }
-  }
+  //   &--ongoing {
+  //     @extend .playlists__playlist;
+  //     background-color: variables.$tertiary-bright;
+  //   }
+  // }
 
   &__name {
     background-color: variables.$tertiary-bright;
@@ -111,7 +99,7 @@
   }
 }
 .create-playlist {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
@@ -164,14 +152,13 @@
 
 @media only screen and (max-width: 550px) {
   .main {
-    grid-template-areas: 'playlists';
-    grid-template-rows: auto;
+    min-height: calc(100vh - 90px);
   }
   .playlists {
     min-height: 400px;
     max-width: 90%;
     width: 90%;
-    margin: 90px auto 120px;
+    margin: 100px auto 120px;
 
     &__name {
       font-size: 14px;
@@ -200,7 +187,7 @@
 
 @media only screen and (max-width: 1024px) and (min-width: 620px) {
   .playlists {
-    margin: 90px 50px 20px;
+    margin: 90px auto 20px;
 
     &__list {
       max-width: 500px;
@@ -218,7 +205,11 @@
 
 @media only screen and (max-width: 620px) and (min-width: 550px) {
   .playlists {
-    margin: 90px 50px 20px;
+    margin: 90px auto 20px;
+
+    &__list {
+      max-width: 400px;
+    }
 
     &__heading {
       font-size: 50px;

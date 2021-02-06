@@ -6,27 +6,30 @@
       :backBtn="false"
     ></headerPanel>
     <div class="playlists">
-      <h2 class="playlists__heading">
-        Playlists
-        <span class="playlists__heading-detail">of group {{ group }} </span>
-      </h2>
-      <create-playlist />
-      <div class="playlists__list">
-        <div class="playlists__playlist--ongoing" v-if="ongoingPlaylistId">
-          <button
-            class="playlists__name--ongoing"
-            @click="goToOngoingPlaylist(ongoingPlaylistId)"
-          >
-            Ongoing playlist
-          </button>
-        </div>
-        <playlist-item
-          v-for="playlist in playlists"
-          :key="playlist.title"
-          :playlist="playlist"
-        />
-        <p v-if="errMsg" class="playlists__message--error">{{ errMsg }}</p>
-      </div>
+        <h2 class="playlists__heading">
+          Playlists
+          <span class="playlists__heading-detail">of group {{ group }} </span>
+        </h2>
+        <create-playlist />
+          <div class="playlists__list">
+            <loading-animation  v-if="loading" />
+            <template v-else>
+              <div class="playlists__playlist--ongoing" v-if="ongoingPlaylistId">
+                <button
+                  class="playlists__name--ongoing"
+                  @click="goToOngoingPlaylist(ongoingPlaylistId)"
+                >
+                  Ongoing playlist
+                </button>
+              </div>
+              <playlist-item
+                v-for="playlist in playlists"
+                :key="playlist.title"
+                :playlist="playlist"
+              />
+              <p v-if="errMsg" class="playlists__message--error">{{ errMsg }}</p>
+            </template>
+          </div>
     </div>
     <members-list :isBottom="true"></members-list>
     <message-box></message-box>
@@ -39,6 +42,7 @@ import MembersList from './MembersList';
 import HeaderPanel from './HeaderPanel';
 import PlaylistItem from './PlaylistItem';
 import CreatePlaylist from './CreatePlaylist';
+import LoadingAnimation from './LoadingAnimation';
 
 export default {
   name: 'MainPage',
@@ -48,11 +52,13 @@ export default {
     HeaderPanel,
     PlaylistItem,
     CreatePlaylist,
+    LoadingAnimation,
   },
   data() {
     return {
       errMsg: '',
       successMsg: '',
+      loading: false,
     };
   },
   mounted() {
@@ -75,9 +81,12 @@ export default {
   methods: {
     async getPlaylists() {
       try {
+        this.loading = true;
         await this.$store.dispatch('playlist/getPlaylists');
       } catch (err) {
         this.errMsg = err.message || err.response.data.message;
+      } finally {
+        this.loading = false;
       }
     },
 

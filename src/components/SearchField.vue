@@ -54,132 +54,135 @@
       >
     </div>
 
-    <div v-if="picked === 'searchAll'" class="search__search-results">
+    <loading-animation v-if="loading" />
+    <template v-else>
+      <div v-if="picked === 'searchAll'" class="search__search-results">
+        <div
+          v-for="item in items"
+          :key="item.id.videoId"
+          class="search__search-result"
+        >
+          <p
+            class="search__message--error"
+            v-if="errorMessage && chosenVideoId === item.id.videoId"
+          >
+            {{ errorMessage }}
+          </p>
+          <p
+            class="search__message--success"
+            v-if="successMessage && chosenVideoId === item.id.videoId"
+          >
+            {{ successMessage }}
+          </p>
+          <h1 class="search__heading">{{ item.snippet.title }}</h1>
+          <img
+            class="search-img"
+            :src="item.snippet.thumbnails.medium.url"
+            :alt="item.snippet.title"
+          />
+          <button class="search__button--add" @click="add(item.id.videoId)">
+            Add
+          </button>
+        </div>
+      </div>
+
       <div
-        v-for="item in items"
-        :key="item.id.videoId"
-        class="search__search-result"
+        v-else-if="picked === 'searchPlaylists'"
+        class="search__search-results"
       >
-        <p
-          class="search__message--error"
-          v-if="errorMessage && chosenVideoId === item.id.videoId"
+        <h6 class="search__subheading" v-if="playlists.length > 0">Playlists</h6>
+        <div
+          v-for="item in playlists"
+          :key="item.id"
+          class="search__search-result search__search-result--playlist"
         >
-          {{ errorMessage }}
-        </p>
-        <p
-          class="search__message--success"
-          v-if="successMessage && chosenVideoId === item.id.videoId"
-        >
-          {{ successMessage }}
-        </p>
-        <h1 class="search__heading">{{ item.snippet.title }}</h1>
-        <img
-          class="search-img"
+          <h1 class="search__heading search__heading--playlist">
+            {{ item.snippet.title }}
+          </h1>
+          <!-- <img class="search__img search__img--playlist"
           :src="item.snippet.thumbnails.medium.url"
-          :alt="item.snippet.title"
-        />
-        <button class="search__button--add" @click="add(item.id.videoId)">
-          Add
-        </button>
+          :alt="item.snippet.title"> -->
+          <button
+            class="search__button--playlist"
+            @click="explorePlaylist(item.id, item.snippet.title)"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'chevron-right']"
+            ></font-awesome-icon>
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div
-      v-else-if="picked === 'searchPlaylists'"
-      class="search__search-results"
-    >
-      <h6 class="search__subheading" v-if="playlists.length > 0">Playlists</h6>
       <div
-        v-for="item in playlists"
-        :key="item.id"
-        class="search__search-result search__search-result--playlist"
+        v-else-if="picked === 'searchPlaylistItems'"
+        class="search__search-results"
       >
-        <h1 class="search__heading search__heading--playlist">
-          {{ item.snippet.title }}
-        </h1>
-        <!-- <img class="search__img search__img--playlist"
-        :src="item.snippet.thumbnails.medium.url"
-        :alt="item.snippet.title"> -->
-        <button
-          class="search__button--playlist"
-          @click="explorePlaylist(item.id, item.snippet.title)"
+        <template v-if="isExploring">
+          <h6 class="search__subheading">{{ playlistName }}</h6>
+          <button
+            v-if="isExploring"
+            class="search__button--centered"
+            @click="backToList"
+          >
+            Back to playlist list
+          </button>
+        </template>
+        <div
+          class="search__search-result"
+          v-for="item in items"
+          :key="item.snippet.resourceId.videoId"
         >
-          <font-awesome-icon
-            :icon="['fas', 'chevron-right']"
-          ></font-awesome-icon>
-        </button>
+          <p
+            class="search__message--error"
+            v-if="
+              errorMessage && chosenVideoId === item.snippet.resourceId.videoId
+            "
+          >
+            {{ errorMessage }}
+          </p>
+          <p
+            class="search__message--success"
+            v-if="
+              successMessage && chosenVideoId === item.snippet.resourceId.videoId
+            "
+          >
+            {{ successMessage }}
+          </p>
+          <h1 class="search__heading">{{ item.snippet.title }}</h1>
+          <img
+            class="search__img"
+            :src="item.snippet.thumbnails.medium.url"
+            :alt="item.snippet.title"
+          />
+          <button
+            class="search__button--add"
+            @click="add(item.snippet.resourceId.videoId)"
+          >
+            Add
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div
-      v-else-if="picked === 'searchPlaylistItems'"
-      class="search__search-results"
-    >
-      <template v-if="isExploring">
-        <h6 class="search__subheading">{{ playlistName }}</h6>
-        <button
-          v-if="isExploring"
-          class="search__button--centered"
-          @click="backToList"
-        >
-          Back to playlist list
-        </button>
-      </template>
       <div
-        class="search__search-result"
-        v-for="item in items"
-        :key="item.snippet.resourceId.videoId"
+        v-show="nextPageToken !== '' || prevPageToken !== ''"
+        class="search__pages"
       >
-        <p
-          class="search__message--error"
-          v-if="
-            errorMessage && chosenVideoId === item.snippet.resourceId.videoId
-          "
-        >
-          {{ errorMessage }}
-        </p>
-        <p
-          class="search__message--success"
-          v-if="
-            successMessage && chosenVideoId === item.snippet.resourceId.videoId
-          "
-        >
-          {{ successMessage }}
-        </p>
-        <h1 class="search__heading">{{ item.snippet.title }}</h1>
-        <img
-          class="search__img"
-          :src="item.snippet.thumbnails.medium.url"
-          :alt="item.snippet.title"
-        />
         <button
-          class="search__button--add"
-          @click="add(item.snippet.resourceId.videoId)"
+          @click="getPage('prev')"
+          v-show="prevPageToken !== ''"
+          class="search__button--small search__button--left"
         >
-          Add
+          Previous
+        </button>
+        <button
+          @click="getPage('next')"
+          v-show="nextPageToken !== '' && items.length !== 0"
+          class="search__button--small search__button--right"
+        >
+          Next
         </button>
       </div>
-    </div>
-
-    <div
-      v-show="nextPageToken !== '' || prevPageToken !== ''"
-      class="search__pages"
-    >
-      <button
-        @click="getPage('prev')"
-        v-show="prevPageToken !== ''"
-        class="search__button--small search__button--left"
-      >
-        Previous
-      </button>
-      <button
-        @click="getPage('next')"
-        v-show="nextPageToken !== '' && items.length !== 0"
-        class="search__button--small search__button--right"
-      >
-        Next
-      </button>
-    </div>
+    </template>
     <members-list :isBottom="false"></members-list>
     <message-box></message-box>
   </div>
@@ -190,10 +193,11 @@ import DataService from '../services/data.service';
 import MembersList from './MembersList';
 import MessageBox from './MessageBox';
 import HeaderPanel from './HeaderPanel';
+import LoadingAnimation from './LoadingAnimation';
 
 export default {
   name: 'SearchField',
-  components: { MembersList, MessageBox, HeaderPanel },
+  components: { MembersList, MessageBox, HeaderPanel, LoadingAnimation },
   data() {
     return {
       picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems
@@ -208,24 +212,32 @@ export default {
       successMessage: '',
       chosenVideoId: '',
       isExploring: false,
+      loading: false,
     };
   },
   methods: {
     async search() {
-      let data;
-      if (this.picked === 'searchAll') {
-        data = await DataService.search(this.queryOrId);
-        this.items = data.data.data.items;
-      } else if (this.picked === 'searchPlaylists') {
-        data = await DataService.getPlaylists(this.queryOrId);
-        this.playlists = data.data.data.items;
-        this.channelId = this.queryOrId;
-      } else if (this.picked === 'searchPlaylistItems') {
-        data = await DataService.getPlaylistItems(this.queryOrId);
-        this.items = data.data.data.items;
+      try {
+        this.loading = true;
+        let data;
+        if (this.picked === 'searchAll') {
+          data = await DataService.search(this.queryOrId);
+          this.items = data.data.data.items;
+        } else if (this.picked === 'searchPlaylists') {
+          data = await DataService.getPlaylists(this.queryOrId);
+          this.playlists = data.data.data.items;
+          this.channelId = this.queryOrId;
+        } else if (this.picked === 'searchPlaylistItems') {
+          data = await DataService.getPlaylistItems(this.queryOrId);
+          this.items = data.data.data.items;
+        }
+        this.prevPageToken = data.data.data.prevPageToken || '';
+        this.nextPageToken = data.data.data.nextPageToken || '';
+      } catch (err) {
+        this.errorMessage = 'Something went wrong!';
+      } finally {
+        this.loading = false;
       }
-      this.prevPageToken = data.data.data.prevPageToken || '';
-      this.nextPageToken = data.data.data.nextPageToken || '';
     },
 
     async add(videoId) {
@@ -257,32 +269,36 @@ export default {
     },
 
     async getPage(direction) {
-      let data;
-      if (this.picked === 'searchAll') {
-        data = await DataService.search(
-          this.queryOrId,
-          direction === 'next' ? this.nextPageToken : this.prevPageToken,
-        );
-        this.items = data.data.data.items;
-      } else if (this.picked === 'searchPlaylists') {
-        data = await DataService.getPlaylists(
-          this.queryOrId,
-          direction === 'next' ? this.nextPageToken : this.prevPageToken,
-        );
-        this.playlists = data.data.data.items;
-      } else if (this.picked === 'searchPlaylistItems') {
-        data = await DataService.getPlaylistItems(
-          this.queryOrId,
-          direction === 'next' ? this.nextPageToken : this.prevPageToken,
-        );
-        this.items = data.data.data.items;
+      try {
+        this.loading = true;
+        let data;
+        if (this.picked === 'searchAll') {
+          data = await DataService.search(
+            this.queryOrId,
+            direction === 'next' ? this.nextPageToken : this.prevPageToken,
+          );
+          this.items = data.data.data.items;
+        } else if (this.picked === 'searchPlaylists') {
+          data = await DataService.getPlaylists(
+            this.queryOrId,
+            direction === 'next' ? this.nextPageToken : this.prevPageToken,
+          );
+          this.playlists = data.data.data.items;
+        } else if (this.picked === 'searchPlaylistItems') {
+          data = await DataService.getPlaylistItems(
+            this.queryOrId,
+            direction === 'next' ? this.nextPageToken : this.prevPageToken,
+          );
+          this.items = data.data.data.items;
+        }
+        this.prevPageToken = data.data.data.prevPageToken || '';
+        this.nextPageToken = data.data.data.nextPageToken || '';
+      } catch (err) {
+        this.errorMessage = 'Something went wrong!';
+      } finally {
+        this.loading = false;
+        window.scrollTo(0, 0);
       }
-      this.prevPageToken = data.data.data.prevPageToken || '';
-      this.nextPageToken = data.data.data.nextPageToken || '';
-      // document.body.scrollTop = 0; // For Safari
-      // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-      window.scrollTo(0, 0);
-      document.scrollTop(0, 0);
     },
 
     typing() {

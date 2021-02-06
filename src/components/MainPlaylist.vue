@@ -14,7 +14,7 @@
     >
       Add some videos!
     </button>
-    <template v-if="initialPlaylistLength !== 0">
+    <template v-if="initialPlaylistLength !== 0 && !loading">
       <ongoing-video-player class="main-playlist__video-player">
       </ongoing-video-player>
       <video-items-data
@@ -22,6 +22,7 @@
         class="main-playlist__video-items"
       ></video-items-data>
     </template>
+    <loading-animation v-if="loading" />
     <members-list :isBottom="false"></members-list>
     <message-box></message-box>
   </div>
@@ -33,6 +34,7 @@ import VideoItemsData from './VideoItemsData';
 import MembersList from './MembersList';
 import MessageBox from './MessageBox';
 import HeaderPanel from './HeaderPanel';
+import LoadingAnimation from './LoadingAnimation';
 
 export default {
   name: 'MainPlaylist',
@@ -42,9 +44,12 @@ export default {
     MembersList,
     MessageBox,
     HeaderPanel,
+    LoadingAnimation,
   },
   data() {
-    return {};
+    return {
+      loading: false,
+    };
   },
   computed: {
     initialPlaylistLength() {
@@ -69,6 +74,7 @@ export default {
       });
     }
     try {
+      this.loading = true;
       this.$store.commit('mainplaylist/setId', { id });
       await this.$store
         .dispatch('mainplaylist/getPlaylist', { id });
@@ -82,6 +88,8 @@ export default {
       }
     } catch (err) {
       this.errMsg = err.response.data.message;
+    } finally {
+      this.loading = false;
     }
   },
 
