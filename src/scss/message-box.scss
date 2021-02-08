@@ -49,25 +49,23 @@
     position: relative;
     display: flex;
     align-items: center;
-    flex-direction: row;
+    flex-direction: column;
     max-width: 80%;
     margin: 10px 0px 20px;
     padding: 5px;
-    background-color: variables.$secondary-light;
     border-radius: 20px;
     align-self: flex-start;
     margin-left: 20px;
 
     &--right {
       align-self: flex-end;
-      flex-direction: row-reverse;
       margin-right: 20px;
     }
   }
 
   &__message-member {
     position: absolute;
-    bottom: -24px;
+    bottom: -12px;
     left: -20px;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
@@ -92,9 +90,23 @@
   }
 
   &__message-content {
+    background-color: variables.$secondary-light;
+    border-radius: 20px;
     word-wrap: anywhere;
     font-size: 14px;
-    padding: 4px 10px;
+    padding: 8px 14px;
+    margin: 2px;
+    align-self: flex-start;
+
+    &--right {
+      background-color: variables.$secondary-light;
+      border-radius: 20px;
+      word-wrap: anywhere;
+      font-size: 14px;
+      padding: 8px 14px;
+      margin: 2px;
+      align-self: flex-end;
+    }
   }
 
   &__message-form {

@@ -19,9 +19,29 @@ const actions = {
 // mutations
 const mutations = {
   setMessage(state, { message, member }) {
+    if (state.messages.length === 0) {
+      state.messages = [
+        ...state.messages,
+        { message: [message], member },
+      ];
+      return;
+    }
+
+    let lastMessage = state.messages[state.messages.length - 1];
+    if (lastMessage.member.name === member.name &&
+        lastMessage.member.emoji === member.emoji) {
+      const messages = [...state.messages];
+      lastMessage = { member, message: [...lastMessage.message, message] };
+      messages[messages.length - 1] = lastMessage;
+      state.messages = [
+        ...messages,
+      ];
+      return;
+    }
+
     state.messages = [
       ...state.messages,
-      { message, member },
+      { message: [message], member },
     ];
   },
 

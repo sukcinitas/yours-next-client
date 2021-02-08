@@ -21,7 +21,14 @@
             {{ message.member.emoji }}
           </p>
         </div>
-        <p class="message-box__message-content">{{ message.message }}</p>
+          <p
+            v-for="(n, index) in message.message"
+            :key="index"
+            :class="[member.name === message.member.name ?
+           'message-box__message-content--right' : 'message-box__message-content']"
+            >
+            {{n}}
+          </p>
       </div>
     </div>
     <form @submit.prevent="handleSubmit" class="message-box__message-form">
@@ -57,7 +64,7 @@
     </button>
     <button
       :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
-      type="button"
+      type="submit"
       @click="toggleChat"
     >
       <font-awesome-icon :icon="['fas', 'chevron-left']"> </font-awesome-icon>
