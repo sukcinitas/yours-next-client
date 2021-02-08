@@ -70,10 +70,10 @@ export default {
       this.$store.commit('mainplaylist/setId', { id });
       await this.$store
         .dispatch('mainplaylist/getPlaylist', { id });
-      if (this.$store.state.mainplaylist.setCount >= 1) {
-        // because only one set of items is loaded
-        return;
-      }
+      // if (this.$store.state.mainplaylist.setCount >= 1) {
+      //   // because only one set of items is loaded
+      //   return;
+      // }
       const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
       if (increaseSetCount) {
         this.$store.commit('mainplaylist/setSetCount');

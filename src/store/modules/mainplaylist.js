@@ -124,9 +124,9 @@ const actions = {
     }
   },
 
-  async addItemToPlaylist({ state, dispatch }, payload) {
+  async addItemToPlaylist({ state }, payload) {
     try {
-      await dispatch('getPlaylist', { id: payload.id });
+      // await dispatch('getPlaylist', { id: payload.id }); get in search component
       if (state.idsArray.indexOf(payload.item) > -1) {
         throw new Error('Item is already in the playlist!');
       }
@@ -134,6 +134,7 @@ const actions = {
         id: payload.id,
         item: payload.item,
       });
+      console.log(state, 'state inside add');
       const items = [...state.idsArray, payload.item];
       const datum = await DataService.getVideos(payload.item);
       const itemData = datum.data.data.items[0];
@@ -158,7 +159,7 @@ const actions = {
         items: [videoId],
       });
       const items = state.idsArray.filter(item => item !== videoId);
-      return { items, id };
+      return { items };
     } catch (err) {
       checkIfAuthorizationError(err);
       throw new Error('Could not remove item!');

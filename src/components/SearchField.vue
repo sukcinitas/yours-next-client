@@ -155,6 +155,7 @@
             :alt="item.snippet.title"
           />
           <button
+            v-if="!chosenVideoId"
             class="search__button--add"
             @click="add(item.snippet.resourceId.videoId)"
           >
@@ -169,14 +170,14 @@
       >
         <button
           @click="getPage('prev')"
-          v-show="prevPageToken !== ''"
+          v-show="prevPageToken !== '' && !loading"
           class="search__button--small search__button--left"
         >
           Previous
         </button>
         <button
           @click="getPage('next')"
-          v-show="nextPageToken !== '' && items.length !== 0"
+          v-show="nextPageToken !== '' && items.length !== 0 && !loading"
           class="search__button--small search__button--right"
         >
           Next
@@ -330,6 +331,27 @@ export default {
       this.prevPageToken = '';
       this.nextPageToken = '';
     },
+  },
+  async mounted() {
+    try {
+      this.loading = true;
+      const { id } = this.$route.params;
+      this.$store.commit('mainplaylist/setId', { id });
+      await this.$store
+        .dispatch('mainplaylist/getPlaylist', { id });
+      // if (this.$store.state.mainplaylist.setCount >= 1) {
+      //   // because only one set of items is loaded
+      //   return;
+      // }
+      const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
+      if (increaseSetCount) {
+        this.$store.commit('mainplaylist/setSetCount');
+      }
+    } catch (err) {
+      this.errMsg = err.response.data.message;
+    } finally {
+      this.loading = false;
+    }
   },
 };
 </script>

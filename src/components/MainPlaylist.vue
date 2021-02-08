@@ -7,13 +7,6 @@
     >
     </headerPanel>
     <h4 class="main-playlist__title--ongoing">{{ title }}</h4>
-    <button
-      v-if="isModerator"
-      class="main-playlist__button"
-      @click="() => $router.push({ name: 'SearchField' })"
-    >
-      Add some videos!
-    </button>
     <template v-if="initialPlaylistLength !== 0 && !loading">
       <ongoing-video-player class="main-playlist__video-player">
       </ongoing-video-player>

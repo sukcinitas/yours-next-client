@@ -133,14 +133,14 @@ export default {
 
     async removeItemFromPlaylist(videoId) {
       try {
-        const { items, id } = await this.$store
+        const { items } = await this.$store
           .dispatch('mainplaylist/removeItemFromPlaylist', { videoId, id: this.$route.params.id });
         this.$socket.emit('updatePlaylist', {
           idsArray: items,
           itemData: videoId,
           type: 'deletion',
           alreadyIn: false,
-          id,
+          id: this.$route.params.id,
         });
         this.$nextTick(() => {
           const isRemovedBefore =
@@ -173,10 +173,13 @@ export default {
       }
     },
 
-    handleScroll(e) {
+    async handleScroll(e) {
+      if (this.loading) {
+        return;
+      }
       if (e.target.scrollHeight - e.target.offsetHeight < e.target.scrollTop
       && this.isThereMoreToLoad) {
-        this.loadMore();
+        await this.loadMore();
       }
     },
   },
