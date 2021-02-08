@@ -10,13 +10,19 @@
 export default {
   name: 'HeaderPanel',
   data() {
-    return {};
+    return {
+      errMsg: '',
+    };
   },
   props: ['leaveBtn', 'backBtn', 'homeBtn'],
   methods: {
-    leave() {
-      this.$store.dispatch('group/resetState');
-      this.$router.push({ name: 'EntrancePage' });
+    async leave() {
+      try {
+        await this.$store.dispatch('group/resetState');
+        this.$router.push({ name: 'EntrancePage' });
+      } catch (err) {
+        this.errMsg = err.message;
+      }
     },
 
     goHome() {

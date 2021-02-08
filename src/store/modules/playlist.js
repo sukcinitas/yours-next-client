@@ -2,6 +2,8 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable no-shadow */
 import PlaylistService from '../../services/playlist.service';
+import GroupService from '../../services/group.service';
+import checkIfAuthorizationError from '../../util/checkIfAuthorizationError';
 
 const state = () => ({
   playlists: [],
@@ -14,10 +16,11 @@ const actions = {
 
   async getPlaylists({ commit }) {
     try {
-      const name = sessionStorage.getItem('groupName');
-      const { data: { playlists } } = await PlaylistService.getAll(name);
+      const { data: { group } } = await GroupService.isLoggedIn();
+      const { data: { playlists } } = await PlaylistService.getAll(group);
       commit('setPlaylists', { playlists });
     } catch (err) {
+      checkIfAuthorizationError(err);
       throw err;
     }
   },
@@ -40,6 +43,7 @@ const actions = {
       }
       return { success: false };
     } catch (err) {
+      checkIfAuthorizationError(err);
       throw err;
     }
   },
@@ -54,6 +58,7 @@ const actions = {
         playlists,
       };
     } catch (err) {
+      checkIfAuthorizationError(err);
       throw err;
     }
   },

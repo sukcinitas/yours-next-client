@@ -7,6 +7,7 @@ import OrdinaryPlaylist from '../components/OrdinaryPlaylist';
 import SearchField from '../components/SearchField';
 import EntrancePage from '../components/EntrancePage';
 import MemberCreate from '../components/MemberCreate';
+import GroupService from '../services/group.service';
 import store from '../store';
 
 Vue.use(Router);
@@ -56,29 +57,42 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    const name = sessionStorage.getItem('groupName');
+    // const name = sessionStorage.getItem('groupName');
     const username = sessionStorage.getItem('username');
     const userEmoji = sessionStorage.getItem('userEmoji');
-    if (
-      !name &&
-      !username &&
-      !userEmoji &&
-      !store.state.group.name &&
-      !store.state.group.member.name &&
-      !store.state.group.member.emoji
-    ) {
-      next({ name: 'EntrancePage' });
-    } else if (store.state.group.name && !store.state.group.member.name) {
-      next({ name: 'MemberCreate' });
-    } else {
-      next();
-    }
+    GroupService.isLoggedIn().then((data) => {
+      if (
+        !data.group &&
+        !username &&
+        !userEmoji &&
+        !store.state.group.name &&
+        !store.state.group.member.name &&
+        !store.state.group.member.emoji
+      ) {
+        next({ name: 'EntrancePage' });
+      } else if (store.state.group.name && !store.state.group.member.name) {
+        next({ name: 'MemberCreate' });
+      } else {
+        next();
+      }
+    });
   } else if (to.matched.some(record => record.meta.alreadyAuth)) {
-    if (store.state.group.name) {
-      next({ name: 'MainPage' });
-    } else {
-      next();
-    }
+    const username = sessionStorage.getItem('username');
+    const userEmoji = sessionStorage.getItem('userEmoji');
+    GroupService.isLoggedIn().then((data) => {
+      if (
+        data.group &&
+        username &&
+        userEmoji &&
+        store.state.group.name &&
+        store.state.group.member.name &&
+        store.state.group.member.emoji
+      ) {
+        next({ name: 'MainPage' });
+      } else {
+        next();
+      }
+    });
   } else if (to.matched.some(record => record.meta.requiresThings)) {
     if (!store.state.group.name) {
       next({ name: 'EntrancePage' });

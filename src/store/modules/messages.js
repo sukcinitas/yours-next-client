@@ -24,9 +24,11 @@ const mutations = {
       { message, member },
     ];
   },
+
   setMessages(state, { messages }) {
     state.messages = messages;
   },
+
   setChatState(state) {
     state.isChatTurnedOn = !state.isChatTurnedOn;
   },
@@ -37,9 +39,11 @@ const getters = {
   chatState(state) {
     return state.isChatTurnedOn;
   },
+
   messages(state) {
     return state.messages;
   },
+
   messageEmojis(state) {
     return state.messageEmojis;
   },

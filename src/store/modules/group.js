@@ -28,7 +28,7 @@ const state = () => ({
     0x1f483,
     0x1f984,
     0x1f996,
-    0x1F999,
+    0x1F574,
     0x1f409,
     0x1f988,
     0x1f985,
@@ -37,18 +37,25 @@ const state = () => ({
   ],
 });
 
-const persist = (commit) => {
-  const name = sessionStorage.getItem('groupName');
-  const username = sessionStorage.getItem('username');
-  const userEmoji = sessionStorage.getItem('userEmoji');
-  if (!name || !username || !userEmoji) {
-    return;
+const persist = async (commit) => {
+  try {
+    const { data } = await GroupService.isLoggedIn();
+    if (data.success) {
+      const group = data.group;
+      const username = sessionStorage.getItem('username');
+      const userEmoji = sessionStorage.getItem('userEmoji');
+      if (!group || !username || !userEmoji) {
+        return;
+      }
+      commit('setName', { name: group });
+      vue.$socket.emit('getInitialState', { name: group });
+      vue.$socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
+      commit('setMember', { name: username, emoji: userEmoji });
+      vue.$socket.emit('addMember', { name: username, emoji: userEmoji });
+    }
+  } catch (err) {
+    console.log(err);
   }
-  commit('setName', { name });
-  vue.$socket.emit('getInitialState', { name });
-  vue.$socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
-  commit('setMember', { name: username, emoji: userEmoji });
-  vue.$socket.emit('addMember', { name: username, emoji: userEmoji });
 };
 
 // actions
@@ -77,23 +84,28 @@ const actions = {
     }
   },
 
-  addMember({ state, commit }, payload) {
+  addMember({ commit }, payload) {
     const { name, emoji } = payload;
     vue.$socket.emit('setMember', {
       name,
       emoji,
     }); // only this socket
-    commit('setMember', { name, emoji });
-    vue.$socket.emit('addMember', { name, emoji });
-    sessionStorage.setItem('groupName', state.name);
     sessionStorage.setItem('username', name);
     sessionStorage.setItem('userEmoji', emoji);
+    commit('setMember', { name, emoji });
+    vue.$socket.emit('addMember', { name, emoji });
   },
-  resetState({ commit }) {
-    sessionStorage.clear();
-    vue.$socket.disconnect();
-    commit('resetState');
-    commit('messages/setMessages', { messages: [] }, { root: true });
+
+  async resetState({ commit }) {
+    try {
+      sessionStorage.clear();
+      vue.$socket.disconnect();
+      commit('messages/setMessages', { messages: [] }, { root: true });
+      await GroupService.logout();
+      commit('resetState');
+    } catch (err) {
+      throw err;
+    }
   },
 
   SOCKET_connect({ commit }) {

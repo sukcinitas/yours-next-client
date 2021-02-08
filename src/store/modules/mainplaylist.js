@@ -2,6 +2,7 @@
 /* eslint-disable no-shadow */
 import PlaylistService from '../../services/playlist.service';
 import DataService from '../../services/data.service';
+import checkIfAuthorizationError from '../../util/checkIfAuthorizationError';
 
 // initial state
 const state = () => ({
@@ -97,6 +98,7 @@ const actions = {
       commit('resetNowPlayingVideoIndex');
       commit('setItems', { items: [] });
     } catch (err) {
+      checkIfAuthorizationError(err);
       throw err;
     }
   },
@@ -117,6 +119,7 @@ const actions = {
       commit('setItems', { items: itemsData });
       return { increaseSetCount: true }; // first time from 0 to 1
     } catch (err) {
+      checkIfAuthorizationError(err);
       throw err;
     }
   },
@@ -143,6 +146,7 @@ const actions = {
       });
       return { successMsg: 'Successfully added!' };
     } catch (err) {
+      checkIfAuthorizationError(err);
       throw err;
     }
   },
@@ -156,6 +160,7 @@ const actions = {
       const items = state.idsArray.filter(item => item !== videoId);
       return { items, id };
     } catch (err) {
+      checkIfAuthorizationError(err);
       throw new Error('Could not remove item!');
     }
   },
