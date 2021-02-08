@@ -46,19 +46,36 @@
   }
 
   &__message {
+    position: relative;
     display: flex;
     align-items: center;
     flex-direction: row;
     max-width: 80%;
-    margin: 10px 0px;
+    margin: 10px 0px 20px;
     padding: 5px;
     background-color: variables.$secondary-light;
     border-radius: 20px;
     align-self: flex-start;
+    margin-left: 20px;
 
     &--right {
       align-self: flex-end;
       flex-direction: row-reverse;
+      margin-right: 20px;
+    }
+  }
+
+  &__message-member {
+    position: absolute;
+    bottom: -24px;
+    left: -20px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+
+    &--right {
+      position: absolute;
+      bottom: -22px;
+      right: -20px;
     }
   }
 
@@ -160,6 +177,10 @@
     border-bottom-left-radius: 0px;
     margin: 0 auto;
     transition: top 0.2s ease-in;
+
+    &__messages {
+      width: 90%;
+    }
 
     &--off {
       top: calc(100% - 10px);

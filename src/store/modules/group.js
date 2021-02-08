@@ -96,13 +96,11 @@ const actions = {
     vue.$socket.emit('addMember', { name, emoji });
   },
 
-  async resetState({ commit }) {
+  async resetState() {
     try {
-      sessionStorage.clear();
-      vue.$socket.disconnect();
-      commit('messages/setMessages', { messages: [] }, { root: true });
       await GroupService.logout();
-      commit('resetState');
+      vue.$socket.disconnect();
+      sessionStorage.clear();
     } catch (err) {
       throw err;
     }
@@ -176,7 +174,6 @@ const mutations = {
       emoji: '',
     };
     state.moderator = '';
-    state.isChatTurnedOf = false;
   },
 };
 

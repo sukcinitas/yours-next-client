@@ -12,7 +12,7 @@
   padding: 2px;
   margin: 2px;
   border: 2px solid variables.$secondary-light;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border 0.2s;
 
   &:hover,
   &:focus {
@@ -20,7 +20,7 @@
     background-color: variables.$secondary-bright;
     color: variables.$primary-bright;
     border: 2px solid variables.$tertiary-light;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
     outline: none;
   }
 

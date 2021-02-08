@@ -40,7 +40,7 @@
   &__member {
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 2px;
     height: 24px;
     width: 24px;
     padding: 1px;
@@ -143,14 +143,14 @@
 
 @media only screen and (min-width: 1024px) {
   .members__member {
-    font-size: 20px;
+    font-size: 18px;
     height: 30px;
     width: 30px;
     padding: 2px;
     position: relative;
 
     &:hover {
-      font-size: 22px;
+      font-size: 20px;
     }
   }
 }

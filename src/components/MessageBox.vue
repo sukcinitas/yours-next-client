@@ -12,7 +12,10 @@
         v-for="(message, index) in messages"
         :key="index"
       >
-        <div class="message-box__message-member">
+        <div
+          :class="[member.name === message.member.name ?
+           'message-box__message-member--right' : 'message-box__message-member']"
+        >
           <p class="message-box__message-name">{{ message.member.name }}</p>
           <p class="message-box__message-emoji" :title="message.member.name">
             {{ message.member.emoji }}

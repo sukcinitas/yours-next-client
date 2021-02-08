@@ -126,7 +126,6 @@ const actions = {
 
   async addItemToPlaylist({ state }, payload) {
     try {
-      // await dispatch('getPlaylist', { id: payload.id }); get in search component
       if (state.idsArray.indexOf(payload.item) > -1) {
         throw new Error('Item is already in the playlist!');
       }
@@ -134,7 +133,6 @@ const actions = {
         id: payload.id,
         item: payload.item,
       });
-      console.log(state, 'state inside add');
       const items = [...state.idsArray, payload.item];
       const datum = await DataService.getVideos(payload.item);
       const itemData = datum.data.data.items[0];
