@@ -60,7 +60,7 @@
         <div
           v-for="item in items"
           :key="item.id.videoId"
-          class="search__search-result"
+          class="video-item"
         >
           <p
             class="search__message--error"
@@ -74,13 +74,13 @@
           >
             {{ successMessage }}
           </p>
-          <h1 class="search__heading">{{ item.snippet.title }}</h1>
+          <h1 class="video-item__heading">{{ item.snippet.title }}</h1>
           <img
-            class="search-img"
+            class="video-item-img"
             :src="item.snippet.thumbnails.medium.url"
             :alt="item.snippet.title"
           />
-          <button class="search__button--add" @click="add(item.id.videoId)">
+          <button class="video-item__button--add" @click="add(item.id.videoId)">
             Add
           </button>
         </div>
@@ -128,7 +128,7 @@
           </button>
         </template>
         <div
-          class="search__search-result"
+          class="video-item"
           v-for="item in items"
           :key="item.snippet.resourceId.videoId"
         >
@@ -148,15 +148,15 @@
           >
             {{ successMessage }}
           </p>
-          <h1 class="search__heading">{{ item.snippet.title }}</h1>
+          <h1 class="video-item__heading">{{ item.snippet.title }}</h1>
           <img
-            class="search__img"
+            class="video-item__img"
             :src="item.snippet.thumbnails.medium.url"
             :alt="item.snippet.title"
           />
           <button
-            v-if="!chosenVideoId"
-            class="search__button--add"
+            v-if="item.snippet.resourceId.videoId !== chosenVideoId"
+            class="video-item__button--add"
             @click="add(item.snippet.resourceId.videoId)"
           >
             Add
@@ -339,10 +339,6 @@ export default {
       this.$store.commit('mainplaylist/setId', { id });
       await this.$store
         .dispatch('mainplaylist/getPlaylist', { id });
-      // if (this.$store.state.mainplaylist.setCount >= 1) {
-      //   // because only one set of items is loaded
-      //   return;
-      // }
       const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
       if (increaseSetCount) {
         this.$store.commit('mainplaylist/setSetCount');
@@ -358,4 +354,5 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/scss/search-field.scss';
+@import '@/scss/video-item.scss';
 </style>

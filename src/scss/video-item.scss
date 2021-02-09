@@ -1,0 +1,146 @@
+@use 'variables';
+
+.video-item {
+  text-align: center;
+  margin: 10px auto;
+  position: relative;
+  width: 334px;
+  background-color: variables.$quoternary-dark;
+  &:hover .button--remove,
+  &:hover .button--add {
+    cursor: pointer;
+    background-color: #4a460acc;
+    transition: background-color 0.3s, color 0.3s;
+    color: variables.$secondary-light;
+    border: none;
+  }
+  &--active {
+    @extend .video-item;
+    background-color: variables.$tertiary-bright;
+  }
+
+
+  &__heading {
+    cursor: pointer;
+    color: variables.$tertiary-light;
+    font-size: 14px;
+    background-color: #000000c9;
+    margin: 0;
+    padding: 10px;
+    font-family: variables.$font-heading;
+    position: absolute;
+    width: 100%;
+    &--active {
+      @extend .video-item__heading;
+      background-color: #daa520c9;
+      color: variables.$quoternary-dark;
+      cursor: default;
+      &--ongoing {
+        cursor: default;
+      }
+    }
+  }
+
+    &__img {
+      width: 100%;
+      &--active {
+        @extend .video-item__img;
+      }
+    }
+
+    &__button {
+      &--remove {
+        @extend .btn--medium;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0;
+        background-color: transparent;
+        color: transparent;
+        border: none;
+        height: 34px;
+    
+        &:hover, &:focus {
+          cursor: pointer;
+          background-color: #4a460acc;
+          color: variables.$secondary-light;
+          transition: background-color 0.3s, color 0.3s;
+          border: none;
+        }
+    
+        &--active {
+          @extend .video-item__button--remove;
+          border: none;
+          height: 34px;
+    
+          &:hover, &:focus {
+            cursor: pointer;
+            background-color: #4a460acc;
+            color: variables.$secondary-light;
+            transition: background-color 0.3s, color 0.3s;
+            border: none;
+          }
+        }
+      }
+
+      &--add {
+        @extend .btn--medium;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        width: 100%;
+        margin: 0;
+        border: none;
+        background-color: transparent;
+        color: transparent;
+        height: 34px;
+  
+        &:hover,
+        &:focus {
+          cursor: pointer;
+          background-color: #4a460acc;
+          color: variables.$secondary-light;
+          transition: background-color 0.3s, color 0.3s;
+          border: none;
+        }
+      }
+    }
+}
+
+@media only screen and (max-width: 400px) {
+  .video-item {
+      width: 240px;
+
+      &__heading {
+        font-size: 12px;
+      }
+
+      &__button--remove, &__button--add {
+        background-color: #4a460acc;
+        color: variables.$secondary-light;
+        cursor: pointer;
+        font-size: 12px;
+        height: 30px;
+      }
+  }
+}
+@media only screen and (max-width: 768px) and (min-width: 400px) {
+  .video-item {
+    max-width: 90%;
+
+    &__heading {
+      font-size: 14px;
+    }
+
+    &__button--remove, &__button--add  {
+      background-color: #4a460acc;
+      color: variables.$secondary-light;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  }
+}

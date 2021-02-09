@@ -26,30 +26,6 @@
     width: 334px;
   }
 
-  &__search-result {
-    background-color: variables.$quoternary-dark;
-    text-align: center;
-    margin: 10px 0;
-    position: relative;
-
-    &:hover .search__button--add,
-    &:focus .search__button--add {
-      cursor: pointer;
-      background-color: variables.$secondary-bright;
-      color: variables.$primary-bright;
-      transition: background-color 0.3s, color 0.3s;
-      border: 7px solid variables.$quoternary-dark;
-      border-top: none;
-    }
-
-    &--playlist {
-      background-color: variables.$primary-bright;
-      display: flex;
-      justify-content: space-between;
-      border-radius: 5px;
-    }
-  }
-
   &__subheading {
     text-align: center;
     margin-bottom: 30px;
@@ -82,31 +58,6 @@
       padding: 2px 16px;
     }
 
-    &--add {
-      @extend .btn--medium;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      width: 100%;
-      margin: 0;
-      border: 7px solid variables.$quoternary-dark;
-      border-top: none;
-      background-color: transparent;
-      color: transparent;
-
-      &:hover,
-      &:focus {
-        cursor: pointer;
-        background-color: variables.$secondary-bright;
-        color: variables.$primary-bright;
-        transition: background-color 0.3s, color 0.3s;
-        border: 7px solid variables.$quoternary-dark;
-        border-top: none;
-      }
-    }
-
     &--playlist {
       @extend .btn--medium;
       width: auto;
@@ -137,30 +88,6 @@
   &__button--right {
     float: right;
     margin-right: calc((100% - 326px) / 4 - 25px);
-  }
-
-  &__heading {
-    color: variables.$tertiary-light;
-    font-size: 14px;
-    background-color: variables.$quoternary-dark;
-    margin: 0;
-    padding: 10px;
-    font-family: variables.$font-heading;
-    border-radius: 5px;
-    &--playlist {
-      text-align: center;
-      width: 100%;
-      align-self: center;
-      font-size: 16px;
-      background-color: variables.$primary-bright;
-    }
-  }
-
-  &__img {
-    border: 3px solid variables.$quoternary-dark;
-    &--playlist {
-      height: 0px;
-    }
   }
 
   &__message--error {
@@ -226,12 +153,6 @@
       margin-right: 2px;
       font-size: 16px;
     }
-
-    &__button--add {
-      background-color: variables.$secondary-light;
-      color: variables.$tertiary-dark;
-      font-size: 16px;
-    }
   }
 }
 @media only screen and (max-width: 768px) and (min-width: 400px) {
@@ -259,12 +180,6 @@
     &__button--right {
       float: none;
       margin-right: 2px;
-      font-size: 16px;
-    }
-    
-    &__button--add {
-      background-color: variables.$secondary-light;
-      color: variables.$tertiary-dark;
       font-size: 16px;
     }
   }

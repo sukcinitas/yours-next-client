@@ -43,38 +43,6 @@
         border: none;
       }
     }
-
-    &--remove {
-      @extend .main-playlist__button;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      margin: 0;
-      border: 8px solid variables.$quoternary-dark;
-      border-top: none;
-      background-color: transparent;
-      color: transparent;
-
-      &:hover, &:focus {
-        margin: 0px;
-        border: 8px solid variables.$quoternary-dark;
-        border-top: none;
-      }
-
-      &--active {
-        @extend .main-playlist__button--remove;
-        border: 8px solid variables.$tertiary-bright;
-        border-top: none;
-
-        &:hover, &:focus {
-          margin: 0px;
-          border: 8px solid variables.$tertiary-bright;
-          border-top: none;
-        }
-      }
-    }
   }
 
   &__video-player {
@@ -93,24 +61,6 @@
     background-color: variables.$secondary-light;
   }
 
-  &__video-item {
-    background-color: variables.$quoternary-dark;
-    text-align: center;
-    margin: 10px auto;
-    position: relative;
-    width: 336px;
-    &:hover .main-playlist__button--remove {
-      cursor: pointer;
-      background-color: #4a460acc;
-      color: variables.$secondary-light;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    &--active {
-      @extend .main-playlist__video-item;
-      background-color: variables.$tertiary-bright;
-    }
-  }
-
   &__title {
     @extend .heading;
     color: variables.$primary-dark;
@@ -121,33 +71,6 @@
       @extend .main-playlist__title;
       color: variables.$tertiary-bright;
       -webkit-text-stroke: 0.6px variables.$primary-dark;
-    }
-  }
-
-  &__heading {
-    cursor: pointer;
-    color: variables.$tertiary-light;
-    font-size: 14px;
-    background-color: variables.$quoternary-dark;
-    margin: 0;
-    padding: 10px;
-    font-family: variables.$font-heading;
-    &--active {
-      @extend .main-playlist__heading;
-      background-color: variables.$tertiary-bright;
-      color: variables.$quoternary-dark;
-      cursor: default;
-      &--ongoing {
-        cursor: default;
-      }
-    }
-  }
-
-  &__img {
-    border: 3px solid variables.$quoternary-dark;
-    &--active {
-      @extend .main-playlist__img;
-      border: 3px solid variables.$tertiary-bright;
     }
   }
 
@@ -172,20 +95,6 @@
 
     &__video-items {
       max-width: 260px;
-    }
-
-    &__video-item {
-      width: 248px;
-    }
-
-    &__video-item img {
-      width: 240px;
-    }
-
-    &__button--remove {
-      background-color: #4a460acc;
-      color: variables.$tertiary-dark;
-      cursor: pointer;
     }
 
     &__button {

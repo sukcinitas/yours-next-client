@@ -3,10 +3,10 @@
     <div
       :class="[
         {
-          'main-playlist__video-item--active':
+          'video-item--active':
             item.id === playlist[activeIndex],
         },
-        'main-playlist__video-item',
+        'video-item',
       ]"
       v-for="(item, index) in items"
       :key="playlist[index]"
@@ -16,11 +16,11 @@
         @click="changeIndex(index)"
         :class="[
           {
-            'main-playlist__heading--active': item.id === playlist[activeIndex],
+            'video-item__heading--active': item.id === playlist[activeIndex],
           },
-          'main-playlist__heading',
+          'video-item__heading',
           {
-            'main-playlist__heading--active--ongoing':
+            'video-item__heading--active--ongoing':
               isOngoing && !isModerator,
           },
         ]"
@@ -29,8 +29,8 @@
       </h3>
       <img
         :class="[
-          { 'main-playlist__img--active': item.id === playlist[activeIndex] },
-          'main-playlist__img',
+          { 'video-item__img--active': item.id === playlist[activeIndex] },
+          'video-item__img',
         ]"
         :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title"
@@ -38,10 +38,10 @@
       <button
         :class="[
           {
-            'main-playlist__button--remove--active':
+            'video-item__button--remove--active':
               item.id === playlist[activeIndex],
           },
-          'main-playlist__button--remove',
+          'video-item__button--remove',
         ]"
         v-if="isModerator"
         @click="removeItemFromPlaylist(item.id)"
@@ -177,4 +177,5 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/scss/main-playlist.scss';
+@import '@/scss/video-item.scss';
 </style>
