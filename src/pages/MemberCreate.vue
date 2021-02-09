@@ -118,12 +118,6 @@ export default {
       });
       this.$router.push({ name: 'MainPage' });
     },
-
-    // checkIfEmptyAndDeleteErr() {
-    //   if (this.name === '') {
-    //     this.errMsg = '';
-    //   }
-    // },
   },
 };
 </script>

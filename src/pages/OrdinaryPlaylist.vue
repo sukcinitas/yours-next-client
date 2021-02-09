@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import OrdinaryVideoPlayer from './OrdinaryVideoPlayer';
-import VideoItemsData from './VideoItemsData';
-import MembersList from './MembersList';
-import MessageBox from './MessageBox';
-import HeaderPanel from './HeaderPanel';
-import LoadingAnimation from './LoadingAnimation';
+import OrdinaryVideoPlayer from '../components/OrdinaryVideoPlayer';
+import VideoItemsData from '../components/VideoItemsData';
+import MembersList from '../components/MembersList';
+import MessageBox from '../components/MessageBox';
+import HeaderPanel from '../components/HeaderPanel';
+import LoadingAnimation from '../components/LoadingAnimation';
 
 export default {
   name: 'OrdinaryPlaylist',

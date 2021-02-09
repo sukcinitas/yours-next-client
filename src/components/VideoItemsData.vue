@@ -1,8 +1,5 @@
 <template>
   <div v-on:scroll.passive="handleScroll">
-    <!-- <p v-if="errMsg && !chosenVideoId" class="main-playlist__message--error">
-      {{ errMsg }}
-    </p> -->
     <div
       :class="[
         {
@@ -58,14 +55,6 @@
         {{ errMsg }}
       </p>
     </div>
-    <!-- <button
-      v-if="isThereMoreToLoad"
-      type="button"
-      class="main-playlist__button"
-      @click="loadMore"
-    >
-      Load more
-    </button> -->
     <loading-animation v-if="loading"/>
   </div>
 </template>

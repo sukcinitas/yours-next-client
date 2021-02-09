@@ -37,12 +37,12 @@
 </template>
 
 <script>
-import MessageBox from './MessageBox';
-import MembersList from './MembersList';
-import HeaderPanel from './HeaderPanel';
-import PlaylistItem from './PlaylistItem';
-import CreatePlaylist from './CreatePlaylist';
-import LoadingAnimation from './LoadingAnimation';
+import MessageBox from '../components/MessageBox';
+import MembersList from '../components/MembersList';
+import HeaderPanel from '../components/HeaderPanel';
+import PlaylistItem from '../components/PlaylistItem';
+import CreatePlaylist from '../components/CreatePlaylist';
+import LoadingAnimation from '../components/LoadingAnimation';
 
 export default {
   name: 'MainPage',

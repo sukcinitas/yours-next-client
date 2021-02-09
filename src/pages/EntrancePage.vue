@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import AuthenticateMember from './AuthenticateMember';
-import CreateGroup from './CreateGroup';
+import AuthenticateMember from '../components/AuthenticateMember';
+import CreateGroup from '../components/CreateGroup';
 
 export default {
   name: 'EntrancePage',

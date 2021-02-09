@@ -191,10 +191,10 @@
 
 <script>
 import DataService from '../services/data.service';
-import MembersList from './MembersList';
-import MessageBox from './MessageBox';
-import HeaderPanel from './HeaderPanel';
-import LoadingAnimation from './LoadingAnimation';
+import MembersList from '../components/MembersList';
+import MessageBox from '../components/MessageBox';
+import HeaderPanel from '../components/HeaderPanel';
+import LoadingAnimation from '../components/LoadingAnimation';
 
 export default {
   name: 'SearchField',
