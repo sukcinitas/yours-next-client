@@ -1,8 +1,8 @@
 <template>
   <div class="loader">
-      <font-awesome-icon :icon="['fas', 'square']" class="loader__item" />
-      <font-awesome-icon :icon="['fas', 'square']" class="loader__item" />
-      <font-awesome-icon :icon="['fas', 'square']" class="loader__item" />
+    <div class="loader__item">{{userEmoji}}</div>
+    <div class="loader__item">{{userEmoji}}</div>
+    <div class="loader__item">{{userEmoji}}</div>
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
   name: 'LoadingAnimation',
   data() {
     return {};
+  },
+  computed: {
+    userEmoji() {
+      return this.$store.getters['group/member'].emoji;
+    },
   },
 };
 </script>

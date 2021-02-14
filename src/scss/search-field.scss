@@ -94,13 +94,19 @@
     font-family: variables.$font-btn;
     color: variables.$primary-light;
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 50px;
-    width: auto;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    margin: auto;
     padding: 4px;
+    width: 100%;
     color: variables.$primary-light;
     background-color: variables.$primary-error;
+    z-index: 111;
+
+    @media only screen and (max-width: 550px) {
+      font-size: 12px;
+    }
   }
 
   &__message--success {

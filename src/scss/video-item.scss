@@ -6,14 +6,19 @@
   position: relative;
   width: 334px;
   background-color: variables.$quoternary-dark;
-  &:hover .button--remove,
-  &:hover .button--add {
-    cursor: pointer;
-    background-color: #4a460acc;
-    transition: background-color 0.3s, color 0.3s;
-    color: variables.$secondary-light;
-    border: none;
+  animation: fade-in 0.5s linear;
+  
+  &:hover, &:active, &:focus {
+    & .video-item__button--remove, .video-item__button--add {
+      visibility: visible;
+      cursor: pointer;
+      background-color: #4a460acc;
+      transition: background-color 0.3s, color 0.3s;
+      color: variables.$secondary-light;
+      border: none;
+    }
   }
+
   &--active {
     @extend .video-item;
     background-color: variables.$tertiary-bright;
@@ -30,11 +35,13 @@
     font-family: variables.$font-heading;
     position: absolute;
     width: 100%;
+
     &--active {
       @extend .video-item__heading;
       background-color: #daa520c9;
       color: variables.$quoternary-dark;
       cursor: default;
+
       &--ongoing {
         cursor: default;
       }
@@ -43,6 +50,7 @@
 
     &__img {
       width: 100%;
+      
       &--active {
         @extend .video-item__img;
       }
@@ -61,6 +69,8 @@
         color: transparent;
         border: none;
         height: 34px;
+        display: hidden;
+        visibility: hidden;
     
         &:hover, &:focus {
           cursor: pointer;
@@ -68,6 +78,7 @@
           color: variables.$secondary-light;
           transition: background-color 0.3s, color 0.3s;
           border: none;
+          visibility: visible;
         }
     
         &--active {
@@ -81,6 +92,7 @@
             color: variables.$secondary-light;
             transition: background-color 0.3s, color 0.3s;
             border: none;
+            visibility: visible;
           }
         }
       }
@@ -98,6 +110,7 @@
         background-color: transparent;
         color: transparent;
         height: 34px;
+        visibility: hidden;
   
         &:hover,
         &:focus {
@@ -106,6 +119,7 @@
           color: variables.$secondary-light;
           transition: background-color 0.3s, color 0.3s;
           border: none;
+          visibility: initial;
         }
       }
     }
@@ -125,6 +139,7 @@
         cursor: pointer;
         font-size: 12px;
         height: 30px;
+        visibility: visible;
       }
   }
 }
@@ -141,6 +156,16 @@
       color: variables.$secondary-light;
       cursor: pointer;
       font-size: 14px;
+      visibility: visible;
     }
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

@@ -6,12 +6,6 @@
       :homeBtn="true"
       :backBtn="true"
     ></headerPanel>
-    <p class="search__message--error" v-if="errorMessage && !chosenVideoId">
-      {{ errorMessage }}
-    </p>
-    <p class="search__message--success" v-if="successMessage && !chosenVideoId">
-      {{ successMessage }}
-    </p>
     <div class="search__search-field">
       <input
         type="text"

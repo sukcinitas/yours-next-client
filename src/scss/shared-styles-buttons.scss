@@ -175,6 +175,10 @@
   color: variables.$primary-light;
   padding: 4px 30px;
 
+  @media only screen and (max-width: 550px) {
+    font-size: 12px;
+  }
+
   &--error {
     @extend .message;
     background-color: variables.$primary-error;
