@@ -1,5 +1,7 @@
 <template>
-  <div :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]">
+  <div
+   :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]"
+  >
     <members-list :isMessages="true"></members-list>
     <div class="message-box__messages" ref="messages">
       <div

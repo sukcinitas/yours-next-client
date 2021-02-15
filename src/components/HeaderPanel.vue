@@ -20,8 +20,6 @@ export default {
       try {
         await this.$store.dispatch('group/resetState');
         this.$router.push({ name: 'EntrancePage' });
-        this.$store.commit('messages/setMessages', { messages: [] }, { root: true });
-        this.$store.commit('group/resetState');
       } catch (err) {
         this.errMsg = err.message;
       }

@@ -74,7 +74,11 @@
             :src="item.snippet.thumbnails.medium.url"
             :alt="item.snippet.title"
           />
-          <button class="video-item__button--add" @click="add(item.id.videoId)">
+          <button
+            v-if="item.snippet.resourceId.videoId !== chosenVideoId"
+            :disabled="isProcessing"
+            class="video-item__button--add" @click="add(item.id.videoId)"
+          >
             Add
           </button>
         </div>
@@ -150,6 +154,7 @@
           />
           <button
             v-if="item.snippet.resourceId.videoId !== chosenVideoId"
+            :disabled="isProcessing"
             class="video-item__button--add"
             @click="add(item.snippet.resourceId.videoId)"
           >
@@ -208,6 +213,7 @@ export default {
       chosenVideoId: '',
       isExploring: false,
       loading: false,
+      isProcessing: false,
     };
   },
   methods: {
@@ -237,6 +243,7 @@ export default {
 
     async add(videoId) {
       try {
+        this.isProcessing = true;
         this.chosenVideoId = videoId;
         const { successMsg } = await this.$store
           .dispatch('mainplaylist/addItemToPlaylist', { item: videoId, id: this.$route.params.id });
@@ -248,7 +255,8 @@ export default {
           this.errorMessage = '';
           this.successMessage = '';
           this.chosenVideoId = '';
-        }, 550);
+          this.isProcessing = false;
+        }, 250);
       }
     },
 
@@ -328,7 +336,6 @@ export default {
   },
   async mounted() {
     try {
-      this.loading = true;
       const { id } = this.$route.params;
       this.$store.commit('mainplaylist/setId', { id });
       await this.$store
@@ -339,8 +346,6 @@ export default {
       }
     } catch (err) {
       this.errMsg = err.response.data.message;
-    } finally {
-      this.loading = false;
     }
   },
 };
