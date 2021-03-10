@@ -115,7 +115,7 @@
   }
 
   &__pages {
-    z-index: -1; // so it would not cover up adding buttons
+    z-index: 10; // so it would not cover up adding buttons
     position: fixed;
     top: calc(50% - 20px); // 20px is half of button height
     left: 0;

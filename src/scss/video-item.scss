@@ -7,6 +7,7 @@
   width: 334px;
   background-color: variables.$quoternary-dark;
   animation: fade-in 0.5s linear;
+  z-index: 11;
   
   &:hover, &:active, &:focus {
     & .video-item__button--remove, .video-item__button--add {

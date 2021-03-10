@@ -5,7 +5,7 @@
   "author": "Gintarė Černiauskaitė <gintare.cerniauskaite@protonmail.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --config build/webpack.dev.conf.js",
+    "dev": "webpack serve --inline --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "npm run unit",
@@ -80,7 +80,7 @@
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.8.0",
-    "webpack-cli": "^3.3.11",
+    "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
   },
