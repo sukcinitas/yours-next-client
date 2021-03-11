@@ -16,6 +16,7 @@
   flex-direction: column;
   justify-content: space-between;
   transition: right 0.3s ease-in;
+  z-index: 12;
 
   &--off {
     right: -490px;
