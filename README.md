@@ -1,7 +1,7 @@
 # Yours Next
 
 An application to create shared playlists you can play using Youtube IFrame Player API and to chat in real-time using socket.io.
-You can take a look at the application [here](http://infinite-woodland-46117.herokuapp.com) (it might take ~ 10 seconds for the sleeping app on Heroku to wake up).
+You can take a look at the application [here](http://yours-next.herokuapp.com/#/) (it might take ~ 10 seconds for the sleeping app on Heroku to wake up).
 
 ---
 

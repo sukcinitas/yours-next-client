@@ -45,8 +45,8 @@ Vue.use(
   new VueSocketIO({
     debug: true,
     connection: SocketIO(
-      location.hostname === 'infinite-woodland-46117.herokuapp.com'
-        ? `http://infinite-woodland-46117.herokuapp.com/#/:${location.port}`
+      location.hostname === 'yours-next.herokuapp.com'
+        ? `http://yours-next.herokuapp.com/#/:${location.port}`
         : 'http://localhost:8081',
     ),
     vuex: {
