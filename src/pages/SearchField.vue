@@ -97,9 +97,6 @@
           <h1 class="search__heading search__heading--playlist">
             {{ item.snippet.title }}
           </h1>
-          <!-- <img class="search__img search__img--playlist"
-          :src="item.snippet.thumbnails.medium.url"
-          :alt="item.snippet.title"> -->
           <button
             class="search__button--playlist"
             @click="explorePlaylist(item.id, item.snippet.title)"
@@ -201,7 +198,7 @@ export default {
   data() {
     return {
       picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems
-      queryOrId: 'PLcCyuE3mscVFQbqG4SbusOGJbrkaJoeY4',
+      queryOrId: 'PLdKHthnnMgzfnju7k92PM5Gg4Y0FRssVw',
       channelId: '',
       playlistName: '',
       items: [],
@@ -256,7 +253,7 @@ export default {
           this.successMessage = '';
           this.chosenVideoId = '';
           this.isProcessing = false;
-        }, 250);
+        }, 500);
       }
     },
 
