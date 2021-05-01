@@ -75,7 +75,7 @@
             :alt="item.snippet.title"
           />
           <button
-            v-if="item.snippet.resourceId.videoId !== chosenVideoId"
+            v-if="item.id.videoId !== chosenVideoId"
             :disabled="isProcessing"
             class="video-item__button--add" @click="add(item.id.videoId)"
           >
@@ -316,7 +316,6 @@ export default {
     empty() {
       this.playlists = [];
       this.items = [];
-      this.queryOrId = '';
       this.channelId = '';
       this.prevPageToken = '';
       this.nextPageToken = '';
