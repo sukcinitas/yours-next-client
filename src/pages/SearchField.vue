@@ -70,7 +70,7 @@
           </p>
           <h1 class="video-item__heading">{{ item.snippet.title }}</h1>
           <img
-            class="video-item-img"
+            class="video-item__img"
             :src="item.snippet.thumbnails.medium.url"
             :alt="item.snippet.title"
           />
