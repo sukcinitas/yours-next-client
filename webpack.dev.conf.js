@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require("vue-loader");
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -12,9 +11,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].bundle.js',
-    // clean: true,
+    clean: true,
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './index.html'),
@@ -22,7 +21,6 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new VueLoaderPlugin(),
-    new CleanWebpackPlugin(),
   ],
   module: {
     rules: [

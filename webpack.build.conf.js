@@ -2,9 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require("vue-loader");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -14,7 +12,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].bundle.js',
-    // clean: true,
+    clean: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -23,7 +21,6 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin(),
-    new CleanWebpackPlugin(),
   ],
   module: {
     rules: [
@@ -56,8 +53,7 @@ module.exports = {
   optimization: {
     minimize: true,
     minimizer: [
-      new TerserPlugin(),
-    //   new CssMinimizerPlugin(),
+      new CssMinimizerPlugin(),
     ],
   },
 }
