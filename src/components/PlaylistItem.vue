@@ -60,5 +60,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/playlist-item.scss';
+@import '../scss/playlist-item.scss';
 </style>

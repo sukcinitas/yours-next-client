@@ -1,6 +1,6 @@
 @use 'variables';
-@import '@/scss/shared-styles-buttons.scss';
-@import '@/scss/shared-styles-forms.scss';
+@import '../scss/shared-styles-buttons.scss';
+@import '../scss/shared-styles-forms.scss';
 
 .main {
   min-height: calc(100vh - 90px);

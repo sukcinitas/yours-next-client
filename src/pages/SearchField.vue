@@ -348,6 +348,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/search-field.scss';
-@import '@/scss/video-item.scss';
+@import '../scss/search-field.scss';
+@import '../scss/video-item.scss';
 </style>

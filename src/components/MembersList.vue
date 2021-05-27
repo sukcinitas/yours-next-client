@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/shared-styles-forms.scss';
-@import '@/scss/shared-styles-buttons.scss';
-@import '@/scss/members-list.scss';
+@import '../scss/shared-styles-forms.scss';
+@import '../scss/shared-styles-buttons.scss';
+@import '../scss/members-list.scss';
 </style>

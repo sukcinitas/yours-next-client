@@ -176,6 +176,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/main-playlist.scss';
-@import '@/scss/video-item.scss';
+@import '../scss/main-playlist.scss';
+@import '../scss/video-item.scss';
 </style>

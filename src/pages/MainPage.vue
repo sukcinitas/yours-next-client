@@ -98,8 +98,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/shared-styles-forms.scss';
-@import '@/scss/shared-styles-buttons.scss';
-@import '@/scss/main-page.scss';
-@import '@/scss/header-panel.scss';
+@import '../scss/shared-styles-forms.scss';
+@import '../scss/shared-styles-buttons.scss';
+@import '../scss/main-page.scss';
+@import '../scss/header-panel.scss';
 </style>

@@ -123,5 +123,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/member-create.scss';
+@import '../scss/member-create.scss';
 </style>

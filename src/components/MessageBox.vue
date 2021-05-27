@@ -141,6 +141,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/shared-styles-buttons.scss';
-@import '@/scss/message-box';
+@import '../scss/shared-styles-buttons.scss';
+@import '../scss/message-box';
 </style>

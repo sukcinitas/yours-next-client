@@ -193,5 +193,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/main-playlist.scss';
+@import '../scss/main-playlist.scss';
 </style>
