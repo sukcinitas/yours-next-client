@@ -91,7 +91,7 @@ export default {
             passcode: this.passcode,
           });
         if (result.success) {
-          this.$router.push({ name: 'MemberCreate' });
+          this.$emit('authenticate');
         }
       } catch (err) {
         const { message, type } = err.response.data;

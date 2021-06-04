@@ -7,9 +7,6 @@
   "scripts": {
     "dev": "webpack serve --inline --config webpack.dev.conf.js",
     "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "test": "npm run unit",
-    "lint": "eslint --ext .js,.vue src test/unit",
     "build": "webpack --config webpack.build.conf.js"
   },
   "dependencies": {
@@ -46,13 +43,6 @@
     "core-js": "^3.13.0",
     "css-loader": "^5.2.6",
     "css-minimizer-webpack-plugin": "^3.0.0",
-    "eslint": "^4.15.0",
-    "eslint-config-airbnb-base": "^11.3.0",
-    "eslint-friendly-formatter": "^4.0.1",
-    "eslint-import-resolver-webpack": "^0.8.3",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-vue": "^4.0.0",
     "html-webpack-plugin": "^5.3.1",
     "mini-css-extract-plugin": "^1.6.0",
     "regenerator-runtime": "^0.13.7",

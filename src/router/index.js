@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import Vue from 'vue';
 import Router from 'vue-router';
 import MainPage from '../pages/MainPage';
@@ -6,7 +5,6 @@ import MainPlaylist from '../pages/MainPlaylist';
 import OrdinaryPlaylist from '../pages/OrdinaryPlaylist';
 import SearchField from '../pages/SearchField';
 import EntrancePage from '../pages/EntrancePage';
-import MemberCreate from '../pages/MemberCreate';
 import GroupService from '../services/group.service';
 import store from '../store';
 
@@ -44,20 +42,11 @@ const router = new Router({
       component: EntrancePage,
       meta: { alreadyAuth: true },
     },
-    {
-      path: '/member',
-      name: 'MemberCreate',
-      component: MemberCreate,
-      meta: { requiresThings: true },
-      from: 'EntrancePage',
-      to: 'MainPage',
-    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // const name = sessionStorage.getItem('groupName');
     const username = sessionStorage.getItem('username');
     const userEmoji = sessionStorage.getItem('userEmoji');
     GroupService.isLoggedIn().then((data) => {
@@ -81,7 +70,7 @@ router.beforeEach((to, from, next) => {
     const userEmoji = sessionStorage.getItem('userEmoji');
     GroupService.isLoggedIn().then((data) => {
       if (
-        data.group &&
+        data.data.group &&
         username &&
         userEmoji &&
         store.state.group.name &&
@@ -93,15 +82,8 @@ router.beforeEach((to, from, next) => {
         next();
       }
     });
-  } else if (to.matched.some(record => record.meta.requiresThings)) {
-    if (!store.state.group.name) {
-      next({ name: 'EntrancePage' });
-    } else if (store.state.group.name && store.state.group.member.name) {
-      next({ name: 'MainPage' });
-    } else {
-      next();
-    }
-  } else {
+  } 
+  else {
     next();
   }
 });

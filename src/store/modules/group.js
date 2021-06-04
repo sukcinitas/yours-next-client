@@ -96,9 +96,10 @@ const actions = {
     vue.$socket.emit('addMember', { name, emoji });
   },
 
-  async resetState() {
+  async resetState({ commit, state }) {
     try {
       await GroupService.logout();
+      commit('removeMember', { name: state.member.name });
       vue.$socket.disconnect();
       sessionStorage.clear();
     } catch (err) {
