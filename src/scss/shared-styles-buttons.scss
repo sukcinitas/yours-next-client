@@ -27,7 +27,6 @@
   &--narrow {
     @extend .btn;
     width: 40px;
-    // justify-content: center;
   }
 
   &--emoji {
@@ -82,6 +81,11 @@
     background-color: transparent;
     padding: 0;
     width: auto;
+    animation-name: move;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    transform: rotate(360deg);
 
     @media only screen and (max-width: 550px) {
       display: inline-block;
@@ -120,6 +124,12 @@
     display: none;
   }
 }
+
+@keyframes move {
+  0% { transform: rotate(0deg); }
+  4% { transform: rotate(360deg); }
+}
+
 
 .inpt {
   background-color: variables.$secondary-light;
@@ -241,6 +251,12 @@
       font-size: 14px;
     }
   }
+
+  .btn {
+    &--turn-on {
+      animation: none;
+    }
+  }
 }
 
 @media only screen and (max-width: 768px) and (min-width: 400px) {
@@ -267,5 +283,11 @@
   .message {
     max-width: 80%;
     top: 240px;
+  }
+
+  .btn {
+    &--turn-on {
+      animation: none;
+    }
   }
 }

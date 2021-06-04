@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { VueLoaderPlugin } = require("vue-loader");
+const { VueLoaderPlugin } = require('vue-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
@@ -14,6 +14,7 @@ module.exports = {
     filename: '[name].bundle.js',
     clean: true,
   },
+  devtool: false,
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './index.html'),
@@ -34,7 +35,7 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        loader: 'vue-loader',
       },
       {
         test: /\.(scss|css)$/,
@@ -49,14 +50,17 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue$: "vue/dist/vue.js",
+      vue$: 'vue/dist/vue.js',
     },
-    extensions: ["*", ".js", ".vue", ".json"],
+    extensions: ['*', '.js', '.vue', '.json'],
   },
   optimization: {
     minimize: true,
     minimizer: [
       new CssMinimizerPlugin(),
     ],
+    splitChunks: {
+      chunks: 'all',
+    },
   },
 }

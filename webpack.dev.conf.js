@@ -13,7 +13,7 @@ module.exports = {
     filename: '[name].bundle.js',
     clean: true,
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './index.html'),
@@ -36,6 +36,17 @@ module.exports = {
       {
         test: /\.(scss|css)$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+            },
+          },
+        ],
       },
     ],
   },
