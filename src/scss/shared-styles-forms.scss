@@ -69,3 +69,17 @@
     }
   }
 }
+
+.redirect {
+  text-align: center;
+  font-size: 16px;
+  color: variables.$tertiary-dark;
+
+  &__link {
+    color: variables.$secondary-dark;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

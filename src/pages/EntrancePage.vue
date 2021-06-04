@@ -4,8 +4,11 @@
       <h1 class="header__heading">yours next</h1>
     </header>
     <div class="entry-forms">
-      <authenticate-member @authenticate="authenticateGroup"></authenticate-member>
-      <create-group @authenticate="authenticateGroup"></create-group>
+      <redirection-comp v-if="isProtocolHttps"></redirection-comp>
+      <template v-else>
+        <authenticate-member @authenticate="authenticateGroup"></authenticate-member>
+        <create-group @authenticate="authenticateGroup"></create-group>
+      </template>
     </div>
   </div>
   <member-create v-else></member-create>
@@ -15,15 +18,17 @@
 import AuthenticateMember from '../components/AuthenticateMember';
 import CreateGroup from '../components/CreateGroup';
 import MemberCreate from '../components/MemberCreate';
+import RedirectionComp from '../components/RedirectionComp';
 
 export default {
   name: 'EntrancePage',
   data() {
     return {
       isGroupAuthenticated: false,
+      isProtocolHttps: location.protocol === 'https:',
     };
   },
-  components: { AuthenticateMember, CreateGroup, MemberCreate },
+  components: { AuthenticateMember, CreateGroup, MemberCreate, RedirectionComp },
   methods: {
     authenticateGroup() {
       this.isGroupAuthenticated = true;
