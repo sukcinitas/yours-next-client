@@ -15,24 +15,32 @@
       <button
         v-if="isModerator"
         class="playlist__button"
-        @click.stop="deletePlaylist(playlist._id)"
+        @click="toggleDeletionBox"
       >
-        <font-awesome-icon :icon="['fas', 'window-close']" />
+        <font-awesome-icon :icon="['fas', 'trash']" />
+        <deletion-box 
+          :class="isDeletionBoxShown ? 'deletion-box' : 'deletion-box deletion-box--hidden'"
+          @delete="deletePlaylist(playlist._id)" 
+          @cancel="cancelDeletion">
+        </deletion-box>
       </button>
     </div>
   </div>
 </template>
 
 <script>
+import DeletionBox from './DeletionBox';
 import formatDate from '../util/formatDate';
 
 export default {
   name: 'PlaylistItem',
   data() {
     return {
+      isDeletionBoxShown: false,
       errMsg: '',
     };
   },
+  components: { DeletionBox },
   props: ['playlist'],
   computed: {
     isModerator() {
@@ -47,6 +55,14 @@ export default {
       } catch (err) {
         this.errMsg = err.response.data.message;
       }
+    },
+
+    toggleDeletionBox() {
+      this.isDeletionBoxShown = !this.isDeletionBoxShown;
+    },
+
+    cancelDeletion() {
+      this.isDeletionBoxShown = false;
     },
 
     formatDate(date) {

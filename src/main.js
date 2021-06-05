@@ -19,6 +19,8 @@ import {
   faPlus,
   faMinus,
   faSquare,
+  faCheck,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import store from './store';
@@ -38,6 +40,8 @@ library.add(
   faPlus,
   faMinus,
   faSquare,
+  faCheck,
+  faTrash,
 );
 
 Vue.use(VueYoutube);

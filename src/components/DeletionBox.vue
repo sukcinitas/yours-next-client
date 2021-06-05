@@ -1,0 +1,40 @@
+<template>
+  <div>
+    <h4>Delete playlist?</h4>
+    <button
+        class="playlist__button"
+        @click="confirm"
+        >
+        <font-awesome-icon :icon="['fas', 'check']" />
+    </button>
+    <button
+        class="playlist__button"
+        @click="cancel"
+        >
+        <font-awesome-icon :icon="['fas', 'window-close']" />
+    </button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'HeaderPanel',
+  data() {
+    return {
+      errMsg: '',
+    };
+  },
+  methods: {
+    confirm() {
+        this.$emit('delete');
+    },
+    cancel() {
+        this.$emit('cancelDeletion');
+    }
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import '../scss/playlist-item.scss';
+</style>

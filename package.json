@@ -5,7 +5,7 @@
   "author": "Gintarė Černiauskaitė <gintare.cerniauskaite@protonmail.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack serve --inline --config webpack.dev.conf.js",
+    "dev": "webpack serve --inline --hot --config webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "webpack --config webpack.build.conf.js"
   },
