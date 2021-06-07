@@ -16,6 +16,7 @@
         v-if="isModerator"
         class="playlist__button"
         @click="toggleDeletionBox"
+        title="Delete?"
       >
         <font-awesome-icon :icon="['fas', 'trash']" />
         <deletion-box 

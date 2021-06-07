@@ -57,8 +57,8 @@ export default {
   data() {
     return {
       isExtended: false,
-      name: '',
-      passcode: '',
+      name: 'bebriukai',
+      passcode: 'bebriukai',
       err: {
         message: '',
         type: '',
@@ -72,8 +72,8 @@ export default {
         message: '',
         type: '',
       };
-      this.name = '';
-      this.passcode = '';
+      this.name = this.name === 'bebriukai' ? 'bebriukai' : '';
+      this.passcode = this.passcode === 'bebriukai' ? 'bebriukai' : '';
       if (this.isExtended) {
         this.$refs.name.focus();
       }

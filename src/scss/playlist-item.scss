@@ -19,7 +19,7 @@
     color: variables.$secondary-dark;
     font-family: variables.$font-btn;
     font-size: 28px;
-    font-size: 16px;
+    font-size: 18px;
     margin-right: 1px solid variables.$secondary-dark;
   }
 
@@ -38,7 +38,6 @@
 
   &__buttons {
     display: flex;
-    font-size: 14px;
     flex-direction: column;
     justify-content: space-around;
     padding: 2px;
@@ -49,6 +48,7 @@
     background-color: transparent;
     border: none;
     margin: 5px;
+    font-size: 16px;
 
     &:hover {
       cursor: pointer;
@@ -79,7 +79,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   background-color: variables.$secondary-light;
-  font-size: 10px; 
+  font-size: 16px;
   border-bottom-right-radius: 10px;
 }
 

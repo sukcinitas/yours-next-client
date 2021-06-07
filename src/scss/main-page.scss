@@ -38,17 +38,6 @@
     margin: 10px auto;
   }
 
-  // &__playlist {
-  //   display: flex;
-  //   background-color: variables.$tertiary-light;
-  //   margin: 10px;
-
-  //   &--ongoing {
-  //     @extend .playlists__playlist;
-  //     background-color: variables.$tertiary-bright;
-  //   }
-  // }
-
   &__name {
     background-color: variables.$tertiary-bright;
     color: variables.$secondary-dark;

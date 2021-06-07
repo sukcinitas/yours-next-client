@@ -162,9 +162,6 @@ export default {
     },
   },
   async mounted() {
-    if (!this.isModerator) {
-      this.$refs.youtube.player.mute();
-    }
     // to keep seekTo in syncronization, I wait 5secs till propability that video is loaded is high
     // and then I seekTo a certain time
     setTimeout(() => {
@@ -174,11 +171,6 @@ export default {
     }, 5000);
   },
   async updated() {
-    if (!this.isModerator) {
-      this.$refs.youtube.player.mute();
-    } else {
-      this.$refs.youtube.player.unMute();
-    }
     if (this.isOngoingPlaylistPaused) {
       this.$refs.youtube.player.pauseVideo();
     } else {
