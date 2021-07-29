@@ -20,8 +20,15 @@
       @mousedown="
         (isTooltipDisplayed = true), (target = $event.target.innerText)
       "
+      @touchstart="
+        (isTooltipDisplayed = true), (target = $event.target.innerText)
+      "
+      @touchmove="
+        (isTooltipDisplayed = true), (target = $event.target.innerText)
+      "
       @mouseout="isTooltipDisplayed = false"
       @mouseup="isTooltipDisplayed = false"
+      @touchend="isTooltipDisplayed = false"
     >
       <p>{{ member.emoji }}</p>
       <p
