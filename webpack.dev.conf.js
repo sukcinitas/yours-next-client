@@ -51,7 +51,6 @@ module.exports = {
     ],
   },
   devServer: {
-      clientLogLevel: 'warning',
       historyApiFallback: {
         rewrites: [
           {
@@ -61,7 +60,6 @@ module.exports = {
         ],
       },
       hot: true,
-      contentBase: false,
       compress: true,
       host: 'localhost',
       port: 8080,
@@ -71,7 +69,6 @@ module.exports = {
           target: 'http://localhost:8081',
         },
       },
-      quiet: true,
   },
   resolve: {
     alias: {
