@@ -256,6 +256,10 @@
     &--turn-on {
       animation: none;
     }
+
+    &--turn-off, &--turn-on {
+      width: 100%;
+    }
   }
 }
 
