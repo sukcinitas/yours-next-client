@@ -62,14 +62,14 @@
       type="button"
       @click="toggleChat"
     >
-      <font-awesome-icon :icon="['fas', 'chevron-right']"> </font-awesome-icon>
+      <span class="icon--off"><font-awesome-icon :icon="['fas', 'chevron-right']"></font-awesome-icon></span>
     </button>
     <button
       :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
       type="submit"
       @click="toggleChat"
     >
-      <font-awesome-icon :icon="['fas', 'chevron-left']"> </font-awesome-icon>
+      <span class="icon--on"><font-awesome-icon :icon="['fas', 'chevron-left']"> </font-awesome-icon></span>
     </button>
   </div>
 </template>

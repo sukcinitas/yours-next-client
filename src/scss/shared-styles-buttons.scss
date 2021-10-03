@@ -93,7 +93,7 @@
       left: 0;
       right: 0;
       top: -25px;
-      transform: rotate(90deg);
+      width: 40px;
     }
   }
 
@@ -116,7 +116,7 @@
       margin: 0 auto;
       bottom: -10px;
       top: auto;
-      transform: rotate(90deg);
+      width: 40px;
     }
   }
 
@@ -256,10 +256,6 @@
     &--turn-on {
       animation: none;
     }
-
-    &--turn-off, &--turn-on {
-      width: 100%;
-    }
   }
 }
 
@@ -293,5 +289,14 @@
     &--turn-on {
       animation: none;
     }
+  }
+}
+
+.icon--on, .icon--off {
+  display: block;
+  // transform: rotate(90deg);
+  margin: auto;
+  @media only screen and (max-width: 550px) {
+    transform: rotate(90deg);
   }
 }
