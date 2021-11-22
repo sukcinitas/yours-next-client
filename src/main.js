@@ -50,7 +50,7 @@ Vue.use(
     debug: true,
     connection: SocketIO(
       location.hostname === 'yours-next.herokuapp.com'
-        ? `http://yours-next.herokuapp.com/#/:${location.port}`
+        ? `https://yours-next.herokuapp.com/#/:${location.port}`
         : 'http://localhost:8081',
     ),
     vuex: {
