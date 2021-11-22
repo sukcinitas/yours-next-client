@@ -1,7 +1,7 @@
 # Yours Next
 
-An application to create shared playlists, play videos in embedded Youtube video player and to chat in real-time using socket.io.
-You can take a look at the application demo [here](http://yours-next.herokuapp.com/#/) (it might take ~ 10 seconds for this sleeping app on Heroku to wake up).
+An application to create shared playlists, play videos in a regular or synchronised manner via embedded Youtube video player and to chat in real-time using socket.io. 
+You can take a look at the application demo [here](https://yours-next.herokuapp.com/#/) (it might take ~ 10 seconds for this sleeping app on Heroku to wake up).
 
 ![](https://github.com/sukcinitas/media/blob/master/yn/yn-1.gif)
 ![](https://github.com/sukcinitas/media/blob/master/yn/yn-2.gif)
