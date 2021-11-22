@@ -4,7 +4,7 @@
       <h1 class="header__heading">yours next</h1>
     </header>
     <div class="entry-forms">
-      <redirection-comp v-if="isProtocolHttps"></redirection-comp>
+      <redirection-comp v-if="isProtocolHttp"></redirection-comp>
       <template v-else>
         <authenticate-member @authenticate="authenticateGroup"></authenticate-member>
         <create-group @authenticate="authenticateGroup"></create-group>
@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       isGroupAuthenticated: false,
-      isProtocolHttps: location.protocol === 'https:',
+      isProtocolHttp: location.protocol === 'http:',
     };
   },
   components: { AuthenticateMember, CreateGroup, MemberCreate, RedirectionComp },
