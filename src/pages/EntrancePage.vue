@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       isGroupAuthenticated: false,
-      isProtocolHttp: location.protocol === 'http:',
+      isProtocolHttp: location.protocol === 'http:' && process.env.NODE_ENV === 'production',
     };
   },
   components: { AuthenticateMember, CreateGroup, MemberCreate, RedirectionComp },
