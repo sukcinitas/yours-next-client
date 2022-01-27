@@ -5,7 +5,6 @@
 .playlist {
   width: 90%;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   background-color: variables.$secondary-light;
   margin: 10px;
@@ -21,6 +20,7 @@
     font-size: 28px;
     font-size: 18px;
     margin-right: 1px solid variables.$secondary-dark;
+    word-break: break-all;
   }
 
   &__details {
