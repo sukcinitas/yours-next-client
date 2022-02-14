@@ -67,6 +67,7 @@
     text-transform: uppercase;
     font-size: 40px;
     margin: 30px;
+    word-wrap: break-word;
     &--ongoing {
       @extend .main-playlist__title;
       color: variables.$tertiary-bright;
