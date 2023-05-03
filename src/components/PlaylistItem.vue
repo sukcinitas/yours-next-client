@@ -1,9 +1,9 @@
 <template>
   <div class="playlist">
     <div class="playlist__details">
-      <h3 class="playlist__name">{{ playlist.title }}</h3>
-      <p>{{ playlist.items.length }} items</p>
-      <p>{{ formatDate(playlist.updatedAt) }}</p>
+      <h3 class="playlist__name">{{ props.playlist.title }}</h3>
+      <p>{{ props.playlist.items.length }} items</p>
+      <p>{{ dateString(props.playlist.updatedAt) }}</p>
     </div>
     <p v-if="errMsg" class="playlist__message--error">{{ errMsg }}</p>
     <div class="playlist__buttons">
@@ -13,7 +13,7 @@
         <font-awesome-icon :icon="['fas', 'chevron-right']" />
       </button>
       <button
-        v-if="isModerator"
+        v-if="groupStore.isModerator"
         class="playlist__button"
         @click="toggleDeletionBox"
         title="Delete?"
@@ -21,7 +21,7 @@
         <font-awesome-icon :icon="['fas', 'trash']" />
         <deletion-box 
           :class="isDeletionBoxShown ? 'deletion-box' : 'deletion-box deletion-box--hidden'"
-          @delete="deletePlaylist(playlist._id)" 
+          @delete="deletePlaylist(props.playlist._id)" 
           @cancel="cancelDeletion">
         </deletion-box>
       </button>
@@ -29,51 +29,43 @@
   </div>
 </template>
 
-<script>
-import DeletionBox from './DeletionBox';
+<script setup>
+import { ref } from 'vue'
+import { useGroupStore } from '../stores/group';
+// import { usePlaylistStore } from '../stores/playlist';
+import DeletionBox from './DeletionBox.vue';
 import formatDate from '../util/formatDate';
 
-export default {
-  name: 'PlaylistItem',
-  data() {
-    return {
-      isDeletionBoxShown: false,
-      errMsg: '',
-    };
-  },
-  components: { DeletionBox },
-  props: ['playlist'],
-  computed: {
-    isModerator() {
-      return this.$store.getters['group/isModerator'];
-    },
-  },
-  methods: {
-    async deletePlaylist(id) {
-      try {
-        const { playlists } = await this.$store.dispatch('playlist/deletePlaylist', { id });
-        this.$socket.emit('updatePlaylists', { playlists });
-      } catch (err) {
-        this.errMsg = err.response.data.message;
-      }
-    },
+const props = defineProps(['playlist'])
+const groupStore = useGroupStore()
+// const playlistStore = usePlaylistStore()
+const isDeletionBoxShown = ref(false)
+const errMsg = ref('')
 
-    toggleDeletionBox() {
-      this.isDeletionBoxShown = !this.isDeletionBoxShown;
-    },
+async function deletePlaylist(_id) {
+  try {
+    // const { playlists } = playlistStore.deletePlaylist({ id });
+    // $socket.emit('updatePlaylists', { playlists });
+  } catch (err) {
+    errMsg.value = err.response.data.message;
+  }
+}
 
-    cancelDeletion() {
-      this.isDeletionBoxShown = false;
-    },
+function toggleDeletionBox() {
+  isDeletionBoxShown.value = !isDeletionBoxShown.value;
+}
 
-    formatDate(date) {
-      if (!date) {
-        return '';
-      }
-      return `last updated on ${formatDate(date)}`;
-    },
-  },
-};
+function cancelDeletion() {
+  isDeletionBoxShown.value = false;
+}
+
+function dateString(date) {
+  if (!date) {
+    return '';
+  }
+  return `last updated on ${formatDate(date)}`;
+}
+
 </script>
 
 <style lang="scss" scoped>

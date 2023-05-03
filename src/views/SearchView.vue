@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 <template>
   <div class="search">
-    <headerPanel
+    <header-panel
       :leaveBtn="false"
       :homeBtn="true"
       :backBtn="true"
-    ></headerPanel>
+    ></header-panel>
     <div class="search__search-field">
       <input
         type="text"
@@ -185,166 +185,161 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import DataService from '../services/data.service';
-import MembersList from '../components/MembersList';
-import MessageBox from '../components/MessageBox';
-import HeaderPanel from '../components/HeaderPanel';
-import LoadingAnimation from '../components/LoadingAnimation';
+import MembersList from '../components/MembersList.vue';
+import MessageBox from '../components/MessageBox.vue';
+import HeaderPanel from '../components/HeaderPanel.vue';
+import LoadingAnimation from '../components/LoadingAnimation.vue';
+import { useMainPlaylistStore } from '../stores/mainplaylist';
+const route = useRoute()
+const mainplaylistStore = useMainPlaylistStore()
+const picked = ref('searchPlaylistItems') // searchAll, searchPlaylists, searchPlaylistItems
+const queryOrId = ref('PLdKHthnnMgzfnju7k92PM5Gg4Y0FRssVw')
+const channelId = ref('')
+const playlistName = ref('')
+const items = ref([])
+const playlists = ref([])
+const prevPageToken = ref('')
+const nextPageToken = ref('')
+const errorMessage = ref('')
+const successMessage = ref('')
+const chosenVideoId = ref('')
+const isExploring = ref(false)
+const loading = ref(false)
+const isProcessing = ref(false)
 
-export default {
-  name: 'SearchField',
-  components: { MembersList, MessageBox, HeaderPanel, LoadingAnimation },
-  data() {
-    return {
-      picked: 'searchPlaylistItems', // searchAll, searchPlaylists, searchPlaylistItems
-      queryOrId: 'PLdKHthnnMgzfnju7k92PM5Gg4Y0FRssVw',
-      channelId: '',
-      playlistName: '',
-      items: [],
-      playlists: [],
-      prevPageToken: '',
-      nextPageToken: '',
-      errorMessage: '',
-      successMessage: '',
-      chosenVideoId: '',
-      isExploring: false,
-      loading: false,
-      isProcessing: false,
-    };
-  },
-  methods: {
-    async search() {
-      try {
-        this.loading = true;
-        let data;
-        if (this.picked === 'searchAll') {
-          data = await DataService.search(this.queryOrId);
-          this.items = data.data.data.items;
-        } else if (this.picked === 'searchPlaylists') {
-          data = await DataService.getPlaylists(this.queryOrId);
-          this.playlists = data.data.data.items;
-          this.channelId = this.queryOrId;
-        } else if (this.picked === 'searchPlaylistItems') {
-          data = await DataService.getPlaylistItems(this.queryOrId);
-          this.items = data.data.data.items;
-        }
-        this.prevPageToken = data.data.data.prevPageToken || '';
-        this.nextPageToken = data.data.data.nextPageToken || '';
-      } catch (err) {
-        this.errorMessage = 'Something went wrong!';
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async add(videoId) {
-      try {
-        this.isProcessing = true;
-        this.chosenVideoId = videoId;
-        const { successMsg } = await this.$store
-          .dispatch('mainplaylist/addItemToPlaylist', { item: videoId, id: this.$route.params.id });
-        this.successMessage = successMsg;
-      } catch (err) {
-        this.errorMessage = err.response ? err.response.data.message : err.message;
-      } finally {
-        setTimeout(() => {
-          this.errorMessage = '';
-          this.successMessage = '';
-          this.chosenVideoId = '';
-          this.isProcessing = false;
-        }, 500);
-      }
-    },
-
-    async explorePlaylist(id, playlistName) {
-      const data = await DataService.getPlaylistItems(id);
-      this.items = data.data.data.items;
-      this.prevPageToken = data.data.data.prevPageToken || '';
-      this.nextPageToken = data.data.data.nextPageToken || '';
-      this.picked = 'searchPlaylistItems';
-      this.queryOrId = id;
-      this.playlistName = playlistName;
-      this.isExploring = true;
-    },
-
-    async getPage(direction) {
-      try {
-        this.loading = true;
-        let data;
-        if (this.picked === 'searchAll') {
-          data = await DataService.search(
-            this.queryOrId,
-            direction === 'next' ? this.nextPageToken : this.prevPageToken,
-          );
-          this.items = data.data.data.items;
-        } else if (this.picked === 'searchPlaylists') {
-          data = await DataService.getPlaylists(
-            this.queryOrId,
-            direction === 'next' ? this.nextPageToken : this.prevPageToken,
-          );
-          this.playlists = data.data.data.items;
-        } else if (this.picked === 'searchPlaylistItems') {
-          data = await DataService.getPlaylistItems(
-            this.queryOrId,
-            direction === 'next' ? this.nextPageToken : this.prevPageToken,
-          );
-          this.items = data.data.data.items;
-        }
-        this.prevPageToken = data.data.data.prevPageToken || '';
-        this.nextPageToken = data.data.data.nextPageToken || '';
-      } catch (err) {
-        this.errorMessage = 'Something went wrong!';
-      } finally {
-        this.loading = false;
-        window.scrollTo(0, 0);
-      }
-    },
-
-    typing() {
-      this.playlists = [];
-      this.items = [];
-      if (this.queryOrId.substring(0, 2) === 'PL') {
-        this.picked = 'searchPlaylistItems';
-      } else if (this.queryOrId.substring(0, 2) === 'UC') {
-        this.picked = 'searchPlaylists';
-      } else {
-        this.picked = 'searchAll';
-      }
-    },
-
-    empty() {
-      this.playlists = [];
-      this.items = [];
-      this.channelId = '';
-      this.prevPageToken = '';
-      this.nextPageToken = '';
-    },
-
-    backToList() {
-      this.picked = 'searchPlaylists';
-      this.queryOrId = this.channelId;
-      this.playlistName = '';
-      this.isExploring = false;
-      this.prevPageToken = '';
-      this.nextPageToken = '';
-    },
-  },
-  async mounted() {
-    try {
-      const { id } = this.$route.params;
-      this.$store.commit('mainplaylist/setId', { id });
-      await this.$store
-        .dispatch('mainplaylist/getPlaylist', { id });
-      const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
-      if (increaseSetCount) {
-        this.$store.commit('mainplaylist/setSetCount');
-      }
-    } catch (err) {
-      this.errMsg = err.response.data.message;
+onMounted(async () => {
+  try {
+    const { id } = route.params;
+    mainplaylistStore.setId({ id });
+    await mainplaylistStore.getPlaylist({ id });
+    const { increaseSetCount } = await mainplaylistStore.getPlaylistData();
+    if (increaseSetCount) {
+      mainplaylistStore.setSetCount();
     }
-  },
-};
+  } catch (err) {
+    errMsg.value = err.response.data.message;
+  }
+})
+
+async function search() {
+  try {
+    loading.value = true;
+    let data = null;
+    if (picked.value === 'searchAll') {
+      data = await DataService.search(queryOrId.value);
+      items.value = data.data.data.items;
+    } else if (picked.value === 'searchPlaylists') {
+      data = await DataService.getPlaylists(queryOrId.value);
+      playlists.value = data.data.data.items;
+      channelId.value = queryOrId.value;
+    } else if (picked.value === 'searchPlaylistItems') {
+      data = await DataService.getPlaylistItems(queryOrId.value);
+      items.value = data.data.data.items;
+    }
+    prevPageToken.value = data.data.data.prevPageToken || '';
+    nextPageToken.value = data.data.data.nextPageToken || '';
+  } catch (err) {
+    errorMessage.value = 'Something went wrong!';
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function add(videoId) {
+  try {
+    isProcessing.value = true;
+    chosenVideoId.value = videoId;
+    const { successMsg } = await mainplaylistStore.addItemToPlaylist({ item: videoId, id: route.params.id });
+    successMessage.value = successMsg;
+  } catch (err) {
+    errorMessage.value = err.response ? err.response.data.message : err.message;
+  } finally {
+    setTimeout(() => {
+      errorMessage.value = '';
+      successMessage.value = '';
+      chosenVideoId.value = '';
+      isProcessing.value = false;
+    }, 500);
+  }
+}
+
+async function explorePlaylist(id, playlistName) {
+  const data = await DataService.getPlaylistItems(id);
+  items.value = data.data.data.items;
+  prevPageToken.value = data.data.data.prevPageToken || '';
+  nextPageToken.value = data.data.data.nextPageToken || '';
+  picked.value = 'searchPlaylistItems';
+  queryOrId.value = id;
+  playlistName.value = playlistName;
+  isExploring.value = true;
+}
+
+async function getPage(direction) {
+  try {
+    loading.value = true;
+    let data = null;
+    if (picked.value === 'searchAll') {
+      data = await DataService.search(
+        queryOrId.value,
+        direction === 'next' ? nextPageToken.value : prevPageToken.value,
+      );
+      items.value = data.data.data.items;
+    } else if (picked.value === 'searchPlaylists') {
+      data = await DataService.getPlaylists(
+        queryOrId.value,
+        direction === 'next' ? nextPageToken.value : prevPageToken.value,
+      );
+      playlists.value = data.data.data.items;
+    } else if (picked.value === 'searchPlaylistItems') {
+      data = await DataService.getPlaylistItems(
+        queryOrId.value,
+        direction === 'next' ? nextPageToken.value : prevPageToken.value,
+      );
+      items.value = data.data.data.items;
+    }
+    prevPageToken.value = data.data.data.prevPageToken || '';
+    nextPageToken.value = data.data.data.nextPageToken || '';
+  } catch (err) {
+    errorMessage.value = 'Something went wrong!';
+  } finally {
+    loading.value = false;
+    window.scrollTo(0, 0);
+  }
+}
+
+function typing() {
+  playlists.value = [];
+  items.value = [];
+  if (queryOrId.substring(0, 2) === 'PL') {
+    picked.value = 'searchPlaylistItems';
+  } else if (queryOrId.substring(0, 2) === 'UC') {
+    picked.value = 'searchPlaylists';
+  } else {
+    picked.value = 'searchAll';
+  }
+}
+
+function empty() {
+  playlists.value = [];
+  items.value = [];
+  channelId.value = '';
+  prevPageToken.value = '';
+  nextPageToken.value = '';
+}
+
+function backToList() {
+  picked.value = 'searchPlaylists';
+  queryOrId.value = channelId;
+  playlistName.value = '';
+  isExploring.value = false;
+  prevPageToken.value = '';
+  nextPageToken.value = '';
+}
+
 </script>
 
 <style lang="scss" scoped>

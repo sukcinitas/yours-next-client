@@ -1,11 +1,13 @@
-import vue from '../main';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const checkIfAuthorizationError = (err) => {
   if ('response' in err) {
     if (err.response.status === 401) {
-      vue.$router.push({ name: 'EntrancePage' });
+      router.push({ name: 'EntranceView' });
     }
   }
 };
 
-export default checkIfAuthorizationError;
+export default checkIfAuthorizationError

@@ -47,42 +47,39 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CreatePlaylist',
-  data() {
-    return {
-      title: '',
-      isExtended: false,
-      errMsg: '',
-      successMsg: '',
-    };
-  },
-  methods: {
-    toggleExtended() {
-      this.errMsg = '';
-      this.successMsg = '';
-      if (!this.title) {
-        this.isExtended = !this.isExtended;
-      }
-    },
+<script setup>
+import {ref} from 'vue'
+import { useRouter } from 'vue-router';
+import { usePlaylistStore } from '../stores/playlist';
+const title = ref('')
+const isExtended = ref('')
+const errMsg = ref('')
+const successMsg = ref('')
+const playlistStore = usePlaylistStore()
+const router = useRouter()
 
-    async addPlaylist() {
-      try {
-        const result = await this.$store
-          .dispatch('playlist/addPlaylist', { title: this.title });
-        if (result.success) {
-          this.errMsg = '';
-          this.successMsg = result.successMsg;
-          setTimeout(() => this.$router.push({ path: `/playlist/${result.id}` }), 250);
-        }
-      } catch (err) {
-        this.successMsg = '';
-        this.errMsg = err.response.data.message;
-      }
-    },
-  },
-};
+function toggleExtended() {
+  errMsg.value = '';
+  successMsg.value = '';
+  if (!title.value) {
+    isExtended.value = !isExtended.value;
+  }
+}
+async function addPlaylist() {
+  try {
+    const result = await playlistStore.addPlaylist({ title: title.value });
+    if (result.success) {
+      errMsg.value = '';
+      successMsg.value = result.successMsg;
+      setTimeout(() => router.push({ path: `/playlist/${result.id}` }), 250);
+    }
+  } catch (err) {
+    console.log(err, 'err')
+    successMsg.value = '';
+    errMsg.value = err.response.data.message;
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>

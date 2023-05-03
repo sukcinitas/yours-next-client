@@ -1,36 +1,25 @@
 <template>
   <div>
-    <button
-        class="playlist__button"
-        @click="confirm"
-        title="Confirm"
-        >
-        <font-awesome-icon :icon="['fas', 'check']" />
+    <button class="playlist__button" @click="confirm" title="Confirm">
+      <font-awesome-icon :icon="['fas', 'check']" />
     </button>
-    <button
-        class="playlist__button"
-        @click="cancel"
-        title="Cancel"
-        >
-        <font-awesome-icon :icon="['fas', 'window-close']" />
+    <button class="playlist__button" @click="cancel" title="Cancel">
+      <font-awesome-icon :icon="['fas', 'window-close']" />
     </button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HeaderPanel',
   data() {
-    return {
-      errMsg: '',
-    };
+    return {};
   },
   methods: {
     confirm() {
-        this.$emit('delete');
+      this.$emit('delete');
     },
     cancel() {
-        this.$emit('cancelDeletion');
+      this.$emit('cancelDeletion');
     }
   },
 };

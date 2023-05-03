@@ -1,17 +1,17 @@
 <template>
   <div
     :class="[
-      isBottom ? 'members--bottom' : 'members',
-      isMessages ? 'members--messages' : '',
+      props.isBottom ? 'members--bottom' : 'members',
+      props.isMessages ? 'members--messages' : '',
     ]"
   >
     <div
       v-for="member in activeMembers"
       :key="member.emoji"
       :class="[
-        { members__moderator: moderator === member.name && !isMessages },
+        { members__moderator: moderator === member.name && !props.isMessages },
         'members__member',
-        { members__you: user === member.name && !isMessages },
+        { members__you: user === member.name && !props.isMessages },
       ]"
       @dblclick="makeModerator(member.name)"
       @mouseover="
@@ -37,14 +37,14 @@
           'members__tooltip--hidden':
             !isTooltipDisplayed || target !== member.emoji,
           'members__tooltip--bottom':
-            isTooltipDisplayed && target === member.emoji && isBottom,
+            isTooltipDisplayed && target === member.emoji && props.isBottom,
         }"
       >
         {{ user === member.name ? 'you' : member.name }}
-        <span v-if="isModerator && user !== member.name && !isMessages" class="members__line"
+        <span v-if="isModerator && user !== member.name && !props.isMessages" class="members__line"
         ></span>
         {{
-          isModerator && user !== member.name && !isMessages
+          isModerator && user !== member.name && !props.isMessages
             ? `double-click to make ${member.name} moderator`
             : ''
         }}
@@ -53,40 +53,38 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'MembersList',
-  props: ['isBottom', 'isMessages'],
-  data() {
-    return {
-      isTooltipDisplayed: false,
-      target: '',
-    };
-  },
-  computed: {
-    activeMembers() {
-      return this.$store.getters['group/activeMembers'];
-    },
-    isModerator() {
-      return this.$store.getters['group/isModerator'];
-    },
-    moderator() {
-      return this.$store.getters['group/moderator'];
-    },
-    user() {
-      return this.$store.getters['group/member'].name;
-    },
-  },
-  methods: {
-    makeModerator(name) {
-      if (this.isModerator && !this.isMessages) {
-        if (this.moderator !== name) {
-          this.$socket.emit('setModerator', name);
-        }
+<script setup>
+import { ref, computed } from 'vue'
+import { useGroupStore } from '../stores/group';
+const props = defineProps(['isBottom', 'isMessages'])
+const isTooltipDisplayed = ref(false)
+const target = ref('')
+const groupStore = useGroupStore()
+
+const activeMembers = computed(() => {
+  return groupStore.activeMembers;
+})
+
+const isModerator = computed(() => {
+  return groupStore.isModerator
+})
+
+const moderator = computed(() => {
+  return groupStore.moderator
+})
+
+const user = computed(() => {
+  return groupStore.member.name
+})
+
+function  makeModerator(name) {
+  if (isModerator.value && !props.isMessages) {
+    if (moderator.value !== name) {
+        // $socket.emit('setModerator', name);
       }
-    },
-  },
-};
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>

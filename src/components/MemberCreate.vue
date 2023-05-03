@@ -4,122 +4,124 @@
       Welcome to group
       <b class="create-member-form__heading--bold">{{ group }}</b>
     </h4>
-    <h6
-      v-show="!isShowingEmojiSelection"
-      class="create-member-form__subheading"
-    >
-      What will you name yourself, fellow?
-    </h6>
-    <div class="wrapper" v-show="!isShowingEmojiSelection">
-      <input
-        v-model="name"
-        type="text"
-        placeholder=""
-        :class="['create-member-form__input', errMsg ? 'input--error' : '']"
-        @input="() => {if(!name) this.errMsg = '' }"
-      />
+    <template v-if="step === 0">
+      <h6
+        class="create-member-form__subheading"
+      >
+        What will you name yourself, fellow?
+      </h6>
+      <div class="wrapper">
+        <input
+          v-model="name"
+          type="text"
+          placeholder=""
+          :class="['create-member-form__input', errors.name ? 'input--error' : '']"
+          @input="() => {if(!name) errors.name = '' }"
+        />
+        <button
+          class="create-member-form__button--narrow"
+          @click="checkIfMemberNameExists"
+          @keyup.enter="checkIfMemberNameExists"
+          :disabled="!name"
+          type="button"
+        >
+          >
+        </button>
+      </div>
+    </template>
+
+    <template v-else-if="step === 1">
+      <h6 class="create-member-form__subheading">
+        Choose an emoji
+      </h6>
+      <div class="create-member-form__emoji-box">
+        <button
+          v-for="(emoji, index) in emojisFreeToSet"
+          :key="index"
+          @click="chooseEmoji(emoji)"
+          type="button"
+          :class="[
+            selectedEmoji === emoji
+              ? 'create-member-form__button--selected-emoji'
+              : 'create-member-form__button--emoji',
+          ]"
+        >
+          {{ emoji }}
+        </button>
+      </div>
       <button
+        type="submit"
         class="create-member-form__button--narrow"
-        @click="checkIfMemberNameExists"
-        @keyup.enter="checkIfMemberNameExists"
-        :disabled="!name"
-        type="button"
+        :disabled="!selectedEmoji || !name"
+        ref="submitButton"
       >
         >
       </button>
-    </div>
+    </template>
 
-    <h6 class="create-member-form__subheading" v-show="isShowingEmojiSelection">
-      Choose an emoji
-    </h6>
-    <div class="create-member-form__emoji-box" v-show="isShowingEmojiSelection">
-      <button
-        v-for="(emoji, index) in emojisFreeToSet"
-        :key="index"
-        @click="chooseEmoji(emoji)"
-        type="button"
-        :class="[
-          selectedEmoji === emoji
-            ? 'create-member-form__button--selected-emoji'
-            : 'create-member-form__button--emoji',
-        ]"
-      >
-        {{ emoji }}
-      </button>
-    </div>
-    <button
-      v-show="isShowingEmojiSelection"
-      type="submit"
-      class="create-member-form__button--narrow"
-      :disabled="!selectedEmoji || !name"
-      ref="submitButton"
-    >
-      >
-    </button>
     <p
-      v-if="errMsg && !isShowingEmojiSelection && name"
+      v-if="errors.name && step === 0 && name"
       class="create-member-form__message--error"
     >
-      {{ errMsg }}
+      {{ errors.name }}
     </p>
   </form>
 </template>
 
-<script>
-export default {
-  name: 'MemberCreate',
-  data() {
-    return {
-      name: '',
-      selectedEmoji: '',
-      errMsg: '',
-      isShowingEmojiSelection: false,
-    };
-  },
-  computed: {
-    group() {
-      return this.$store.getters['group/name'];
-    },
-    emojisFreeToSet() {
-      return this.$store.getters['group/emojisFreeToSet'];
-    },
-    memberNameExists() {
-      const name = this.name.toLowerCase();
-      const activeMembersNames = this.$store.getters[
-        'group/activeMembersNames'
-      ].map(memberName => memberName.toLowerCase());
-      return activeMembersNames.indexOf(name) >= 0;
-    },
-  },
-  methods: {
-    checkIfMemberNameExists() {
-      if (this.memberNameExists) {
-        this.errMsg = 'Name is already in use!';
-      } else {
-        this.isShowingEmojiSelection = true;
-      }
-    },
+<script setup>
+import { ref, reactive, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useGroupStore } from '../stores/group';
 
-    chooseEmoji(emoji) {
-      this.selectedEmoji = emoji;
-      this.$refs.submitButton.focus();
-    },
+const groupStore = useGroupStore()
+const router = useRouter()
 
-    addMember() {
-      if (this.memberNameExists) {
-        // extra if names are being created in parallel
-        this.errMsg = 'Another member at this very moment used this name! Please try another one!';
-        this.isShowingEmojiSelection = false;
-        return;
-      }
-      this.$store.dispatch('group/addMember', {
-        name: this.name,
-        emoji: this.selectedEmoji,
-      });
-      this.$router.push({ name: 'MainPage' });
-    },
-  },
-};
+const name = ref('')
+const selectedEmoji = ref(undefined)
+const errors = reactive({
+  name: '',
+})
+const step = ref(0)
+const submitButton = ref(null)
+
+const group = computed(() => {
+  return groupStore.name;
+})
+
+const emojisFreeToSet = computed(() => {
+  return groupStore.emojisFreeToSet;
+})
+
+const memberNameExists = computed(() => {
+  const activeMembersNames = groupStore.activeMembersNames.map(memberName => memberName.toLowerCase());
+  return activeMembersNames.indexOf(name.value.toLowerCase()) >= 0;
+})
+
+function checkIfMemberNameExists() {
+  if (memberNameExists.value) {
+    errors.name = 'Name is already in use!';
+  } else {
+    errors.name = '';
+    step.value++;
+  }
+}
+
+function chooseEmoji(emoji) {
+  selectedEmoji.value = emoji;
+  submitButton.value.focus();
+}
+
+function addMember() {
+  if (memberNameExists.value) {
+    // extra if names are being created in parallel
+    errors.name = 'Another member at this very moment used this name! Please try another one!';
+    step.value = 0 
+    return;
+  }
+  groupStore.addMember({ name, emoji: selectedEmoji });
+  router.push({ name: 'MainPage' });
+}
+
 </script>
 
 <style lang="scss" scoped>

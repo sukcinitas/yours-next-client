@@ -22,23 +22,23 @@
 </template>
 
 <script>
-import OngoingVideoPlayer from '../components/OngoingVideoPlayer';
-import VideoItemsData from '../components/VideoItemsData';
-import MembersList from '../components/MembersList';
-import MessageBox from '../components/MessageBox';
-import HeaderPanel from '../components/HeaderPanel';
-import LoadingAnimation from '../components/LoadingAnimation';
+// import OngoingVideoPlayer from '../components/OngoingVideoPlayer.vue';
+// import VideoItemsData from '../components/VideoItemsData.vue';
+// import MembersList from '../components/MembersList.vue';
+// import MessageBox from '../components/MessageBox.vue';
+// import HeaderPanel from '../components/HeaderPanel.vue';
+// import LoadingAnimation from '../components/LoadingAnimation.vue';
 
 export default {
-  name: 'MainPlaylist',
-  components: {
-    OngoingVideoPlayer,
-    VideoItemsData,
-    MembersList,
-    MessageBox,
-    HeaderPanel,
-    LoadingAnimation,
-  },
+  // name: 'MainPlaylist',
+  // components: {
+  //   OngoingVideoPlayer,
+  //   VideoItemsData,
+  //   MembersList,
+  //   MessageBox,
+  //   HeaderPanel,
+  //   LoadingAnimation,
+  // },
   data() {
     return {
       loading: false,
@@ -86,7 +86,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.isModerator) {
       this.$socket.emit('setOngoingPlaylist', {
         id: '',

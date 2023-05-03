@@ -1,9 +1,7 @@
 <template>
-  <div
-   :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]"
-  >
+  <div :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]">
     <members-list :isMessages="true"></members-list>
-    <div class="message-box__messages" ref="messages">
+    <div class="message-box__messages" ref="messagesBox">
       <div
         :class="[
           'message-box__message',
@@ -74,70 +72,69 @@
   </div>
 </template>
 
-<script>
-import MembersList from './MembersList';
+<script setup>
+import { onMounted, onUpdated, ref, watch, computed } from 'vue';
+import MembersList from './MembersList.vue';
+import { useMessagesStore } from '../stores/messages';
+import { useGroupStore } from '../stores/group';
 
-export default {
-  name: 'MessageBox',
-  components: { MembersList },
-  data() {
-    return {
-      message: '',
-      messagesWillBeUpdated: false,
-    };
-  },
-  computed: {
-    messages() {
-      return this.$store.getters['messages/messages'];
-    },
-    emojis() {
-      return this.$store.getters['messages/messageEmojis'];
-    },
-    member() {
-      return this.$store.getters['group/member'];
-    },
-    isMessagesTurnedOn() {
-      return this.$store.getters['messages/chatState'];
-    },
-  },
-  watch: {
-    messages() {
-      this.messagesWillBeUpdated = true;
-    },
-  },
-  methods: {
-    handleSubmit() {
-      this.$socket.emit('sendMessage', {
-        message: this.message,
-        member: this.member,
-      });
-      this.message = '';
-    },
+const messagesStore = useMessagesStore()
+const groupStore = useGroupStore()
 
-    addEmoji(emoji) {
-      this.message = `${this.message} ${emoji}`;
-      this.$refs.textarea.focus();
-    },
+const message = ref('')
+const messagesWillBeUpdated = ref(false)
+const textarea = ref(null)
+const messagesBox = ref(null)
 
-    scrollTop() {
-      this.$refs.messages.scrollTop =
-        this.$refs.messages.scrollHeight + this.$refs.messages.clientHeight;
-    },
+const messages = computed(() => {
+  return messagesStore.messages
+})
+const emojis = computed(() => {
+  return messagesStore.messageEmojis
+})
+const member = computed(() => {
+  return groupStore.member
+})
+const isMessagesTurnedOn = computed(() => {
+  return messagesStore.chatState
+})
 
-    toggleChat() {
-      this.$store.commit('messages/setChatState');
-    },
-  },
-  updated() {
-    if (this.messagesWillBeUpdated) {
-      this.scrollTop();
-      this.messagesWillBeUpdated = false;
-    }
-  },
-  mounted() {
-    this.scrollTop();
-  },
-};
+function handleSubmit() {
+  // $socket.emit('sendMessage', {
+  //   message,
+  //   member,
+  // });
+  message.value = '';
+}
+
+function addEmoji(emoji) {
+  message.value = `${message.value} ${emoji}`;
+  textarea.value.focus();
+}
+
+function scrollTop() {
+  messagesBox.value.scrollTop = messagesBox.value.scrollHeight + messagesBox.value.clientHeight;
+}
+
+function toggleChat() {
+  messagesStore.setChatState()
+}
+
+onUpdated(() => {
+  if (messagesWillBeUpdated.value) {
+    scrollTop();
+    messagesWillBeUpdated.value = false;
+  }
+})
+
+onMounted(() => {
+  scrollTop();
+})
+
+watch(messages, () => {
+  messagesWillBeUpdated.value = true
+})
+
 </script>
 
 <style lang="scss">

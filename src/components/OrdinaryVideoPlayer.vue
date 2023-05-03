@@ -36,63 +36,56 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'OrdinaryVideoPlayer',
-  data() {
-    return {
-      playerVars: {
-        autoplay: 1,
-        color: 'red',
-        controls: 1,
-      },
-      message: '',
-    };
-  },
-  computed: {
-    isModerator() {
-      return this.$store.getters['group/isModerator'];
-    },
-    index() {
-      return this.$store.getters['mainplaylist/nowPlayingVideoIndex'];
-    },
-    videoId() {
-      return this.playlist[this.index];
-    },
-    playlist() {
-      return this.$store.getters['mainplaylist/playlist'];
-    },
-  },
-  methods: {
-    ended() {
-      this.end();
-    },
+<script setup>
+import { reactive, computed } from 'vue'
+import { useMainPlaylistStore } from '../stores/mainplaylist';
+import { useGroupStore } from '../stores/group';
 
-    end() {
-      if (this.index === this.playlist.length - 1) {
-        return;
-      }
-      this.$store.commit(
-        'mainplaylist/changeNowPlayingVideoIndex',
-        this.index + 1,
-      );
-    },
+const groupStore = useGroupStore()
+const mainplaylistStore = useMainPlaylistStore()
 
-    prevVideo() {
-      this.$store.commit(
-        'mainplaylist/changeNowPlayingVideoIndex',
-        this.index - 1,
-      );
-    },
+const playerVars = reactive({
+  autoplay: 1,
+  color: 'red',
+  controls: 1,
+})
+// const message = ref('')
 
-    nextVideo() {
-      this.$store.commit(
-        'mainplaylist/changeNowPlayingVideoIndex',
-        this.index + 1,
-      );
-    },
-  },
-};
+const isModerator = computed(() => {
+  return groupStore.isModerator
+})
+
+const index = computed(() => {
+  return mainplaylistStore.nowPlayingVideoIndex
+})
+
+const playlist = computed(() => {
+  return mainplaylistStore.playlist
+})
+
+const videoId = computed(() => {
+  return playlist[index.value]
+})
+
+function ended() {
+  end()
+}
+
+function end() {
+  if (index.value === playlist.value.length - 1) {
+    return;
+  }
+  mainplaylistStore.changeNowPlayingVideoIndex(index.value + 1);
+}
+
+function prevVideo() {
+  mainplaylistStore.changeNowPlayingVideoIndex(this.index - 1);
+}
+
+function nextVideo() {
+  mainplaylistStore.changeNowPlayingVideoIndex(this.index + 1);
+}
+
 </script>
 
 <style lang="scss" scoped>
