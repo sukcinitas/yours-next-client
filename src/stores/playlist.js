@@ -11,7 +11,6 @@ export const usePlaylistStore = defineStore('playlist', {
   }),
   actions: {
     socketUpdatePlaylists({ playlists }) {
-      console.log('playlists')
       this.playlists = playlists;
     },
 

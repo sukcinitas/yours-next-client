@@ -20,7 +20,7 @@ const router = useRouter()
 async function leave() {
   try {
     await groupStore.resetState();
-    router.push({ name: 'EntrancePage' });
+    router.push({ name: 'EntranceView' });
   } catch (err) {
     // this.errors.leave = err.message;
   }

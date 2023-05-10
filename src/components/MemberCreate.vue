@@ -60,10 +60,16 @@
     </template>
 
     <p
-      v-if="errors.name && step === 0 && name"
+      v-if="errors.name && step === 0"
       class="create-member-form__message--error"
     >
       {{ errors.name }}
+    </p>
+    <p
+      v-if="errors.emoji && step === 1"
+      class="create-member-form__message--error"
+    >
+      {{ errors.emoji }}
     </p>
   </form>
 </template>
@@ -80,6 +86,7 @@ const name = ref('')
 const selectedEmoji = ref(undefined)
 const errors = reactive({
   name: '',
+  emoji: '',
 })
 const step = ref(0)
 const submitButton = ref(null)
@@ -118,7 +125,10 @@ function addMember() {
     step.value = 0 
     return;
   }
-  console.log(selectedEmoji.value)
+  if (!selectedEmoji.value) {
+    errors.emoji = 'Emoji must be selected!'
+    return;
+  }
   groupStore.addMember({ name: name.value, emoji: selectedEmoji.value });
   router.push({ name: 'MainView' });
 }

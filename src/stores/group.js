@@ -110,7 +110,6 @@ export const useGroupStore = defineStore('group', {
         },
     
         socketConnect() {
-            console.log('hey')
             this.persist();
         },
     
@@ -119,7 +118,6 @@ export const useGroupStore = defineStore('group', {
         },
     
         socketSetInitialStateSocket(payload) {
-            console.log('initial state', payload)
             const messagesStore = useMessagesStore()
             const mainplaylistStore = useMainPlaylistStore()
             this.setInitialState(payload.group);
@@ -145,7 +143,6 @@ export const useGroupStore = defineStore('group', {
         },
 
         setName(name) {
-            console.log('name')
             this.name = name;
         },
         setModerator(payload) {
@@ -169,7 +166,7 @@ export const useGroupStore = defineStore('group', {
             this.activeMembers = payload.activeMembers;
             this.moderator = payload.moderator;
         },
-        resetState() {
+        socketResetState() {
             this.activeMembers = [];
             this.name = '';
             this.member = {
@@ -188,7 +185,6 @@ export const useGroupStore = defineStore('group', {
                 if (!group || !username || !userEmoji) {
                   return;
                 }
-                console.log(group)
                 this.setName(group);
                 socket.emit('getInitialState', { name: group });
                 socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
@@ -201,25 +197,3 @@ export const useGroupStore = defineStore('group', {
           },
     },
 })
-
-// const persist = async () => {
-//     try {
-//       const { data } = await GroupService.isLoggedIn();
-//       if (data.success) {
-//         const group = data.group;
-//         const username = sessionStorage.getItem('username');
-//         const userEmoji = sessionStorage.getItem('userEmoji');
-//         if (!group || !username || !userEmoji) {
-//           return;
-//         }
-//         console.log(group)
-//         this.setName(group);
-//         socket.emit('getInitialState', { name: group });
-//         socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
-//         this.setMember({ name: username, emoji: userEmoji });
-//         socket.emit('addMember', { name: username, emoji: userEmoji });
-//       }
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };

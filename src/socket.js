@@ -25,17 +25,12 @@ socket.on("connect", () => {
   groupStore.socketConnect()
 });
 
-socket.on("disconnect", () => {
-  console.log('hey')
-});
-
 socket.on("reconnecting", () => {
   const groupStore = useGroupStore()
   groupStore.socketReconnecting()
 });
 
 socket.on("setInitialState", (payload) => {
-  console.log('cia')
   const groupStore = useGroupStore()
   groupStore.socketSetInitialStateSocket(payload)
 });
@@ -62,7 +57,6 @@ socket.on("removeMember", (payload) => {
 
 socket.on('updatePlaylists', (payload) => {
   const playlistStore = usePlaylistStore()
-  console.log(payload, 'socket playlists')
   playlistStore.socketUpdatePlaylists(payload)
 })
 
