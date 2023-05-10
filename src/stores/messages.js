@@ -10,17 +10,9 @@ export const useMessagesStore = defineStore('messages', {
     chatState() {
       return this.isChatTurnedOn;
     },
-  
-    messages() {
-      return this.messages;
-    },
-  
-    messageEmojis() {
-      return this.messageEmojis;
-    },
   },
   actions: {
-    setMessage({ message, member }) {
+    socketSetMessage({ message, member }) {
         if (this.messages.length === 0) {
           this.messages = [
             ...this.messages,

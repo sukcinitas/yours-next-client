@@ -16,10 +16,10 @@ export default {
   },
   methods: {
     confirm() {
-      this.$emit('delete');
+      this.$emit('confirm');
     },
     cancel() {
-      this.$emit('cancelDeletion');
+      this.$emit('cancel');
     }
   },
 };

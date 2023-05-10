@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import GroupService from '../services/group.service';
 import { useMainPlaylistStore } from './mainplaylist';
 import { useMessagesStore } from './messages';
+import { socket } from "@/socket";
 
 export const useGroupStore = defineStore('group', {
     state: () => ({
@@ -46,7 +47,7 @@ export const useGroupStore = defineStore('group', {
             if (this.member && this.moderator === this.member.name) {
                 return 'you';
             } 
-            const moderator = this.activeMembers.filter(member => member.name === moderator);
+            const moderator = this.activeMembers.filter(member => member.name === this.moderator);
             return moderator.length === 0 ? '' : moderator[0].emoji;
         },
         emojisFreeToSet() {
@@ -64,9 +65,9 @@ export const useGroupStore = defineStore('group', {
         async authenticate(payload) {
             try {
               await GroupService.authenticate(payload);
-              this.setName({ name: payload.name });
-            //   vue.$socket.connect();
-            //   vue.$socket.emit('getInitialState', { name: payload.name });
+              this.setName(payload.name);
+              socket.connect();
+              socket.emit('getInitialState', { name: payload.name });
               return { success: true };
             } catch (err) {
               throw err;
@@ -76,9 +77,9 @@ export const useGroupStore = defineStore('group', {
         async createGroup(payload) {
             try {
                 await GroupService.create(payload);
-                this.setName({ name: payload.name });
-                // vue.$socket.connect();
-                // vue.$socket.emit('getInitialState', { name: payload.name });
+                this.setName(payload.name);
+                socket.connect();
+                socket.emit('getInitialState', { name: payload.name });
                 return { success: true };
             } catch (err) {
                 throw err;
@@ -87,36 +88,38 @@ export const useGroupStore = defineStore('group', {
     
         addMember(payload) {
             const { name, emoji } = payload;
-                // vue.$socket.emit('setMember', {
-                //     name,
-                //     emoji,
-                // }); // only this socket
+            socket.emit('setMember', {
+                name,
+                emoji,
+            }); // only this socket
             sessionStorage.setItem('username', name);
             sessionStorage.setItem('userEmoji', emoji);
             this.setMember({ name, emoji });
-            // vue.$socket.emit('addMember', { name, emoji });
+            socket.emit('addMember', { name, emoji });
         },
     
         async resetState() {
             try {
                 await GroupService.logout();
                 this.removeMember({ name: this.member.name });
-                // vue.$socket.disconnect();
+                socket.disconnect();
                 sessionStorage.clear();
             } catch (err) {
                 throw err;
             }
         },
     
-        SOCKET_connect() {
-            persist();
+        socketConnect() {
+            console.log('hey')
+            this.persist();
         },
     
-        SOCKET_reconnecting() {
-            persist();
+        socketReconnecting() {
+            this.persist();
         },
     
-        SOCKET_setInitialState(payload) {
+        socketSetInitialStateSocket(payload) {
+            console.log('initial state', payload)
             const messagesStore = useMessagesStore()
             const mainplaylistStore = useMainPlaylistStore()
             this.setInitialState(payload.group);
@@ -124,25 +127,26 @@ export const useGroupStore = defineStore('group', {
             mainplaylistStore.setOngoingPlaylist(payload.group.ongoingPlaylist);
         },
     
-        SOCKET_setModerator(payload) {
+        socketSetModerator(payload) {
             this.setModerator({ name: payload.name });
         },
     
-        SOCKET_addMember(payload) {
+        socketAddMember(payload) {
             this.setActiveMembers({ name: payload.name, emoji: payload.emoji });
         },
     
-        SOCKET_setMember(payload) {
+        socketSetMember(payload) {
             // only to this socket
             this.setMember({ name: payload.name, emoji: payload.emoji });
         },
     
-        SOCKET_removeMember(payload) {
+        socketRemoveMember(payload) {
             this.removeMember({ name: payload.client });
         },
 
-        setName(payload) {
-            this.name = payload.name;
+        setName(name) {
+            console.log('name')
+            this.name = name;
         },
         setModerator(payload) {
             this.moderator = payload.name;
@@ -174,26 +178,48 @@ export const useGroupStore = defineStore('group', {
             };
             this.moderator = '';
         },
+        async persist() {
+            try {
+              const { data } = await GroupService.isLoggedIn();
+              if (data.success) {
+                const group = data.group;
+                const username = sessionStorage.getItem('username');
+                const userEmoji = sessionStorage.getItem('userEmoji');
+                if (!group || !username || !userEmoji) {
+                  return;
+                }
+                console.log(group)
+                this.setName(group);
+                socket.emit('getInitialState', { name: group });
+                socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
+                this.setMember({ name: username, emoji: userEmoji });
+                socket.emit('addMember', { name: username, emoji: userEmoji });
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          },
     },
 })
 
-const persist = async () => {
-    try {
-      const { data } = await GroupService.isLoggedIn();
-      if (data.success) {
-        const group = data.group;
-        const username = sessionStorage.getItem('username');
-        const userEmoji = sessionStorage.getItem('userEmoji');
-        if (!group || !username || !userEmoji) {
-          return;
-        }
-        this.setName({ name: group });
-        // vue.$socket.emit('getInitialState', { name: group });
-        // vue.$socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
-        this.setMember({ name: username, emoji: userEmoji });
-        // vue.$socket.emit('addMember', { name: username, emoji: userEmoji });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+// const persist = async () => {
+//     try {
+//       const { data } = await GroupService.isLoggedIn();
+//       if (data.success) {
+//         const group = data.group;
+//         const username = sessionStorage.getItem('username');
+//         const userEmoji = sessionStorage.getItem('userEmoji');
+//         if (!group || !username || !userEmoji) {
+//           return;
+//         }
+//         console.log(group)
+//         this.setName(group);
+//         socket.emit('getInitialState', { name: group });
+//         socket.emit('setMember', { name: username, emoji: userEmoji }); // only this socket
+//         this.setMember({ name: username, emoji: userEmoji });
+//         socket.emit('addMember', { name: username, emoji: userEmoji });
+//       }
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };

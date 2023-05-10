@@ -26,7 +26,7 @@ async function leave() {
   }
 }
 function goHome() {
-  router.push({ name: 'MainPage' });
+  router.push({ name: 'MainView' });
 }
 function goBack() {
   router.go(-1);

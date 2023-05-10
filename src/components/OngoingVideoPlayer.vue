@@ -51,6 +51,8 @@
 import { ref, reactive, onMounted, onUpdated, watch, computed } from 'vue'
 import { useMainPlaylistStore } from '../stores/mainplaylist';
 import { useGroupStore } from '../stores/group';
+import { socket } from "@/socket";
+
 const mainplaylistStore = useMainPlaylistStore()
 const groupStore = useGroupStore()
 
@@ -95,11 +97,11 @@ async function ended() {
 }
 
 function pause() {
-  // this.$socket.emit('toggleOngoingPlaylist', { paused: true });
+  socket.emit('toggleOngoingPlaylist', { paused: true });
 }
 
 function play() {
-  // $socket.emit('toggleOngoingPlaylist', { paused: false });
+  socket.emit('toggleOngoingPlaylist', { paused: false });
 }
 
 function fixatePause() {
@@ -120,7 +122,7 @@ function end() {
     return;
   }
   if (isModerator) {
-    $socket.emit('changeOngoingPlaylistVideoIndex', {
+    socket.emit('changeOngoingPlaylistVideoIndex', {
       videoIndex: this.index + 1,
     });
   }
@@ -128,17 +130,17 @@ function end() {
 
 function prevVideo() {
   if (this.isModerator) {
-    // this.$socket.emit('changeOngoingPlaylistVideoIndex', {
-    //   videoIndex: this.index - 1,
-    // });
+    socket.emit('changeOngoingPlaylistVideoIndex', {
+      videoIndex: this.index - 1,
+    });
   }
 }
 
 function nextVideo() {
   if (this.isModerator) {
-    // this.$socket.emit('changeOngoingPlaylistVideoIndex', {
-    //   videoIndex: this.index + 1,
-    // });
+    socket.emit('changeOngoingPlaylistVideoIndex', {
+      videoIndex: this.index + 1,
+    });
   }
 }
 
@@ -151,7 +153,7 @@ onMounted(async () => {
   // and then I seekTo a certain time
   setTimeout(() => {
     if (!isModerator) {
-      // $socket.emit('userJoinsOngoingPlaylist');
+      socket.emit('userJoinsOngoingPlaylist');
     }
   }, 5000);
 })
@@ -174,12 +176,12 @@ watch('time', () => {
 
 watch('userJoined', async () => {
   const time = await youtube.value.player.getCurrentTime();
-  // $socket.emit('setOngoingPlaylist', {
-  //   id: $route.params.id,
-  //   videoIndex: index,
-  //   time,
-  //   paused: false,
-  // });
+  socket.emit('setOngoingPlaylist', {
+    id: $route.params.id,
+    videoIndex: index,
+    time,
+    paused: false,
+  });
   mainplaylist.setUserJoined({ state: false });
 })
 

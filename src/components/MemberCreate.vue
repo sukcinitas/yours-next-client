@@ -118,8 +118,9 @@ function addMember() {
     step.value = 0 
     return;
   }
-  groupStore.addMember({ name, emoji: selectedEmoji });
-  router.push({ name: 'MainPage' });
+  console.log(selectedEmoji.value)
+  groupStore.addMember({ name: name.value, emoji: selectedEmoji.value });
+  router.push({ name: 'MainView' });
 }
 
 </script>

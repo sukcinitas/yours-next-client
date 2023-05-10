@@ -19,9 +19,10 @@
         title="Delete?"
       >
         <font-awesome-icon :icon="['fas', 'trash']" />
-        <deletion-box 
-          :class="isDeletionBoxShown ? 'deletion-box' : 'deletion-box deletion-box--hidden'"
-          @delete="deletePlaylist(props.playlist._id)" 
+        <deletion-box
+          class="deletion-box"
+          :class="{ 'deletion-box--hidden': !isDeletionBoxShown}"
+          @confirm="deletePlaylist(props.playlist._id)" 
           @cancel="cancelDeletion">
         </deletion-box>
       </button>
@@ -32,22 +33,25 @@
 <script setup>
 import { ref } from 'vue'
 import { useGroupStore } from '../stores/group';
-// import { usePlaylistStore } from '../stores/playlist';
+import { usePlaylistStore } from '../stores/playlist';
 import DeletionBox from './DeletionBox.vue';
 import formatDate from '../util/formatDate';
+import { socket } from "@/socket";
 
 const props = defineProps(['playlist'])
 const groupStore = useGroupStore()
-// const playlistStore = usePlaylistStore()
+const playlistStore = usePlaylistStore()
 const isDeletionBoxShown = ref(false)
 const errMsg = ref('')
 
-async function deletePlaylist(_id) {
+async function deletePlaylist(id) {
   try {
-    // const { playlists } = playlistStore.deletePlaylist({ id });
-    // $socket.emit('updatePlaylists', { playlists });
+    await playlistStore.deletePlaylist({ id });
   } catch (err) {
-    errMsg.value = err.response.data.message;
+    errMsg.value = err?.response?.data?.message || 'Oops...';
+    setTimeout(() => {
+      errMsg.value = ''
+    }, 2000);
   }
 }
 

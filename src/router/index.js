@@ -13,25 +13,25 @@ const router = createRouter({
   routes: [
     {
       path: '/main',
-      name: 'MainPage',
+      name: 'MainView',
       component: MainView,
       meta: { requiresAuth: true },
     },
     {
       path: '/mainplaylist/:id',
-      name: 'MainPlaylist',
+      name: 'MainPlaylistView',
       component: MainPlaylistView,
       meta: { requiresAuth: true },
     },
     {
       path: '/playlist/:id',
-      name: 'OrdinaryPlaylist',
+      name: 'OrdinaryPlaylistView',
       component: OrdinaryPlaylistView,
       meta: { requiresAuth: true },
     },
     {
       path: '/search/:id',
-      name: 'SearchField',
+      name: 'SearchView',
       component: SearchView,
       meta: { requiresAuth: true },
     },
@@ -58,9 +58,7 @@ router.beforeEach((to, _from, next) => {
         !groupStore.member.name &&
         !groupStore.member.emoji
       ) {
-        next({ name: 'EntrancePage' });
-      } else if (groupStore.name && !groupStore.member.name) {
-        next({ name: 'MemberCreate' });
+        next({ name: 'EntranceView' });
       } else {
         next();
       }
@@ -77,7 +75,7 @@ router.beforeEach((to, _from, next) => {
         groupStore.member.name &&
         groupStore.member.emoji
       ) {
-        next({ name: 'MainPage' });
+        next({ name: 'MainView' });
       } else {
         next();
       }

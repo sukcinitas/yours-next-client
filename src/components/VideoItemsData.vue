@@ -49,6 +49,7 @@ import { ref, defineProps, watch, computed } from 'vue'
 import { useGroupStore } from '../stores/group';
 import { useMainPlaylistStore } from '../stores/mainplaylist';
 import LoadingAnimation from './LoadingAnimation.vue';
+import { socket } from "@/socket";
 
 const groupStore = useGroupStore()
 const mainplaylistStore = useMainPlaylistStore()
@@ -89,9 +90,9 @@ watch(activeIndex, (newValue, oldValue) => {
 function changeIndex(index) {
   if (props.isOngoing) {
     if (isModerator) {
-      // $socket.emit('changeOngoingPlaylistVideoIndex', {
-      //   videoIndex: index,
-      // });
+      socket.emit('changeOngoingPlaylistVideoIndex', {
+        videoIndex: index,
+      });
     }
   } else {
     mainplaylistStore.changeNowPlayingVideoIndex(index);
@@ -101,13 +102,13 @@ function changeIndex(index) {
 async function removeItemFromPlaylist(videoId) {
   try {
     const { items } = await mainplaylistStore.removeItemFromPlaylist({ videoId, id: this.$route.params.id });
-    // $socket.emit('updatePlaylist', {
-    //   idsArray: items,
-    //   itemData: videoId,
-    //   type: 'deletion',
-    //   alreadyIn: false,
-    //   id: this.$route.params.id,
-    // });
+    socket.emit('updatePlaylist', {
+      idsArray: items,
+      itemData: videoId,
+      type: 'deletion',
+      alreadyIn: false,
+      id: this.$route.params.id,
+    });
     nextTick(() => {
       const isRemovedBefore = playlist.indexOf(videoId) < this.activeIndex;
       if (isRemovedBefore) {

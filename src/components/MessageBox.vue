@@ -6,14 +6,14 @@
         :class="[
           'message-box__message',
           {
-            'message-box__message--right': member.name === message.member.name,
+            'message-box__message--right': groupStore.member.name === message.member.name,
           },
         ]"
         v-for="(message, index) in messages"
         :key="index"
       >
         <div
-          :class="[member.name === message.member.name ?
+          :class="[groupStore.member.name === message.member.name ?
            'message-box__message-member--right' : 'message-box__message-member']"
         >
           <p class="message-box__message-name">{{ message.member.name }}</p>
@@ -24,7 +24,7 @@
           <p
             v-for="(n, index) in message.message"
             :key="index"
-            :class="[member.name === message.member.name ?
+            :class="[groupStore.member.name === message.member.name ?
            'message-box__message-content--right' : 'message-box__message-content']"
             >
             {{n}}
@@ -77,6 +77,7 @@ import { onMounted, onUpdated, ref, watch, computed } from 'vue';
 import MembersList from './MembersList.vue';
 import { useMessagesStore } from '../stores/messages';
 import { useGroupStore } from '../stores/group';
+import { socket } from "@/socket";
 
 const messagesStore = useMessagesStore()
 const groupStore = useGroupStore()
@@ -92,18 +93,16 @@ const messages = computed(() => {
 const emojis = computed(() => {
   return messagesStore.messageEmojis
 })
-const member = computed(() => {
-  return groupStore.member
-})
+
 const isMessagesTurnedOn = computed(() => {
   return messagesStore.chatState
 })
 
 function handleSubmit() {
-  // $socket.emit('sendMessage', {
-  //   message,
-  //   member,
-  // });
+  socket.emit('sendMessage', {
+    message: message.value,
+    member: groupStore.member,
+  });
   message.value = '';
 }
 

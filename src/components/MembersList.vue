@@ -56,6 +56,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useGroupStore } from '../stores/group';
+import { socket } from "@/socket";
+
 const props = defineProps(['isBottom', 'isMessages'])
 const isTooltipDisplayed = ref(false)
 const target = ref('')
@@ -80,7 +82,7 @@ const user = computed(() => {
 function  makeModerator(name) {
   if (isModerator.value && !props.isMessages) {
     if (moderator.value !== name) {
-        // $socket.emit('setModerator', name);
+        socket.emit('setModerator', name);
       }
   }
 }

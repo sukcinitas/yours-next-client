@@ -3,13 +3,15 @@ import PlaylistService from '../services/playlist.service';
 import GroupService from '../services/group.service';
 import checkIfAuthorizationError from '../util/checkIfAuthorizationError';
 import { useGroupStore } from './group';
+import { socket } from "@/socket";
 
 export const usePlaylistStore = defineStore('playlist', {
   state: () => ({
     playlists: [],
   }),
   actions: {
-    SOCKET_updatePlaylists({ playlists }) {
+    socketUpdatePlaylists({ playlists }) {
+      console.log('playlists')
       this.playlists = playlists;
     },
 
@@ -33,7 +35,7 @@ export const usePlaylistStore = defineStore('playlist', {
         });
         if (data.success) {
           const playlists = [...this.playlists, data.playlist];
-          // this._vm.$socket.emit('updatePlaylists', { playlists });
+          socket.emit('updatePlaylists', { playlists });
           return {
             success: true,
             successMsg: data.message,
@@ -52,6 +54,7 @@ export const usePlaylistStore = defineStore('playlist', {
       try {
         await PlaylistService.delete(payload.id);
         const playlists = this.playlists.filter(playlist => playlist._id !== payload.id);
+        socket.emit('updatePlaylists', { playlists });
         return { playlists };
       } catch (err) {
         checkIfAuthorizationError(err);

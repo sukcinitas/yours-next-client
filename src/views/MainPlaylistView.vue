@@ -28,6 +28,7 @@
 // import MessageBox from '../components/MessageBox.vue';
 // import HeaderPanel from '../components/HeaderPanel.vue';
 // import LoadingAnimation from '../components/LoadingAnimation.vue';
+import { socket } from "@/socket";
 
 export default {
   // name: 'MainPlaylist',
@@ -59,7 +60,7 @@ export default {
   async mounted() {
     const { id } = this.$route.params;
     if (this.isModerator) {
-      this.$socket.emit('setOngoingPlaylist', {
+      socket.emit('setOngoingPlaylist', {
         id,
         videoIndex: 0,
         time: 0,
@@ -88,7 +89,7 @@ export default {
 
   beforeUnmount() {
     if (this.isModerator) {
-      this.$socket.emit('setOngoingPlaylist', {
+      socket.emit('setOngoingPlaylist', {
         id: '',
         videoIndex: 0,
         time: 0,

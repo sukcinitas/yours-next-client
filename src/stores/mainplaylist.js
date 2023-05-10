@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import PlaylistService from '../services/playlist.service';
 import DataService from '../services/data.service';
 import checkIfAuthorizationError from '../util/checkIfAuthorizationError';
+import { socket } from "@/socket";
 
 export const useMainPlaylistStore = defineStore('mainplaylist', {
     state: () => ({
@@ -170,13 +171,13 @@ export const useMainPlaylistStore = defineStore('mainplaylist', {
               const items = [...this.idsArray, payload.item];
               const datum = await DataService.getVideos(payload.item);
               const itemData = datum.data.data.items[0];
-              // this._vm.$socket.emit('updatePlaylist', {
-              //   idsArray: items,
-              //   itemData,
-              //   type: 'addition',
-              //   alreadyIn: false,
-              //   id: payload.id,
-              // });
+              socket.emit('updatePlaylist', {
+                idsArray: items,
+                itemData,
+                type: 'addition',
+                alreadyIn: false,
+                id: payload.id,
+              });
               return { successMsg: 'Successfully added!' };
             } catch (err) {
               checkIfAuthorizationError(err);
