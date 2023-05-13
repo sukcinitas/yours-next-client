@@ -1,28 +1,15 @@
 <template>
   <div>
-    <button class="playlist__button" @click="confirm" title="Confirm">
+    <button class="playlist__button" @click="emit('confirm')" title="Confirm">
       <font-awesome-icon :icon="['fas', 'check']" />
     </button>
-    <button class="playlist__button" @click="cancel" title="Cancel">
+    <button class="playlist__button" @click="emit('cancel')" title="Cancel">
       <font-awesome-icon :icon="['fas', 'window-close']" />
     </button>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {};
-  },
-  methods: {
-    confirm() {
-      this.$emit('confirm');
-    },
-    cancel() {
-      this.$emit('cancel');
-    }
-  },
-};
+<script setup>
 </script>
 
 <style lang="scss" scoped>

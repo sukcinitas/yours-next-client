@@ -22,7 +22,7 @@ async function leave() {
     await groupStore.resetState();
     router.push({ name: 'EntranceView' });
   } catch (err) {
-    // this.errors.leave = err.message;
+    // errors.leave = err.message;
   }
 }
 function goHome() {

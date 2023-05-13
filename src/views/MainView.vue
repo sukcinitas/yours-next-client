@@ -52,7 +52,7 @@ import LoadingAnimation from '../components/LoadingAnimation.vue';
 const playlistStore = usePlaylistStore()
 const mainplaylist = useMainPlaylistStore()
 const groupStore = useGroupStore()
-const router = useRouter
+const router = useRouter()
 const errMsg = ref('')
 // const successMsg = ref('')
 const loading = ref(false)
@@ -81,7 +81,7 @@ async function getPlaylists() {
 }
 
 async function goToOngoingPlaylist() {
-  router.push({ path: `/mainplaylist/${this.ongoingPlaylistId}` });
+  router.push({ path: `/mainplaylist/${ongoingPlaylistId}` });
 }
 
 </script>

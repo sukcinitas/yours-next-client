@@ -8,7 +8,7 @@
     <p v-if="errMsg" class="playlist__message--error">{{ errMsg }}</p>
     <div class="playlist__buttons">
       <button class="playlist__button"
-        @click="() => $router.push({ path: `/playlist/${playlist._id}` })"
+        @click="() => router.push({ path: `/playlist/${playlist._id}` })"
       >
         <font-awesome-icon :icon="['fas', 'chevron-right']" />
       </button>
@@ -34,10 +34,11 @@
 import { ref } from 'vue'
 import { useGroupStore } from '../stores/group';
 import { usePlaylistStore } from '../stores/playlist';
+import { useRouter } from 'vue-router';
 import DeletionBox from './DeletionBox.vue';
 import formatDate from '../util/formatDate';
-import { socket } from "@/socket";
 
+const router = useRouter()
 const props = defineProps(['playlist'])
 const groupStore = useGroupStore()
 const playlistStore = usePlaylistStore()

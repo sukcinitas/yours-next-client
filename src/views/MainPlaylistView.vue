@@ -1,13 +1,13 @@
 <template>
   <div class="main-playlist">
-    <headerPanel
+    <header-panel
       :leaveBtn="false"
       :homeBtn="true"
       :backBtn="true"
     >
-    </headerPanel>
-    <h4 class="main-playlist__title--ongoing">{{ title }}</h4>
-    <template v-if="initialPlaylistLength !== 0 && !loading">
+    </header-panel>
+    <h4 class="main-playlist__title--ongoing">{{ mainplaylistStore.title }}</h4>
+    <template v-if="mainplaylistStore.length !== 0 && !loading">
       <ongoing-video-player class="main-playlist__video-player">
       </ongoing-video-player>
       <video-items-data
@@ -21,45 +21,53 @@
   </div>
 </template>
 
-<script>
-// import OngoingVideoPlayer from '../components/OngoingVideoPlayer.vue';
-// import VideoItemsData from '../components/VideoItemsData.vue';
-// import MembersList from '../components/MembersList.vue';
-// import MessageBox from '../components/MessageBox.vue';
-// import HeaderPanel from '../components/HeaderPanel.vue';
-// import LoadingAnimation from '../components/LoadingAnimation.vue';
+<script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useGroupStore } from '../stores/group';
+import { useMainPlaylistStore } from '../stores/mainplaylist';
+import OngoingVideoPlayer from '../components/OngoingVideoPlayer.vue';
+import VideoItemsData from '../components/VideoItemsData.vue';
+import MembersList from '../components/MembersList.vue';
+import MessageBox from '../components/MessageBox.vue';
+import HeaderPanel from '../components/HeaderPanel.vue';
+import LoadingAnimation from '../components/LoadingAnimation.vue';
 import { socket } from "@/socket";
 
-export default {
-  // name: 'MainPlaylist',
-  // components: {
-  //   OngoingVideoPlayer,
-  //   VideoItemsData,
-  //   MembersList,
-  //   MessageBox,
-  //   HeaderPanel,
-  //   LoadingAnimation,
-  // },
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  computed: {
-    initialPlaylistLength() {
-      return this.$store.getters['mainplaylist/length'];
-    },
-    title() {
-      return this.$store.getters['mainplaylist/title'];
-    },
-    isModerator() {
-      return this.$store.getters['group/isModerator'];
-    },
-  },
+const loading = ref(false);
+const errMsg = ref('');
+const route = useRoute()
+const groupStore = useGroupStore();
+const mainplaylistStore = useMainPlaylistStore();
 
-  async mounted() {
-    const { id } = this.$route.params;
-    if (this.isModerator) {
+onMounted(async () => {
+  const { id } = route.params;
+    setOngoingPlaylist(id);
+    try {
+      loading.value = true;
+      mainplaylistStore.setId({ id });
+      await mainplaylistStore.getPlaylist({ id });
+      if (mainplaylistStore.setCount >= 1) {
+        // because only one set of items is loaded
+        return;
+      }
+      const { increaseSetCount } = await mainplaylistStore.getPlaylistData();
+      if (increaseSetCount) {
+        mainplaylistStore.setSetCount();
+      }
+    } catch (err) {
+      errMsg.value = err.response.data.message;
+    } finally {
+      loading.value = false;
+    }
+})
+
+onBeforeUnmount(() => {
+  setOngoingPlaylist('')
+})
+
+function setOngoingPlaylist(id) {
+  if (groupStore.isModerator) {
       socket.emit('setOngoingPlaylist', {
         id,
         videoIndex: 0,
@@ -67,37 +75,7 @@ export default {
         paused: false,
       });
     }
-    try {
-      this.loading = true;
-      this.$store.commit('mainplaylist/setId', { id });
-      await this.$store
-        .dispatch('mainplaylist/getPlaylist', { id });
-      if (this.$store.state.mainplaylist.setCount >= 1) {
-        // because only one set of items is loaded
-        return;
-      }
-      const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
-      if (increaseSetCount) {
-        this.$store.commit('mainplaylist/setSetCount');
-      }
-    } catch (err) {
-      this.errMsg = err.response.data.message;
-    } finally {
-      this.loading = false;
-    }
-  },
-
-  beforeUnmount() {
-    if (this.isModerator) {
-      socket.emit('setOngoingPlaylist', {
-        id: '',
-        videoIndex: 0,
-        time: 0,
-        paused: false,
-      });
-    }
-  },
-};
+}
 </script>
 
 <style lang="scss" scoped>

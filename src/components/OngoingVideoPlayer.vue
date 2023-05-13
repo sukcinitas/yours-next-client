@@ -1,18 +1,15 @@
 <template>
   <div>
     <div class="main-playlist__youtube">
-      <youtube
-        :video-id="videoId"
-        :player-vars="playerVars"
+      <Youtube
+        :src="videoId"
+        :vars="playerVars"
         ref="youtube"
-        @ended="ended"
-        @paused="fixatePause"
-        @playing="fixatePlay"
         @ready="fixateReady"
-        fitParent
-        resize
+        @stateChange="(state) => handleStateChange(state)"
+        width="inherit"
       >
-      </youtube>
+      </Youtube>
     </div>
     <div class="main-playlist__controls">
       <button
@@ -63,30 +60,27 @@ const playerVars = reactive({
     iv_load_policy: 3,
   }
 )
-// const message = ref('')
 const paused = ref(false)
 const timeWillBeUpdated = ref(false)
 const youtube = ref(null)
 const time = computed(() => {
   return mainplaylistStore.ongoingPlaylist.time
 })
-const isModerator = computed(() => {
-  return groupStore.isModerator
-})
+
 const index = computed(() => {
   return mainplaylistStore.ongoingPlaylist.videoIndex
 })
-const videoId = computed(() => {
-  return playlist[index]
-})
 const playlist = computed(() => {
   return mainplaylistStore.idsArray
+})
+const videoId = computed(() => {
+  return  mainplaylistStore.idsArray[mainplaylistStore.ongoingPlaylist.videoIndex]
 })
 const isOngoingPlaylistPaused = computed(() => {
   return mainplaylistStore.isOngoingPlaylistPaused
 })
 const isNextAndPrevButtonDisplayed = computed(() => {
-  return isModerator
+  return groupStore.isModerator
 })
 // const userJoined = computed(() => {
 //   return mainplaylistStore.userJoined
@@ -104,12 +98,14 @@ function play() {
   socket.emit('toggleOngoingPlaylist', { paused: false });
 }
 
-function fixatePause() {
-  paused.value = true;
-}
-
-function fixatePlay() {
-  paused.value = false;
+function handleStateChange(state) {
+  if (state.data === 0) {
+    ended()
+  } else if (state.data === 2) {
+    paused.value = true
+  } else if (state.data === 1) {
+    paused.value = false
+  }
 }
 
 function fixateReady() {
@@ -121,25 +117,23 @@ function end() {
   if (index.value === playlist.length - 1) {
     return;
   }
-  if (isModerator) {
-    socket.emit('changeOngoingPlaylistVideoIndex', {
-      videoIndex: this.index + 1,
-    });
+  if (groupStore.isModerator) {
+    nextVideo()
   }
 }
 
 function prevVideo() {
-  if (this.isModerator) {
+  if (groupStore.isModerator) {
     socket.emit('changeOngoingPlaylistVideoIndex', {
-      videoIndex: this.index - 1,
+      videoIndex: index.value - 1,
     });
   }
 }
 
 function nextVideo() {
-  if (this.isModerator) {
+  if (groupStore.isModerator) {
     socket.emit('changeOngoingPlaylistVideoIndex', {
-      videoIndex: this.index + 1,
+      videoIndex: index.value + 1,
     });
   }
 }
@@ -152,7 +146,7 @@ onMounted(async () => {
   // to keep seekTo in syncronization, I wait 5secs till propability that video is loaded is high
   // and then I seekTo a certain time
   setTimeout(() => {
-    if (!isModerator) {
+    if (!groupStore.isModerator) {
       socket.emit('userJoinsOngoingPlaylist');
     }
   }, 5000);
@@ -177,8 +171,8 @@ watch('time', () => {
 watch('userJoined', async () => {
   const time = await youtube.value.player.getCurrentTime();
   socket.emit('setOngoingPlaylist', {
-    id: $route.params.id,
-    videoIndex: index,
+    id: route.params.id,
+    videoIndex: index.value,
     time,
     paused: false,
   });

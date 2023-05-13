@@ -48,9 +48,11 @@
 import { ref, defineProps, watch, computed } from 'vue'
 import { useGroupStore } from '../stores/group';
 import { useMainPlaylistStore } from '../stores/mainplaylist';
+import { useRoute } from 'vue-router';
 import LoadingAnimation from './LoadingAnimation.vue';
 import { socket } from "@/socket";
 
+const route = useRoute()
 const groupStore = useGroupStore()
 const mainplaylistStore = useMainPlaylistStore()
 const props = defineProps(['isOngoing'])
@@ -60,7 +62,7 @@ const loading = ref(false)
 
 const activeIndex = computed(() => {
   if (props.isOngoing) {
-    return mainplaylisStore.ongoingPlaylist.videoIndex;
+    return mainplaylistStore.ongoingPlaylist.videoIndex;
   }
   return mainplaylistStore.nowPlayingVideoIndex;
 })
@@ -101,16 +103,16 @@ function changeIndex(index) {
 
 async function removeItemFromPlaylist(videoId) {
   try {
-    const { items } = await mainplaylistStore.removeItemFromPlaylist({ videoId, id: this.$route.params.id });
+    const { items } = await mainplaylistStore.removeItemFromPlaylist({ videoId, id: route.params.id });
     socket.emit('updatePlaylist', {
       idsArray: items,
       itemData: videoId,
       type: 'deletion',
       alreadyIn: false,
-      id: this.$route.params.id,
+      id: route.params.id,
     });
     nextTick(() => {
-      const isRemovedBefore = playlist.indexOf(videoId) < this.activeIndex;
+      const isRemovedBefore = playlist.indexOf(videoId) < activeIndex;
       if (isRemovedBefore) {
         changeIndex(activeIndex - 1);
       }

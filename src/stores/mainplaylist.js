@@ -5,6 +5,7 @@ import PlaylistService from '../services/playlist.service';
 import DataService from '../services/data.service';
 import checkIfAuthorizationError from '../util/checkIfAuthorizationError';
 import { socket } from "@/socket";
+import { useGroupStore } from './group';
 
 export const useMainPlaylistStore = defineStore('mainplaylist', {
     state: () => ({
@@ -58,7 +59,7 @@ export const useMainPlaylistStore = defineStore('mainplaylist', {
       },
     },
     actions: {
-        SOCKET_setOngoingPlaylist(payload) {
+        socketSetOngoingPlaylist(payload) {
             this.setOngoingPlaylist({
               id: payload.id,
               videoIndex: payload.videoIndex,
@@ -70,22 +71,23 @@ export const useMainPlaylistStore = defineStore('mainplaylist', {
             }
           },
         
-          SOCKET_userJoinsOngoingPlaylist({ rootState }) {
-            if (rootState.group.member.name === rootState.group.moderator) {
+          socketUserJoinsOngoingPlaylist() {
+            const groupStore = useGroupStore()
+            if (groupStore.member.name === groupStore.moderator) {
               this.setUserJoined({ state: true });
             }
           },
         
-          SOCKET_changeOngoingPlaylistVideoIndex(payload) {
+          socketChangeOngoingPlaylistVideoIndex(payload) {
             this.setOngoingPlaylistVideoIndex({ videoIndex: payload.videoIndex });
             this.setOngoingPlaylistPause({ paused: false });
           },
         
-          SOCKET_toggleOngoingPlaylist(payload) {
+          socketToggleOngoingPlaylist(payload) {
             this.setOngoingPlaylistPause({ paused: payload.paused });
           },
         
-          async SOCKET_updatePlaylist({ rootState }, payload) {
+          async socketUpdatePlaylist(payload) {
             if (payload.type === 'addition') {
               if (this.items.length < this.setCount * this.itemCount) {
                 const itemsData = [...this.items, payload.itemData];
@@ -98,7 +100,7 @@ export const useMainPlaylistStore = defineStore('mainplaylist', {
             if (payload.type === 'deletion') {
               // if it is a moderator, no need to change index, as it has already been changed
               const needToChangeIndex =
-                rootState.group.member.name !== rootState.group.moderator &&
+                groupStore.member.name !== groupStore.moderator &&
                 this.nowPlayingVideoIndex > this.idsArray.indexOf(payload.itemData);
               const index = needToChangeIndex
                 ? this.nowPlayingVideoIndex - 1

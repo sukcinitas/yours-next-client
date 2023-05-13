@@ -28,4 +28,12 @@ body {
   scroll-behavior: smooth;
   background-color: #80808000;
 }
+
+.main-playlist__youtube--ordinary {
+  width: 100%;
+}
+
+iframe {
+  width: 100% !important;
+}
 </style>

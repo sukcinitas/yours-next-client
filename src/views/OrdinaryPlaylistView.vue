@@ -11,7 +11,7 @@
       {{ title }}
     </h4>
     <button class="main-playlist__button"
-      @click="() => $router.push({ path: `/search/${$route.params.id}` })"
+      @click="() => router.push({ path: `/search/${$route.params.id}` })"
     >
       Add some videos!
     </button>
@@ -34,7 +34,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useMainPlaylistStore } from '../stores/mainplaylist';
 import OrdinaryVideoPlayer from '../components/OrdinaryVideoPlayer.vue';
 import VideoItemsData from '../components/VideoItemsData.vue';
@@ -44,6 +44,7 @@ import HeaderPanel from '../components/HeaderPanel.vue';
 import LoadingAnimation from '../components/LoadingAnimation.vue';
 
 const route = useRoute()
+const router = useRouter()
 const mainplaylistStore = useMainPlaylistStore()
 const loading = ref(false)
 const errMsg = ref('')
