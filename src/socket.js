@@ -4,9 +4,6 @@ import { useMessagesStore } from "./stores/messages";
 import { usePlaylistStore } from './stores/playlist.js'
 import { useMainPlaylistStore } from "./stores/mainplaylist.js";
 
-// `https://yours-next.herokuapp.com/#/:${location.port}`
-// 'http://localhost:8081',
-// "undefined" means the URL will be computed from the `window.location` object
 const URL = process.env.NODE_ENV === "production" ? undefined : "http://localhost:8081";
 export const socket = io(URL, { withCredentials: false });
 

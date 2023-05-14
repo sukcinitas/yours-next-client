@@ -2,12 +2,12 @@
   <h1 class="redirect">
     Please visit here
     <a 
-      href="https://yours-next.herokuapp.com" 
+      :href="location.href.replace('http', 'https')" 
       class="redirect__link" 
       target="_blank" 
       rel="noreferrer noopener"
     >
-      https://yours-next.herokuapp.com
+      {{ location.href.replace('http', 'https') }}
     </a>
   </h1>
 </template>
