@@ -41,10 +41,10 @@
         }"
       >
         {{ user === member.name ? 'you' : member.name }}
-        <span v-if="isModerator && user !== member.name && !props.isMessages" class="members__line"
+        <span v-if="groupStore.isModerator && user !== member.name && !props.isMessages" class="members__line"
         ></span>
         {{
-          isModerator && user !== member.name && !props.isMessages
+          groupStore.isModerator && user !== member.name && !props.isMessages
             ? `double-click to make ${member.name} moderator`
             : ''
         }}
@@ -67,10 +67,6 @@ const activeMembers = computed(() => {
   return groupStore.activeMembers;
 })
 
-const isModerator = computed(() => {
-  return groupStore.isModerator
-})
-
 const moderator = computed(() => {
   return groupStore.moderator
 })
@@ -80,7 +76,7 @@ const user = computed(() => {
 })
 
 function  makeModerator(name) {
-  if (isModerator.value && !props.isMessages) {
+  if (groupStore.isModerator && !props.isMessages) {
     if (moderator.value !== name) {
         socket.emit('setModerator', name);
       }

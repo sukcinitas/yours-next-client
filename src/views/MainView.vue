@@ -50,7 +50,7 @@ import PlaylistItem from '../components/PlaylistItem.vue';
 import CreatePlaylist from '../components/CreatePlaylist.vue';
 import LoadingAnimation from '../components/LoadingAnimation.vue';
 const playlistStore = usePlaylistStore()
-const mainplaylist = useMainPlaylistStore()
+const mainplaylistStore = useMainPlaylistStore()
 const groupStore = useGroupStore()
 const router = useRouter()
 const errMsg = ref('')
@@ -61,12 +61,8 @@ onMounted(() => {
   return getPlaylists()
 })
 
-// const isMainAnOngoingPlaylist = computed(() => {
-//   return mainplaylist.isMainAnOngoingPlaylist
-// })
-
 const ongoingPlaylistId= computed(() => {
-  return mainplaylist.ongoingPlaylist?.id;
+  return mainplaylistStore.ongoingPlaylist?.id;
 })
 
 async function getPlaylists() {
@@ -81,7 +77,7 @@ async function getPlaylists() {
 }
 
 async function goToOngoingPlaylist() {
-  router.push({ path: `/mainplaylist/${ongoingPlaylistId}` });
+  router.push({ path: `/mainplaylist/${ongoingPlaylistId.value}` });
 }
 
 </script>

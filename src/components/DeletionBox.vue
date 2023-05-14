@@ -10,6 +10,7 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['confirm', 'cancel'])
 </script>
 
 <style lang="scss" scoped>
