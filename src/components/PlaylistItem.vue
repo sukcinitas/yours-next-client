@@ -31,7 +31,7 @@
           class="deletion-box"
           :class="{ 'deletion-box--hidden': !isDeletionBoxShown}"
           @confirm="deletePlaylist(props.playlist._id)" 
-          @cancel="cancelDeletion"
+          @cancel.self="cancelDeletion"
         />
       </button>
     </div>
