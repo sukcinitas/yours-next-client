@@ -1,121 +1,138 @@
 <template>
   <div>
     <form
-      @submit.prevent="handleSubmit"
       :class="['entry-form', isExtended ? 'entry-form--extended' : '']"
+      @submit.prevent="handleSubmit"
     >
       <button
-        @click="toggleExtended"
         type="button"
         class="entry-form__button"
+        @click="toggleExtended"
       >
-        Join a group
+        {{ props.name }}
       </button>
       <input
         ref="name"
-        v-model="name"
+        v-model="formData.name"
         type="text"
         placeholder="Enter the group name"
         :class="[
           isExtended ? 'entry-form--extended__input' : 'entry-form__input',
-          err.type === 'name' ? 'input--error' : '',
+          errors.name ? 'input--error' : '',
         ]"
-        @input="checkIfEmpty('name')"
-      />
+        @input="resetError('name')"
+      >
       <input
         ref="passcode"
-        v-model="passcode"
+        v-model="formData.passcode"
         type="password"
         placeholder="Enter the passcode"
         :class="[
           isExtended ? 'entry-form--extended__input' : 'entry-form__input',
-          err.type === 'passcode' ? 'input--error' : '',
+          errors.passcode ? 'input--error' : '',
         ]"
-        @input="checkIfEmpty('passcode')"
-      />
+        @input="resetError('passcode')"
+      >
       <button
         type="submit"
-        :disabled="!name || !passcode"
+        :disabled="!formData.name || !formData.passcode"
         :class="[
           isExtended
-            ? 'entry-form--extended__button--narrow'
-            : 'entry-form__button--narrow',
+            ? 'entry-form--extended__button--narrow' : 'entry-form__button--narrow',
         ]"
       >
         >
       </button>
     </form>
-    <p v-if="err.message && isExtended" class="entry-form__message--error">
-      {{ err.message }}
+    <p
+      v-for="errorMessage, idx in errorMessages"
+      :key="idx"
+      class="entry-form__message--error"
+    >
+      {{ errorMessage }}
     </p>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'AuthenticateMember',
-  data() {
-    return {
-      isExtended: false,
-      name: 'bebriukai',
-      passcode: 'bebriukai',
-      err: {
-        message: '',
-        type: '',
-      },
-    };
+<script setup>
+import { ref, reactive, computed } from 'vue'
+import { useGroupStore } from '@/stores/group.js'
+
+const props = defineProps({
+  type: {
+    type: String,
+    required: true,
   },
-  methods: {
-    toggleExtended() {
-      this.isExtended = !this.isExtended;
-      this.err = {
-        message: '',
-        type: '',
-      };
-      this.name = this.name === 'bebriukai' ? 'bebriukai' : '';
-      this.passcode = this.passcode === 'bebriukai' ? 'bebriukai' : '';
-      if (this.isExtended) {
-        this.$refs.name.focus();
-      }
-    },
-    async handleSubmit() {
-      try {
-        const result = await this.$store
-          .dispatch('group/authenticate', {
-            name: this.name,
-            passcode: this.passcode,
-          });
-        if (result.success) {
-          this.$emit('authenticate');
-        }
-      } catch (err) {
-        const { message, type } = err.response.data;
-        this.err = {
-          message,
-          type,
-        };
-        if (type === 'name') {
-          this.$refs.name.focus();
-        } else {
-          this.$refs.passcode.focus();
-        }
-      }
-    },
-    checkIfEmpty(type) {
-      if (this[type] === '') {
-        this.deleteErr(type);
-      }
-    },
-    deleteErr(type) {
-      if (this.err.type === type) {
-        this.err = {
-          message: '',
-          type: '',
-        };
-      }
-    },
+  name: {
+    type: String,
+    required: true,
   },
-};
+})
+const emit = defineEmits(['authenticate'])
+const groupStore = useGroupStore()
+
+const isExtended = ref(false)
+const formData = reactive({
+  name: 'bebriukai',
+  passcode: 'bebriukai'
+})
+const errors = reactive({
+  name: '',
+  passcode: '',
+  other: ''
+})
+
+const name = ref(null)
+const passcode = ref(null)
+
+const errorMessages = computed(() => {
+  return Object.values(errors).filter(errorMessage => Boolean(errorMessage))
+})
+
+function toggleExtended() {
+  isExtended.value = !isExtended.value
+  errors.name = ''
+  errors.passcode = ''
+  errors.other = ''
+  formData.name = formData.name === 'bebriukai' ? 'bebriukai' : ''
+  formData.passcode = formData.passcode === 'bebriukai' ? 'bebriukai' : ''
+  if (isExtended.value) {
+    name.value.focus()
+  }
+}
+
+function resetError(type) {
+  if (!formData[type]) {
+    errors[type] = ''
+  }
+}
+
+async function handleSubmit() {
+  try {
+    let result = null
+    if (props.type === 'authenticate') {
+      result = await groupStore.authenticate(formData)
+    } else if (props.type === 'create'){
+      if (formData.passcode.length < 8) {
+        errors.passcode = 'Passcode must be at least 8 characters long!'
+        return;
+      }
+      result = await groupStore.createGroup(formData)
+    }
+    if (result?.success) {
+      emit('authenticate')
+    }
+  } catch (err) {
+    if (!(err?.response?.data)) {
+      errors.other = 'Something went wrong!'
+      return
+    }
+    const { message, type } = err.response.data;
+    errors[type]= message
+    [type].value.focus()
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>

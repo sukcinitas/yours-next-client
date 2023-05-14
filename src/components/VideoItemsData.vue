@@ -1,49 +1,34 @@
 <template>
-  <div v-on:scroll.passive="handleScroll">
+  <div @scroll.passive="handleScroll">
     <div
-      :class="[
-        {
-          'video-item--active':
-            item.id === playlist[activeIndex],
-        },
-        'video-item',
-      ]"
       v-for="(item, index) in items"
-      :key="playlist[index]"
+      :key="item.id"
       :index="index"
+      :class="[{'video-item--active': item.id === playlist[activeIndex]}]"
+      class="video-item"
     >
       <h3
+        class="video-item__heading"
+        :class="{
+          'video-item__heading--active': item.id === playlist[activeIndex],
+          'video-item__heading--active--ongoing': isOngoing && !isModerator,
+        }"
         @click="changeIndex(index)"
-        :class="[
-          {
-            'video-item__heading--active': item.id === playlist[activeIndex],
-          },
-          'video-item__heading',
-          {
-            'video-item__heading--active--ongoing':
-              isOngoing && !isModerator,
-          },
-        ]"
       >
         {{ item.snippet.title }}
       </h3>
       <img
-        :class="[
-          { 'video-item__img--active': item.id === playlist[activeIndex] },
-          'video-item__img',
-        ]"
+        class="video-item__img"
+        :class="{ 'video-item__img--active': item.id === playlist[activeIndex] }"
         :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title"
-      />
+      >
       <button
-        :class="[
-          {
-            'video-item__button--remove--active':
-              item.id === playlist[activeIndex],
-          },
-          'video-item__button--remove',
-        ]"
         v-if="isModerator"
+        class="video-item__button--remove"
+        :class="{
+          'video-item__button--remove--active': item.id === playlist[activeIndex],
+        }"
         @click="removeItemFromPlaylist(item.id)"
       >
         Remove
@@ -55,124 +40,118 @@
         {{ errMsg }}
       </p>
     </div>
-    <loading-animation v-if="loading"/>
+    <loading-animation v-if="loading" />
   </div>
 </template>
 
-<script>
-import LoadingAnimation from './LoadingAnimation';
+<script setup>
+import { ref, defineProps, watch, computed } from 'vue'
+import { useGroupStore } from '../stores/group';
+import { useMainPlaylistStore } from '../stores/mainplaylist';
+import { useRoute } from 'vue-router';
+import LoadingAnimation from './LoadingAnimation.vue';
+import { socket } from "@/socket";
 
-export default {
-  name: 'VideoItemsData',
-  data() {
-    return {
-      errMsg: '',
-      chosenVideoId: '',
-      loading: false,
-    };
-  },
-  components: {
-    LoadingAnimation,
-  },
-  props: ['isOngoing'],
-  computed: {
-    activeIndex() {
-      if (this.isOngoing) {
-        return this.$store.getters['mainplaylist/ongoingPlaylist'].videoIndex;
-      }
-      return this.$store.getters['mainplaylist/nowPlayingVideoIndex'];
-    },
-    playlist() {
-      return this.$store.getters['mainplaylist/playlist'];
-    },
-    items() {
-      return this.$store.getters['mainplaylist/items'];
-    },
-    isModerator() {
-      return this.$store.getters['group/isModerator'];
-    },
-    isThereMoreToLoad() {
-      return this.playlist.length > this.items.length;
-    },
-    isIndexAheadOfData() {
-      return this.$store.getters['mainplaylist/isIndexAheadOfData'];
-    },
-  },
-  watch: {
-    activeIndex(newValue, oldValue) {
-      if (newValue > oldValue) {
-        if (this.isIndexAheadOfData) {
-          this.loadMore();
-        }
-      }
-    },
-  },
-  methods: {
-    changeIndex(index) {
-      if (this.isOngoing) {
-        if (this.isModerator) {
-          this.$socket.emit('changeOngoingPlaylistVideoIndex', {
-            videoIndex: index,
-          });
-        }
-      } else {
-        this.$store.commit('mainplaylist/changeNowPlayingVideoIndex', index);
-      }
-    },
+const route = useRoute()
+const groupStore = useGroupStore()
+const mainplaylistStore = useMainPlaylistStore()
+const props = defineProps({
+  isOngoing: Boolean,
+})
+const errMsg = ref('')
+const chosenVideoId = ref('')
+const loading = ref(false)
 
-    async removeItemFromPlaylist(videoId) {
-      try {
-        const { items } = await this.$store
-          .dispatch('mainplaylist/removeItemFromPlaylist', { videoId, id: this.$route.params.id });
-        this.$socket.emit('updatePlaylist', {
-          idsArray: items,
-          itemData: videoId,
-          type: 'deletion',
-          alreadyIn: false,
-          id: this.$route.params.id,
-        });
-        this.$nextTick(() => {
-          const isRemovedBefore =
-              this.playlist.indexOf(videoId) < this.activeIndex;
-          if (isRemovedBefore) {
-            this.changeIndex(this.activeIndex - 1);
-          }
-        });
-      } catch (err) {
-        this.errMsg = err.message;
-        this.chosenVideoId = videoId;
-        setTimeout(() => {
-          this.errorMsg = '';
-          this.chosenVideoId = '';
-        }, 500);
-      }
-    },
+const activeIndex = computed(() => {
+  if (props.isOngoing) {
+    return mainplaylistStore.ongoingPlaylist.videoIndex;
+  }
+  return mainplaylistStore.nowPlayingVideoIndex;
+})
+const playlist = computed(() => {
+  return mainplaylistStore.playlist;
+})
+const items = computed(() => {
+  return mainplaylistStore.items;
+})
+const isModerator = computed(() => {
+  return groupStore.isModerator;
+})
+const isThereMoreToLoad = computed(() => {
+  return playlist.value.length > items.value.length;
+})
+const isIndexAheadOfData = computed(() => {
+  return mainplaylistStore.isIndexAheadOfData;
+})
+watch(activeIndex, (newValue, oldValue) => {
+  if (newValue > oldValue) {
+    if (isIndexAheadOfData.value) {
+      loadMore();
+    }
+  }
+})
 
-    async loadMore() {
-      try {
-        this.loading = true;
-        const { increaseSetCount } = await this.$store.dispatch('mainplaylist/getPlaylistData');
-        if (increaseSetCount) {
-          this.$store.commit('mainplaylist/setSetCount');
-        }
-      } catch (err) {
-        this.errorMsg = err.response.data.message;
-      } finally {
-        this.loading = false;
-      }
-    },
+function changeIndex(index) {
+  if (props.isOngoing) {
+    if (isModerator.value) {
+      socket.emit('changeOngoingPlaylistVideoIndex', {
+        videoIndex: index,
+      });
+    }
+  } else {
+    mainplaylistStore.changeNowPlayingVideoIndex(index);
+  }
+}
 
-    async handleScroll(e) {
-      if (this.loading) {
-        return;
+async function removeItemFromPlaylist(videoId) {
+  try {
+    const { items } = await mainplaylistStore.removeItemFromPlaylist({ videoId, id: route.params.id });
+    socket.emit('updatePlaylist', {
+      idsArray: items,
+      itemData: videoId,
+      type: 'deletion',
+      alreadyIn: false,
+      id: route.params.id,
+    });
+    nextTick(() => {
+      const isRemovedBefore = playlist.value.indexOf(videoId) < activeIndex.value;
+      if (isRemovedBefore) {
+        changeIndex(activeIndex.value - 1);
       }
-      if (e.target.scrollHeight - e.target.offsetHeight < e.target.scrollTop
-      && this.isThereMoreToLoad) {
-        await this.loadMore();
-      }
-    },
-  },
-};
+    });
+  } catch (err) {
+    errMsg.value = err.message;
+    chosenVideoId.value = videoId;
+    setTimeout(() => {
+      errorMsg.value = '';
+      chosenVideoId.value = '';
+    }, 500);
+  }
+}
+
+async function loadMore() {
+  try {
+    loading.value = true;
+    const { increaseSetCount } = await mainplaylistStore.getPlaylistData();
+    if (increaseSetCount) {
+      mainplaylistStore.setSetCount();
+    }
+  } catch (err) {
+    errorMsg.value = err.response.data.message;
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function handleScroll(e) {
+  if (loading.value) {
+    return;
+  }
+  if (e.target.scrollHeight - e.target.offsetHeight < e.target.scrollTop
+  && isThereMoreToLoad.value) {
+    await loadMore();
+  }
+}
 </script>
 
 <style lang="scss" scoped>

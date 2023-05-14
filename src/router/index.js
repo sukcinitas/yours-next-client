@@ -1,51 +1,51 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import MainPage from '../pages/MainPage';
-import MainPlaylist from '../pages/MainPlaylist';
-import OrdinaryPlaylist from '../pages/OrdinaryPlaylist';
-import SearchField from '../pages/SearchField';
-import EntrancePage from '../pages/EntrancePage';
+import { createRouter, createWebHistory } from 'vue-router'
+
+import EntranceView from '../views/EntranceView.vue';
+import MainView from '../views/MainView.vue';
+import MainPlaylistView from '../views/MainPlaylistView.vue';
+import OrdinaryPlaylistView from '../views/OrdinaryPlaylistView.vue';
+import SearchView from '../views/SearchView.vue';
 import GroupService from '../services/group.service';
-import store from '../store';
+import { useGroupStore } from '../stores/group.js'
 
-Vue.use(Router);
-
-const router = new Router({
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/main',
-      name: 'MainPage',
-      component: MainPage,
+      name: 'MainView',
+      component: MainView,
       meta: { requiresAuth: true },
     },
     {
       path: '/mainplaylist/:id',
-      name: 'MainPlaylist',
-      component: MainPlaylist,
+      name: 'MainPlaylistView',
+      component: MainPlaylistView,
       meta: { requiresAuth: true },
     },
     {
       path: '/playlist/:id',
-      name: 'OrdinaryPlaylist',
-      component: OrdinaryPlaylist,
+      name: 'OrdinaryPlaylistView',
+      component: OrdinaryPlaylistView,
       meta: { requiresAuth: true },
     },
     {
       path: '/search/:id',
-      name: 'SearchField',
-      component: SearchField,
+      name: 'SearchView',
+      component: SearchView,
       meta: { requiresAuth: true },
     },
     {
       path: '/',
-      name: 'EntrancePage',
-      component: EntrancePage,
+      name: 'EntranceView',
+      component: EntranceView,
       meta: { alreadyAuth: true },
     },
   ],
-});
+})
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
+  const groupStore =  useGroupStore()
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const username = sessionStorage.getItem('username');
     const userEmoji = sessionStorage.getItem('userEmoji');
@@ -54,13 +54,11 @@ router.beforeEach((to, from, next) => {
         !data.group &&
         !username &&
         !userEmoji &&
-        !store.state.group.name &&
-        !store.state.group.member.name &&
-        !store.state.group.member.emoji
+        !groupStore.name &&
+        !groupStore.member.name &&
+        !groupStore.member.emoji
       ) {
-        next({ name: 'EntrancePage' });
-      } else if (store.state.group.name && !store.state.group.member.name) {
-        next({ name: 'MemberCreate' });
+        next({ name: 'EntranceView' });
       } else {
         next();
       }
@@ -73,11 +71,11 @@ router.beforeEach((to, from, next) => {
         data.data.group &&
         username &&
         userEmoji &&
-        store.state.group.name &&
-        store.state.group.member.name &&
-        store.state.group.member.emoji
+        groupStore.name &&
+        groupStore.member.name &&
+        groupStore.member.emoji
       ) {
-        next({ name: 'MainPage' });
+        next({ name: 'MainView' });
       } else {
         next();
       }

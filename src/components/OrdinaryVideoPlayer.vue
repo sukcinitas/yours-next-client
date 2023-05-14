@@ -1,98 +1,91 @@
 <template>
   <div>
     <button
-      class="main-playlist__button"
       v-if="isModerator"
-      @click="() => $router.push({ path: `/mainplaylist/${$route.params.id}` })"
+      class="main-playlist__button"
+      @click="() => router.push({ path: `/mainplaylist/${$route.params.id}` })"
     >
       Make this playlist main
     </button>
-    <div class="main-playlist__youtube--ordinary">
-      <youtube
-        :video-id="videoId"
-        :player-vars="playerVars"
+    <div
+      ref="youtubeParent"
+      class="main-playlist__youtube--ordinary"
+    >
+      <youtube-player
         ref="youtube"
-        @ended="ended"
-        fitParent
-        resize
-      >
-      </youtube>
+        :src="videoId"
+        :vars="playerVars"
+        width="inherit"
+        @state-change="(state) => handleStateChange(state)"
+      />
     </div>
     <div class="main-playlist__controls">
       <button
         v-if="index !== 0"
-        @click="prevVideo"
         class="main-playlist__button--controls"
+        @click="prevVideo"
       >
-        <font-awesome-icon :icon="['fas', 'step-backward']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'step-backward']" />
       </button>
       <button
-        v-if="index !== playlist.length - 1"
-        @click="nextVideo"
+        v-if="index !== mainplaylistStore.playlist.length - 1"
         class="main-playlist__button--controls"
+        @click="nextVideo"
       >
-        <font-awesome-icon :icon="['fas', 'step-forward']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'step-forward']" />
       </button>
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'OrdinaryVideoPlayer',
-  data() {
-    return {
-      playerVars: {
-        autoplay: 1,
-        color: 'red',
-        controls: 1,
-      },
-      message: '',
-    };
-  },
-  computed: {
-    isModerator() {
-      return this.$store.getters['group/isModerator'];
-    },
-    index() {
-      return this.$store.getters['mainplaylist/nowPlayingVideoIndex'];
-    },
-    videoId() {
-      return this.playlist[this.index];
-    },
-    playlist() {
-      return this.$store.getters['mainplaylist/playlist'];
-    },
-  },
-  methods: {
-    ended() {
-      this.end();
-    },
+<script setup>
+import { reactive, computed } from 'vue'
+import { useMainPlaylistStore } from '../stores/mainplaylist';
+import { useGroupStore } from '../stores/group';
+import { useRouter } from 'vue-router';
 
-    end() {
-      if (this.index === this.playlist.length - 1) {
-        return;
-      }
-      this.$store.commit(
-        'mainplaylist/changeNowPlayingVideoIndex',
-        this.index + 1,
-      );
-    },
+const router = useRouter();
+const groupStore = useGroupStore();
+const mainplaylistStore = useMainPlaylistStore();
 
-    prevVideo() {
-      this.$store.commit(
-        'mainplaylist/changeNowPlayingVideoIndex',
-        this.index - 1,
-      );
-    },
+const playerVars = reactive({
+  autoplay: 1,
+  color: 'red',
+  controls: 1,
+})
 
-    nextVideo() {
-      this.$store.commit(
-        'mainplaylist/changeNowPlayingVideoIndex',
-        this.index + 1,
-      );
-    },
-  },
-};
+const isModerator = computed(() => {
+  return groupStore.isModerator
+})
+
+const index = computed(() => {
+  return mainplaylistStore.nowPlayingVideoIndex
+})
+
+const videoId = computed(() => {
+  return mainplaylistStore.playlist[index.value]
+})
+
+function handleStateChange(state) {
+  if (state.data === 0) {
+    end()
+  }
+}
+
+function end() {
+  if (index.value === mainplaylistStore.playlist.length - 1) {
+    return;
+  }
+  nextVideo()
+}
+
+function prevVideo() {
+  mainplaylistStore.changeNowPlayingVideoIndex(index.value - 1);
+}
+
+function nextVideo() {
+  mainplaylistStore.changeNowPlayingVideoIndex(index.value + 1);
+}
+
 </script>
 
 <style lang="scss" scoped>

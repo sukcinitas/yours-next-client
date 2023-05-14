@@ -1,39 +1,53 @@
 <template>
   <div class="header">
-    <button v-if="leaveBtn" @click="leave" class="header__button">Leave</button>
-    <button v-if="homeBtn" @click="goHome" class="header__button">Home</button>
-    <button v-if="backBtn" @click="goBack" class="header__button">Back</button>
+    <button
+      class="header__logo"
+      @click="goHome"
+    >
+      YN
+    </button>
+    <button
+      v-if="props.leaveBtn"
+      class="header__button"
+      @click="leave"
+    >
+      Leave
+    </button>
+    <button
+      v-if="props.backBtn"
+      class="header__button"
+      @click="goBack"
+    >
+      Back
+    </button>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HeaderPanel',
-  data() {
-    return {
-      errMsg: '',
-    };
-  },
-  props: ['leaveBtn', 'backBtn', 'homeBtn'],
-  methods: {
-    async leave() {
-      try {
-        await this.$store.dispatch('group/resetState');
-        this.$router.push({ name: 'EntrancePage' });
-      } catch (err) {
-        this.errMsg = err.message;
-      }
-    },
+<script setup>
+import { useGroupStore } from '../stores/group'
+import { useRouter } from 'vue-router'
 
-    goHome() {
-      this.$router.push({ name: 'MainPage' });
-    },
+const props = defineProps({
+  leaveBtn: Boolean,
+  backBtn: Boolean,
+})
+const groupStore = useGroupStore()
+const router = useRouter()
 
-    goBack() {
-      this.$router.go(-1);
-    },
-  },
-};
+async function leave() {
+  try {
+    await groupStore.resetState();
+    router.push({ name: 'EntranceView' });
+  } catch (err) {
+    //
+  }
+}
+function goHome() {
+  router.push({ name: 'MainView' });
+}
+function goBack() {
+  router.go(-1);
+}
 </script>
 
 <style lang="scss" scoped>

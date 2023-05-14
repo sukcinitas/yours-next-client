@@ -1,17 +1,10 @@
-<template>
-  <div id="app">
-    <router-view />
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'App',
-  data() {
-    return {};
-  },
-};
+<script setup>
+import { RouterView } from 'vue-router'
 </script>
+
+<template>
+  <RouterView />
+</template>
 
 <style>
 html {
@@ -34,5 +27,13 @@ body {
   padding: 0;
   scroll-behavior: smooth;
   background-color: #80808000;
+}
+
+.main-playlist__youtube--ordinary {
+  width: 100%;
+}
+
+iframe {
+  width: 100% !important;
 }
 </style>

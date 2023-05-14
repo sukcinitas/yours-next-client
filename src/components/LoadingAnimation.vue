@@ -1,23 +1,27 @@
 <template>
   <div class="loader">
-    <div class="loader__item">{{userEmoji}}</div>
-    <div class="loader__item">{{userEmoji}}</div>
-    <div class="loader__item">{{userEmoji}}</div>
+    <div class="loader__item">
+      {{ userEmoji }}
+    </div>
+    <div class="loader__item">
+      {{ userEmoji }}
+    </div>
+    <div class="loader__item">
+      {{ userEmoji }}
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LoadingAnimation',
-  data() {
-    return {};
-  },
-  computed: {
-    userEmoji() {
-      return this.$store.getters['group/member'].emoji;
-    },
-  },
-};
+<script setup>
+import { computed } from 'vue'
+import { useGroupStore } from '../stores/group'
+
+const groupStore = useGroupStore()
+
+const userEmoji = computed(() => {
+  return groupStore.member.emoji
+})
+
 </script>
 
 <style lang="scss" scoped>

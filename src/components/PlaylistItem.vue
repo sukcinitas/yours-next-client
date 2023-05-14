@@ -1,79 +1,88 @@
 <template>
   <div class="playlist">
     <div class="playlist__details">
-      <h3 class="playlist__name">{{ playlist.title }}</h3>
-      <p>{{ playlist.items.length }} items</p>
-      <p>{{ formatDate(playlist.updatedAt) }}</p>
+      <h3 class="playlist__name">
+        {{ props.playlist.title }}
+      </h3>
+      <p>{{ props.playlist.items.length }} items</p>
+      <p>{{ dateString(props.playlist.updatedAt) }}</p>
     </div>
-    <p v-if="errMsg" class="playlist__message--error">{{ errMsg }}</p>
+    <p
+      v-if="errMsg"
+      class="playlist__message--error"
+    >
+      {{ errMsg }}
+    </p>
     <div class="playlist__buttons">
-      <button class="playlist__button"
-        @click="() => $router.push({ path: `/playlist/${playlist._id}` })"
+      <button
+        class="playlist__button"
+        @click="() => router.push({ path: `/playlist/${playlist._id}` })"
       >
         <font-awesome-icon :icon="['fas', 'chevron-right']" />
       </button>
       <button
-        v-if="isModerator"
+        v-if="groupStore.isModerator"
         class="playlist__button"
-        @click="toggleDeletionBox"
         title="Delete?"
+        @click="toggleDeletionBox"
       >
         <font-awesome-icon :icon="['fas', 'trash']" />
-        <deletion-box 
-          :class="isDeletionBoxShown ? 'deletion-box' : 'deletion-box deletion-box--hidden'"
-          @delete="deletePlaylist(playlist._id)" 
-          @cancel="cancelDeletion">
-        </deletion-box>
+        <deletion-box
+          class="deletion-box"
+          :class="{ 'deletion-box--hidden': !isDeletionBoxShown}"
+          @confirm="deletePlaylist(props.playlist._id)" 
+          @cancel="cancelDeletion"
+        />
       </button>
     </div>
   </div>
 </template>
 
-<script>
-import DeletionBox from './DeletionBox';
+<script setup>
+import { ref } from 'vue'
+import { useGroupStore } from '../stores/group';
+import { usePlaylistStore } from '../stores/playlist';
+import { useRouter } from 'vue-router';
+import DeletionBox from './DeletionBox.vue';
 import formatDate from '../util/formatDate';
 
-export default {
-  name: 'PlaylistItem',
-  data() {
-    return {
-      isDeletionBoxShown: false,
-      errMsg: '',
-    };
+const router = useRouter()
+const props = defineProps({
+  playlist: {
+    type: Object,
   },
-  components: { DeletionBox },
-  props: ['playlist'],
-  computed: {
-    isModerator() {
-      return this.$store.getters['group/isModerator'];
-    },
-  },
-  methods: {
-    async deletePlaylist(id) {
-      try {
-        const { playlists } = await this.$store.dispatch('playlist/deletePlaylist', { id });
-        this.$socket.emit('updatePlaylists', { playlists });
-      } catch (err) {
-        this.errMsg = err.response.data.message;
-      }
-    },
+})
+const groupStore = useGroupStore()
+const playlistStore = usePlaylistStore()
+const isDeletionBoxShown = ref(false)
+const errMsg = ref('')
 
-    toggleDeletionBox() {
-      this.isDeletionBoxShown = !this.isDeletionBoxShown;
-    },
+async function deletePlaylist(id) {
+  try {
+    await playlistStore.deletePlaylist({ id });
+  } catch (err) {
+    errMsg.value = err?.response?.data?.message || 'Oops...';
+    setTimeout(() => {
+      errMsg.value = ''
+    }, 2000);
+  }
+}
 
-    cancelDeletion() {
-      this.isDeletionBoxShown = false;
-    },
+function toggleDeletionBox() {
+  isDeletionBoxShown.value = !isDeletionBoxShown.value;
+}
 
-    formatDate(date) {
-      if (!date) {
-        return '';
-      }
-      return `last updated on ${formatDate(date)}`;
-    },
-  },
-};
+function cancelDeletion() {
+  isDeletionBoxShown.value = false;
+}
+
+function dateString(date) {
+  if (!date) {
+    return '';
+  }
+  return `last updated on ${formatDate(date)}`;
+}
+
 </script>
 
 <style lang="scss" scoped>

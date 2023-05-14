@@ -1,48 +1,56 @@
 <template>
-  <div
-   :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]"
-  >
-    <members-list :isMessages="true"></members-list>
-    <div class="message-box__messages" ref="messages">
+  <div :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]">
+    <members-list :is-messages="true" />
+    <div
+      ref="messagesBox"
+      class="message-box__messages"
+    >
       <div
+        v-for="(mes, index) in messages"
+        :key="index"
         :class="[
           'message-box__message',
           {
-            'message-box__message--right': member.name === message.member.name,
+            'message-box__message--right': groupStore.member.name === mes.member.name,
           },
         ]"
-        v-for="(message, index) in messages"
-        :key="index"
       >
         <div
-          :class="[member.name === message.member.name ?
-           'message-box__message-member--right' : 'message-box__message-member']"
+          :class="[groupStore.member.name === mes.member.name ?
+            'message-box__message-member--right' : 'message-box__message-member']"
         >
-          <p class="message-box__message-name">{{ message.member.name }}</p>
-          <p class="message-box__message-emoji" :title="message.member.name">
-            {{ message.member.emoji }}
+          <p class="message-box__message-name">
+            {{ mes.member.name }}
+          </p>
+          <p
+            class="message-box__message-emoji"
+            :title="mes.member.name"
+          >
+            {{ mes.member.emoji }}
           </p>
         </div>
-          <p
-            v-for="(n, index) in message.message"
-            :key="index"
-            :class="[member.name === message.member.name ?
-           'message-box__message-content--right' : 'message-box__message-content']"
-            >
-            {{n}}
-          </p>
+        <p
+          v-for="(n, messageIndex) in mes.message"
+          :key="messageIndex"
+          :class="[groupStore.member.name === mes.member.name ?
+            'message-box__message-content--right' : 'message-box__message-content']"
+        >
+          {{ n }}
+        </p>
       </div>
     </div>
-    <form @submit.prevent="handleSubmit" class="message-box__message-form">
+    <form
+      class="message-box__message-form"
+      @submit.prevent="handleSubmit"
+    >
       <div class="message-box__input">
         <textarea
-          type="text"
+          ref="textarea"
           v-model="message"
+          type="text"
           class="message-box__textarea"
           rows="2"
-          ref="textarea"
-        >
-        </textarea>
+        />
         <div class="message-box__emojies">
           <span
             v-for="emoji in emojis"
@@ -53,7 +61,11 @@
           </span>
         </div>
       </div>
-      <button class="message-box__button" type="submit" :disabled="!message">
+      <button
+        class="message-box__button"
+        type="submit"
+        :disabled="!message"
+      >
         <span>Submit</span>
       </button>
     </form>
@@ -62,82 +74,80 @@
       type="button"
       @click="toggleChat"
     >
-      <span class="icon--off"><font-awesome-icon :icon="['fas', 'chevron-right']"></font-awesome-icon></span>
+      <span class="icon--off"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
     </button>
     <button
       :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
       type="submit"
       @click="toggleChat"
     >
-      <span class="icon--on"><font-awesome-icon :icon="['fas', 'chevron-left']"> </font-awesome-icon></span>
+      <span class="icon--on"><font-awesome-icon :icon="['fas', 'chevron-left']" /></span>
     </button>
   </div>
 </template>
 
-<script>
-import MembersList from './MembersList';
+<script setup>
+import { onMounted, onUpdated, ref, watch, computed } from 'vue';
+import MembersList from './MembersList.vue';
+import { useMessagesStore } from '../stores/messages';
+import { useGroupStore } from '../stores/group';
+import { socket } from "@/socket";
 
-export default {
-  name: 'MessageBox',
-  components: { MembersList },
-  data() {
-    return {
-      message: '',
-      messagesWillBeUpdated: false,
-    };
-  },
-  computed: {
-    messages() {
-      return this.$store.getters['messages/messages'];
-    },
-    emojis() {
-      return this.$store.getters['messages/messageEmojis'];
-    },
-    member() {
-      return this.$store.getters['group/member'];
-    },
-    isMessagesTurnedOn() {
-      return this.$store.getters['messages/chatState'];
-    },
-  },
-  watch: {
-    messages() {
-      this.messagesWillBeUpdated = true;
-    },
-  },
-  methods: {
-    handleSubmit() {
-      this.$socket.emit('sendMessage', {
-        message: this.message,
-        member: this.member,
-      });
-      this.message = '';
-    },
+const messagesStore = useMessagesStore()
+const groupStore = useGroupStore()
 
-    addEmoji(emoji) {
-      this.message = `${this.message} ${emoji}`;
-      this.$refs.textarea.focus();
-    },
+const message = ref('')
+const messagesWillBeUpdated = ref(false)
+const textarea = ref(null)
+const messagesBox = ref(null)
 
-    scrollTop() {
-      this.$refs.messages.scrollTop =
-        this.$refs.messages.scrollHeight + this.$refs.messages.clientHeight;
-    },
+const messages = computed(() => {
+  return messagesStore.messages
+})
+const emojis = computed(() => {
+  return messagesStore.messageEmojis
+})
 
-    toggleChat() {
-      this.$store.commit('messages/setChatState');
-    },
-  },
-  updated() {
-    if (this.messagesWillBeUpdated) {
-      this.scrollTop();
-      this.messagesWillBeUpdated = false;
-    }
-  },
-  mounted() {
-    this.scrollTop();
-  },
-};
+const isMessagesTurnedOn = computed(() => {
+  return messagesStore.chatState
+})
+
+function handleSubmit() {
+  socket.emit('sendMessage', {
+    message: message.value,
+    member: groupStore.member,
+  });
+  message.value = '';
+}
+
+function addEmoji(emoji) {
+  message.value = `${message.value} ${emoji}`;
+  textarea.value.focus();
+}
+
+function scrollTop() {
+  messagesBox.value.scrollTop = messagesBox.value.scrollHeight + messagesBox.value.clientHeight;
+}
+
+function toggleChat() {
+  messagesStore.setChatState()
+}
+
+onUpdated(() => {
+  if (messagesWillBeUpdated.value) {
+    scrollTop();
+    messagesWillBeUpdated.value = false;
+  }
+})
+
+onMounted(() => {
+  scrollTop();
+})
+
+watch(messages, () => {
+  messagesWillBeUpdated.value = true
+})
+
 </script>
 
 <style lang="scss">

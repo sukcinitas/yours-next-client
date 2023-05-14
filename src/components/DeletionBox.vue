@@ -1,39 +1,24 @@
 <template>
   <div>
     <button
-        class="playlist__button"
-        @click="confirm"
-        title="Confirm"
-        >
-        <font-awesome-icon :icon="['fas', 'check']" />
+      class="playlist__button"
+      title="Confirm"
+      @click="emit('confirm')"
+    >
+      <font-awesome-icon :icon="['fas', 'check']" />
     </button>
     <button
-        class="playlist__button"
-        @click="cancel"
-        title="Cancel"
-        >
-        <font-awesome-icon :icon="['fas', 'window-close']" />
+      class="playlist__button"
+      title="Cancel"
+      @click="emit('cancel')"
+    >
+      <font-awesome-icon :icon="['fas', 'window-close']" />
     </button>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HeaderPanel',
-  data() {
-    return {
-      errMsg: '',
-    };
-  },
-  methods: {
-    confirm() {
-        this.$emit('delete');
-    },
-    cancel() {
-        this.$emit('cancelDeletion');
-    }
-  },
-};
+<script setup>
+const emit = defineEmits(['confirm', 'cancel'])
 </script>
 
 <style lang="scss" scoped>
