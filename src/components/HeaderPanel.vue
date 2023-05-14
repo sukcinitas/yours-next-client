@@ -1,7 +1,7 @@
 <template>
   <div class="header">
+    <button @click="goHome" class="header__logo">YN</button>
     <button v-if="props.leaveBtn" @click="leave" class="header__button">Leave</button>
-    <button v-if="props.homeBtn" @click="goHome" class="header__button">Home</button>
     <button v-if="props.backBtn" @click="goBack" class="header__button">Back</button>
   </div>
 </template>

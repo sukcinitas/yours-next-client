@@ -6,10 +6,6 @@
       :backBtn="false"
     ></header-panel>
     <div class="playlists">
-        <h2 class="playlists__heading">
-          Playlists
-          <span class="playlists__heading-detail">of group {{ groupStore.name }} </span>
-        </h2>
         <create-playlist />
           <div class="playlists__list">
             <loading-animation  v-if="loading" />
@@ -51,10 +47,8 @@ import CreatePlaylist from '../components/CreatePlaylist.vue';
 import LoadingAnimation from '../components/LoadingAnimation.vue';
 const playlistStore = usePlaylistStore()
 const mainplaylistStore = useMainPlaylistStore()
-const groupStore = useGroupStore()
 const router = useRouter()
 const errMsg = ref('')
-// const successMsg = ref('')
 const loading = ref(false)
 
 onMounted(() => {

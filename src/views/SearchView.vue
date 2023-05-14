@@ -314,9 +314,9 @@ async function getPage(direction) {
 function typing() {
   playlists.value = [];
   items.value = [];
-  if (queryOrId.substring(0, 2) === 'PL') {
+  if (queryOrId.value.substring(0, 2) === 'PL') {
     picked.value = 'searchPlaylistItems';
-  } else if (queryOrId.substring(0, 2) === 'UC') {
+  } else if (queryOrId.value.substring(0, 2) === 'UC') {
     picked.value = 'searchPlaylists';
   } else {
     picked.value = 'searchAll';

@@ -74,7 +74,6 @@ async function addPlaylist() {
       setTimeout(() => router.push({ path: `/playlist/${result.id}` }), 250);
     }
   } catch (err) {
-    console.log(err, 'err')
     successMsg.value = '';
     errMsg.value = err.response.data.message;
   }
