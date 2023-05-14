@@ -13,8 +13,8 @@ You can take a look at the application demo [here](https://yours-next.herokuapp.
 #### Front-end
 
 - JavaScript
-- Vue, Vuex, Vue Router
-- VueYoutube
+- Vue 3, Pinia, Vue Router 4
+- Vue3-youtube
 - Socket.io-client, Vue-socket.io
 - Axios
 - Font Awesome
