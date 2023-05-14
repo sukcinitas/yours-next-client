@@ -14,7 +14,7 @@
     <div class="main-playlist__controls">
       <button
         :icon="['fas', 'step-backward']"
-        v-if="index !== 0 && isNextAndPrevButtonDisplayed"
+        v-if="index !== 0 && groupStore.isModerator"
         @click="prevVideo"
         class="main-playlist__button--controls"
       >
@@ -35,7 +35,7 @@
         <font-awesome-icon :icon="['fas', 'pause']"></font-awesome-icon>
       </button>
       <button
-        v-if="index !== playlist.length - 1 && isNextAndPrevButtonDisplayed"
+        v-if="index !== playlist.length - 1 && groupStore.isModerator"
         @click="nextVideo"
         class="main-playlist__button--controls"
       >
@@ -45,13 +45,15 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, onMounted, onUpdated, watch, computed } from 'vue'
+import { ref, reactive, onUpdated, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useMainPlaylistStore } from '../stores/mainplaylist';
 import { useGroupStore } from '../stores/group';
 import { socket } from "@/socket";
 
 const mainplaylistStore = useMainPlaylistStore()
 const groupStore = useGroupStore()
+const route = useRoute()
 
 const playerVars = reactive({
     autoplay: 1,
@@ -61,11 +63,8 @@ const playerVars = reactive({
   }
 )
 const paused = ref(false)
-const timeWillBeUpdated = ref(false)
 const youtube = ref(null)
-const time = computed(() => {
-  return mainplaylistStore.ongoingPlaylist.time
-})
+
 
 const index = computed(() => {
   return mainplaylistStore.ongoingPlaylist.videoIndex
@@ -79,12 +78,6 @@ const videoId = computed(() => {
 const isOngoingPlaylistPaused = computed(() => {
   return mainplaylistStore.isOngoingPlaylistPaused
 })
-const isNextAndPrevButtonDisplayed = computed(() => {
-  return groupStore.isModerator
-})
-// const userJoined = computed(() => {
-//   return mainplaylistStore.userJoined
-// })
 
 async function ended() {
   end();
@@ -109,6 +102,9 @@ function handleStateChange(state) {
 }
 
 function fixateReady() {
+  if (!groupStore.isModerator) {
+    socket.emit('userJoinsOngoingPlaylist');
+  }
   youtube.value.player.playVideo();
   // always start page from playing; substitute if autoplay does not work
 }
@@ -138,19 +134,13 @@ function nextVideo() {
   }
 }
 
+watch(() => mainplaylistStore.ongoingPlaylist.time, (nVal) => {
+  seekTo(nVal);
+})
+
 async function seekTo(time) {
   youtube.value.player.seekTo(time, true);
 }
-
-onMounted(async () => {
-  // to keep seekTo in syncronization, I wait 5secs till propability that video is loaded is high
-  // and then I seekTo a certain time
-  setTimeout(() => {
-    if (!groupStore.isModerator) {
-      socket.emit('userJoinsOngoingPlaylist');
-    }
-  }, 5000);
-})
 
 onUpdated(() => {
   if (isOngoingPlaylistPaused.value) {
@@ -158,25 +148,19 @@ onUpdated(() => {
   } else {
     youtube.value.player.playVideo();
   }
-  if (timeWillBeUpdated.value) {
-    seekTo(time.value);
-    timeWillBeUpdated.value = false;
+})
+
+watch(() => mainplaylistStore.userJoined, async () => {
+  if (groupStore.isModerator) {
+    const time = await youtube.value.player.getCurrentTime();
+    socket.emit('setOngoingPlaylist', {
+      id: route.params.id,
+      videoIndex: index.value,
+      time,
+      paused: false,
+    });
   }
-})
-
-watch('time', () => {
-  timeWillBeUpdated.value = true
-})
-
-watch('userJoined', async () => {
-  const time = await youtube.value.player.getCurrentTime();
-  socket.emit('setOngoingPlaylist', {
-    id: route.params.id,
-    videoIndex: index.value,
-    time,
-    paused: false,
-  });
-  mainplaylist.setUserJoined({ state: false });
+  mainplaylistStore.setUserJoined({ state: false });
 })
 
 </script>

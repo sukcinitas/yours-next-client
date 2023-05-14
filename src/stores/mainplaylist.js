@@ -237,7 +237,7 @@ export const useMainPlaylistStore = defineStore('mainplaylist', {
             });
           },
           setUserJoined(payload) {
-            this.userJoined = payload.this;
+            this.userJoined = payload.state;
           },
           setSetCount() {
             this.setCount += 1;
