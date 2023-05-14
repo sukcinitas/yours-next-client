@@ -1,46 +1,56 @@
 <template>
   <div :class="['message-box', { 'message-box--off': !isMessagesTurnedOn }]">
-    <members-list :isMessages="true"></members-list>
-    <div class="message-box__messages" ref="messagesBox">
+    <members-list :is-messages="true" />
+    <div
+      ref="messagesBox"
+      class="message-box__messages"
+    >
       <div
+        v-for="(mes, index) in messages"
+        :key="index"
         :class="[
           'message-box__message',
           {
-            'message-box__message--right': groupStore.member.name === message.member.name,
+            'message-box__message--right': groupStore.member.name === mes.member.name,
           },
         ]"
-        v-for="(message, index) in messages"
-        :key="index"
       >
         <div
-          :class="[groupStore.member.name === message.member.name ?
-           'message-box__message-member--right' : 'message-box__message-member']"
+          :class="[groupStore.member.name === mes.member.name ?
+            'message-box__message-member--right' : 'message-box__message-member']"
         >
-          <p class="message-box__message-name">{{ message.member.name }}</p>
-          <p class="message-box__message-emoji" :title="message.member.name">
-            {{ message.member.emoji }}
+          <p class="message-box__message-name">
+            {{ mes.member.name }}
+          </p>
+          <p
+            class="message-box__message-emoji"
+            :title="mes.member.name"
+          >
+            {{ mes.member.emoji }}
           </p>
         </div>
-          <p
-            v-for="(n, index) in message.message"
-            :key="index"
-            :class="[groupStore.member.name === message.member.name ?
-           'message-box__message-content--right' : 'message-box__message-content']"
-            >
-            {{n}}
-          </p>
+        <p
+          v-for="(n, messageIndex) in mes.message"
+          :key="messageIndex"
+          :class="[groupStore.member.name === mes.member.name ?
+            'message-box__message-content--right' : 'message-box__message-content']"
+        >
+          {{ n }}
+        </p>
       </div>
     </div>
-    <form @submit.prevent="handleSubmit" class="message-box__message-form">
+    <form
+      class="message-box__message-form"
+      @submit.prevent="handleSubmit"
+    >
       <div class="message-box__input">
         <textarea
-          type="text"
+          ref="textarea"
           v-model="message"
+          type="text"
           class="message-box__textarea"
           rows="2"
-          ref="textarea"
-        >
-        </textarea>
+        />
         <div class="message-box__emojies">
           <span
             v-for="emoji in emojis"
@@ -51,7 +61,11 @@
           </span>
         </div>
       </div>
-      <button class="message-box__button" type="submit" :disabled="!message">
+      <button
+        class="message-box__button"
+        type="submit"
+        :disabled="!message"
+      >
         <span>Submit</span>
       </button>
     </form>
@@ -60,14 +74,14 @@
       type="button"
       @click="toggleChat"
     >
-      <span class="icon--off"><font-awesome-icon :icon="['fas', 'chevron-right']"></font-awesome-icon></span>
+      <span class="icon--off"><font-awesome-icon :icon="['fas', 'chevron-right']" /></span>
     </button>
     <button
       :class="[!isMessagesTurnedOn ? 'btn--turn-on' : 'btn--hidden']"
       type="submit"
       @click="toggleChat"
     >
-      <span class="icon--on"><font-awesome-icon :icon="['fas', 'chevron-left']"> </font-awesome-icon></span>
+      <span class="icon--on"><font-awesome-icon :icon="['fas', 'chevron-left']" /></span>
     </button>
   </div>
 </template>

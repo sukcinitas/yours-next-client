@@ -1,23 +1,23 @@
 <template>
   <div class="main-playlist">
     <header-panel
-      :leaveBtn="false"
-      :homeBtn="true"
-      :backBtn="true"
-    >
-    </header-panel>
-    <h4 class="main-playlist__title--ongoing">{{ mainplaylistStore.title }}</h4>
+      :leave-btn="false"
+      :home-btn="true"
+      :back-btn="true"
+    />
+    <h4 class="main-playlist__title--ongoing">
+      {{ mainplaylistStore.title }}
+    </h4>
     <template v-if="mainplaylistStore.length !== 0 && !loading">
-      <ongoing-video-player class="main-playlist__video-player">
-      </ongoing-video-player>
+      <ongoing-video-player class="main-playlist__video-player" />
       <video-items-data
-        :isOngoing="true"
+        :is-ongoing="true"
         class="main-playlist__video-items"
-      ></video-items-data>
+      />
     </template>
     <loading-animation v-if="loading" />
-    <members-list :isBottom="false"></members-list>
-    <message-box></message-box>
+    <members-list :is-bottom="false" />
+    <message-box />
   </div>
 </template>
 

@@ -1,36 +1,38 @@
 <template>
   <div>
     <button
-      class="main-playlist__button"
       v-if="isModerator"
+      class="main-playlist__button"
       @click="() => router.push({ path: `/mainplaylist/${$route.params.id}` })"
     >
-    Make this playlist main
+      Make this playlist main
     </button>
-    <div class="main-playlist__youtube--ordinary" ref="youtubeParent">
-      <Youtube
+    <div
+      ref="youtubeParent"
+      class="main-playlist__youtube--ordinary"
+    >
+      <youtube-player
+        ref="youtube"
         :src="videoId"
         :vars="playerVars"
-        ref="youtube"
-        @stateChange="(state) => handleStateChange(state)"
         width="inherit"
-        >
-      </Youtube>
+        @state-change="(state) => handleStateChange(state)"
+      />
     </div>
     <div class="main-playlist__controls">
       <button
         v-if="index !== 0"
-        @click="prevVideo"
         class="main-playlist__button--controls"
+        @click="prevVideo"
       >
-        <font-awesome-icon :icon="['fas', 'step-backward']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'step-backward']" />
       </button>
       <button
         v-if="index !== mainplaylistStore.playlist.length - 1"
-        @click="nextVideo"
         class="main-playlist__button--controls"
+        @click="nextVideo"
       >
-        <font-awesome-icon :icon="['fas', 'step-forward']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'step-forward']" />
       </button>
     </div>
   </div>

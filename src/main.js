@@ -42,6 +42,6 @@ library.add(
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
-app.component("font-awesome-icon", FontAwesomeIcon)
-app.component('Youtube', YouTube)
+app.component("FontAwesomeIcon", FontAwesomeIcon)
+app.component('YoutubePlayer', YouTube)
 app.mount('#app')

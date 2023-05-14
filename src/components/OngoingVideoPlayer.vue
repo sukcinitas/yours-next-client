@@ -1,45 +1,44 @@
 <template>
   <div>
     <div class="main-playlist__youtube">
-      <Youtube
+      <youtube-player
+        ref="youtube"
         :src="videoId"
         :vars="playerVars"
-        ref="youtube"
-        @ready="fixateReady"
-        @stateChange="(state) => handleStateChange(state)"
         width="inherit"
-      >
-      </Youtube>
+        @ready="fixateReady"
+        @state-change="(state) => handleStateChange(state)"
+      />
     </div>
     <div class="main-playlist__controls">
       <button
-        :icon="['fas', 'step-backward']"
         v-if="index !== 0 && groupStore.isModerator"
-        @click="prevVideo"
+        :icon="['fas', 'step-backward']"
         class="main-playlist__button--controls"
+        @click="prevVideo"
       >
-        <font-awesome-icon :icon="['fas', 'step-backward']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'step-backward']" />
       </button>
       <button
         v-if="paused"
-        @click="play()"
         class="main-playlist__button--controls"
+        @click="play()"
       >
-        <font-awesome-icon :icon="['fas', 'play']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'play']" />
       </button>
       <button
         v-if="!paused"
-        @click="pause()"
         class="main-playlist__button--controls"
+        @click="pause()"
       >
-        <font-awesome-icon :icon="['fas', 'pause']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'pause']" />
       </button>
       <button
         v-if="index !== playlist.length - 1 && groupStore.isModerator"
-        @click="nextVideo"
         class="main-playlist__button--controls"
+        @click="nextVideo"
       >
-        <font-awesome-icon :icon="['fas', 'step-forward']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'step-forward']" />
       </button>
     </div>
   </div>
@@ -110,7 +109,7 @@ function fixateReady() {
 }
 
 function end() {
-  if (index.value === playlist.length - 1) {
+  if (index.value === playlist.value.length - 1) {
     return;
   }
   if (groupStore.isModerator) {

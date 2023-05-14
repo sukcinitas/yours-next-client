@@ -2,82 +2,100 @@
 <template>
   <div class="search">
     <header-panel
-      :leaveBtn="false"
-      :homeBtn="true"
-      :backBtn="true"
-    ></header-panel>
+      :leave-btn="false"
+      :home-btn="true"
+      :back-btn="true"
+    />
     <div class="search__search-field">
       <input
-        type="text"
         v-model="queryOrId"
-        @input="typing"
+        type="text"
         class="search__input"
-      />
-      <button @click="search" class="search__button">Search</button>
+        @input="typing"
+      >
+      <button
+        class="search__button"
+        @click="search"
+      >
+        Search
+      </button>
     </div>
 
     <div class="search__search-options">
       <input
-        type="radio"
         id="searchAll"
+        v-model="picked"
+        type="radio"
         name="searchParameters"
         value="searchAll"
-        v-model="picked"
         @change="empty"
-      />
-      <label for="searchAll" class="search__label">by phrase</label>
-      <input
-        type="radio"
-        id="searchPlaylists"
-        value="searchPlaylists"
-        v-model="picked"
-        name="searchParameters"
-        @change="empty"
-      />
-      <label for="searchPlaylists" class="search__label">by channel id</label>
-      <input
-        type="radio"
-        id="searchPlaylistItems"
-        value="searchPlaylistItems"
-        v-model="picked"
-        name="searchParameters"
-        @change="empty"
-      />
-      <label for="searchPlaylistItems" class="search__label"
-        >by playlist id</label
       >
+      <label
+        for="searchAll"
+        class="search__label"
+      >by phrase</label>
+      <input
+        id="searchPlaylists"
+        v-model="picked"
+        type="radio"
+        value="searchPlaylists"
+        name="searchParameters"
+        @change="empty"
+      >
+      <label
+        for="searchPlaylists"
+        class="search__label"
+      >by channel id</label>
+      <input
+        id="searchPlaylistItems"
+        v-model="picked"
+        type="radio"
+        value="searchPlaylistItems"
+        name="searchParameters"
+        @change="empty"
+      >
+      <label
+        for="searchPlaylistItems"
+        class="search__label"
+      >by playlist id</label>
     </div>
 
     <loading-animation v-if="loading" />
     <template v-else>
-      <div v-if="picked === 'searchAll'" class="search__search-results">
+      <div
+        v-if="picked === 'searchAll'"
+        class="search__search-results"
+      >
         <div
           v-for="item in items"
           :key="item.id.videoId"
           class="video-item"
         >
           <p
-            class="search__message--error"
             v-if="errorMessage && chosenVideoId === item.id.videoId"
+            class="search__message--error"
           >
             {{ errorMessage }}
           </p>
           <p
-            class="search__message--success"
             v-if="successMessage && chosenVideoId === item.id.videoId"
+            class="search__message--success"
           >
             {{ successMessage }}
           </p>
-          <h1 class="video-item__heading">{{ item.snippet.title }}</h1>
+          <h1 class="video-item__heading">
+            {{ item.snippet.title }}
+          </h1>
           <img
             class="video-item__img"
             :src="item.snippet.thumbnails.medium.url"
             :alt="item.snippet.title"
-          />
+          >
           <button
             v-if="item.id.videoId !== chosenVideoId"
             :disabled="isProcessing"
-            class="video-item__button--add" @click="add(item.id.videoId)"
+            class="video-item__button--add"
+            @click="add(item.id.videoId)"
           >
             Add
           </button>
@@ -88,7 +106,12 @@
         v-else-if="picked === 'searchPlaylists'"
         class="search__search-results"
       >
-        <h6 class="search__subheading" v-if="playlists.length > 0">Playlists</h6>
+        <h6
+          v-if="playlists.length > 0"
+          class="search__subheading"
+        >
+          Playlists
+        </h6>
         <div
           v-for="item in playlists"
           :key="item.id"
@@ -103,7 +126,7 @@
           >
             <font-awesome-icon
               :icon="['fas', 'chevron-right']"
-            ></font-awesome-icon>
+            />
           </button>
         </div>
       </div>
@@ -113,7 +136,9 @@
         class="search__search-results"
       >
         <template v-if="isExploring">
-          <h6 class="search__subheading">{{ playlistName }}</h6>
+          <h6 class="search__subheading">
+            {{ playlistName }}
+          </h6>
           <button
             v-if="isExploring"
             class="search__button--centered"
@@ -123,32 +148,34 @@
           </button>
         </template>
         <div
-          class="video-item"
           v-for="item in items"
           :key="item.snippet.resourceId.videoId"
+          class="video-item"
         >
           <p
-            class="search__message--error"
             v-if="
               errorMessage && chosenVideoId === item.snippet.resourceId.videoId
             "
+            class="search__message--error"
           >
             {{ errorMessage }}
           </p>
           <p
-            class="search__message--success"
             v-if="
               successMessage && chosenVideoId === item.snippet.resourceId.videoId
             "
+            class="search__message--success"
           >
             {{ successMessage }}
           </p>
-          <h1 class="video-item__heading">{{ item.snippet.title }}</h1>
+          <h1 class="video-item__heading">
+            {{ item.snippet.title }}
+          </h1>
           <img
             class="video-item__img"
             :src="item.snippet.thumbnails.medium.url"
             :alt="item.snippet.title"
-          />
+          >
           <button
             v-if="item.snippet.resourceId.videoId !== chosenVideoId"
             :disabled="isProcessing"
@@ -165,23 +192,23 @@
         class="search__pages"
       >
         <button
-          @click="getPage('prev')"
           v-show="prevPageToken !== '' && !loading"
           class="search__button--small search__button--left"
+          @click="getPage('prev')"
         >
           Previous
         </button>
         <button
-          @click="getPage('next')"
           v-show="nextPageToken !== '' && items.length !== 0 && !loading"
           class="search__button--small search__button--right"
+          @click="getPage('next')"
         >
           Next
         </button>
       </div>
     </template>
-    <members-list :isBottom="false"></members-list>
-    <message-box></message-box>
+    <members-list :is-bottom="false" />
+    <message-box />
   </div>
 </template>
 

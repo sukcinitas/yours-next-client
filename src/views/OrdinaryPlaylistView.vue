@@ -1,16 +1,15 @@
 <template>
   <div class="main-playlist">
     <headerPanel
-      :leaveBtn="false"
-      :homeBtn="true"
-      :backBtn="true"
-    >
-    </headerPanel>
-    <h4 class="main-playlist__title"
-    >
+      :leave-btn="false"
+      :home-btn="true"
+      :back-btn="true"
+    />
+    <h4 class="main-playlist__title">
       {{ title }}
     </h4>
-    <button class="main-playlist__button"
+    <button
+      class="main-playlist__button"
       @click="() => router.push({ path: `/search/${$route.params.id}` })"
     >
       Add some videos!
@@ -18,17 +17,15 @@
     <template v-if="initialPlaylistLength !== 0 && !loading">
       <ordinary-video-player
         class="main-playlist__video-player"
-      >
-      </ordinary-video-player>
+      />
       <video-items-data
-        :isOngoing="false"
+        :is-ongoing="false"
         class="main-playlist__video-items"
-      >
-      </video-items-data>
+      />
     </template>
     <loading-animation v-if="loading" />
-    <members-list :isBottom="false"></members-list>
-    <message-box></message-box>
+    <members-list :is-bottom="false" />
+    <message-box />
   </div>
 </template>
 

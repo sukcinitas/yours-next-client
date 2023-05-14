@@ -1,10 +1,12 @@
 <template>
   <div v-if="!isGroupAuthenticated">
     <header class="header">
-      <h1 class="header__heading">yours next</h1>
+      <h1 class="header__heading">
+        yours next
+      </h1>
     </header>
     <div class="entry-forms">
-      <redirection-comp v-if="isProtocolHttp"></redirection-comp>
+      <redirection-comp v-if="isProtocolHttp" />
       <template v-else>
         <authenticate-member
           v-bind="{ type: 'authenticate', name: 'Join a group' }"
@@ -17,7 +19,7 @@
       </template>
     </div>
   </div>
-  <member-create v-else></member-create>
+  <member-create v-else />
 </template>
 
 <script setup>

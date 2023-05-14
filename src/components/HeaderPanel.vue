@@ -1,8 +1,25 @@
 <template>
   <div class="header">
-    <button @click="goHome" class="header__logo">YN</button>
-    <button v-if="props.leaveBtn" @click="leave" class="header__button">Leave</button>
-    <button v-if="props.backBtn" @click="goBack" class="header__button">Back</button>
+    <button
+      class="header__logo"
+      @click="goHome"
+    >
+      YN
+    </button>
+    <button
+      v-if="props.leaveBtn"
+      class="header__button"
+      @click="leave"
+    >
+      Leave
+    </button>
+    <button
+      v-if="props.backBtn"
+      class="header__button"
+      @click="goBack"
+    >
+      Back
+    </button>
   </div>
 </template>
 
@@ -10,19 +27,19 @@
 import { useGroupStore } from '../stores/group'
 import { useRouter } from 'vue-router'
 
-const props = defineProps(['leaveBtn', 'backBtn', 'homeBtn'])
+const props = defineProps({
+  leaveBtn: Boolean,
+  backBtn: Boolean,
+})
 const groupStore = useGroupStore()
 const router = useRouter()
-// const errors = reactive({
-//   leave: ''
-// })
 
 async function leave() {
   try {
     await groupStore.resetState();
     router.push({ name: 'EntranceView' });
   } catch (err) {
-    // errors.leave = err.message;
+    //
   }
 }
 function goHome() {

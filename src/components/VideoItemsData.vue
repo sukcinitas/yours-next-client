@@ -8,12 +8,12 @@
       class="video-item"
     >
       <h3
-        @click="changeIndex(index)"
         class="video-item__heading"
         :class="{
           'video-item__heading--active': item.id === playlist[activeIndex],
           'video-item__heading--active--ongoing': isOngoing && !isModerator,
         }"
+        @click="changeIndex(index)"
       >
         {{ item.snippet.title }}
       </h3>
@@ -22,7 +22,7 @@
         :class="{ 'video-item__img--active': item.id === playlist[activeIndex] }"
         :src="item.snippet.thumbnails.medium.url"
         :alt="item.snippet.title"
-      />
+      >
       <button
         v-if="isModerator"
         class="video-item__button--remove"
@@ -40,7 +40,7 @@
         {{ errMsg }}
       </p>
     </div>
-    <loading-animation v-if="loading"/>
+    <loading-animation v-if="loading" />
   </div>
 </template>
 
@@ -55,7 +55,9 @@ import { socket } from "@/socket";
 const route = useRoute()
 const groupStore = useGroupStore()
 const mainplaylistStore = useMainPlaylistStore()
-const props = defineProps(['isOngoing'])
+const props = defineProps({
+  isOngoing: Boolean,
+})
 const errMsg = ref('')
 const chosenVideoId = ref('')
 const loading = ref(false)
@@ -76,14 +78,14 @@ const isModerator = computed(() => {
   return groupStore.isModerator;
 })
 const isThereMoreToLoad = computed(() => {
-  return playlist.length > items.length;
+  return playlist.value.length > items.value.length;
 })
 const isIndexAheadOfData = computed(() => {
   return mainplaylistStore.isIndexAheadOfData;
 })
 watch(activeIndex, (newValue, oldValue) => {
   if (newValue > oldValue) {
-    if (isIndexAheadOfData) {
+    if (isIndexAheadOfData.value) {
       loadMore();
     }
   }
@@ -91,7 +93,7 @@ watch(activeIndex, (newValue, oldValue) => {
 
 function changeIndex(index) {
   if (props.isOngoing) {
-    if (isModerator) {
+    if (isModerator.value) {
       socket.emit('changeOngoingPlaylistVideoIndex', {
         videoIndex: index,
       });
@@ -112,9 +114,9 @@ async function removeItemFromPlaylist(videoId) {
       id: route.params.id,
     });
     nextTick(() => {
-      const isRemovedBefore = playlist.indexOf(videoId) < activeIndex;
+      const isRemovedBefore = playlist.value.indexOf(videoId) < activeIndex.value;
       if (isRemovedBefore) {
-        changeIndex(activeIndex - 1);
+        changeIndex(activeIndex.value - 1);
       }
     });
   } catch (err) {

@@ -1,8 +1,14 @@
 <template>
   <div class="loader">
-    <div class="loader__item">{{userEmoji}}</div>
-    <div class="loader__item">{{userEmoji}}</div>
-    <div class="loader__item">{{userEmoji}}</div>
+    <div class="loader__item">
+      {{ userEmoji }}
+    </div>
+    <div class="loader__item">
+      {{ userEmoji }}
+    </div>
+    <div class="loader__item">
+      {{ userEmoji }}
+    </div>
   </div>
 </template>
 

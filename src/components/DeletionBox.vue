@@ -1,9 +1,17 @@
 <template>
   <div>
-    <button class="playlist__button" @click="emit('confirm')" title="Confirm">
+    <button
+      class="playlist__button"
+      title="Confirm"
+      @click="emit('confirm')"
+    >
       <font-awesome-icon :icon="['fas', 'check']" />
     </button>
-    <button class="playlist__button" @click="emit('cancel')" title="Cancel">
+    <button
+      class="playlist__button"
+      title="Cancel"
+      @click="emit('cancel')"
+    >
       <font-awesome-icon :icon="['fas', 'window-close']" />
     </button>
   </div>

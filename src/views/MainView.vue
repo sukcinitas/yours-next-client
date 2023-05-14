@@ -1,34 +1,42 @@
 <template>
   <main class="main">
     <header-panel
-      :leaveBtn="true"
-      :homeBtn="false"
-      :backBtn="false"
-    ></header-panel>
+      :leave-btn="true"
+      :home-btn="false"
+      :back-btn="false"
+    />
     <div class="playlists">
-        <create-playlist />
-          <div class="playlists__list">
-            <loading-animation  v-if="loading" />
-            <template v-else>
-              <div class="playlists__playlist--ongoing" v-if="ongoingPlaylistId">
-                <button
-                  class="playlists__name--ongoing"
-                  @click="goToOngoingPlaylist(ongoingPlaylistId)"
-                >
-                  Ongoing playlist
-                </button>
-              </div>
-              <playlist-item
-                v-for="playlist in playlistStore.playlists"
-                :key="playlist.title"
-                :playlist="playlist"
-              />
-              <p v-if="errMsg" class="playlists__message--error">{{ errMsg }}</p>
-            </template>
+      <create-playlist />
+      <div class="playlists__list">
+        <loading-animation v-if="loading" />
+        <template v-else>
+          <div
+            v-if="ongoingPlaylistId"
+            class="playlists__playlist--ongoing"
+          >
+            <button
+              class="playlists__name--ongoing"
+              @click="goToOngoingPlaylist(ongoingPlaylistId)"
+            >
+              Ongoing playlist
+            </button>
           </div>
+          <playlist-item
+            v-for="playlist in playlistStore.playlists"
+            :key="playlist.title"
+            :playlist="playlist"
+          />
+          <p
+            v-if="errMsg"
+            class="playlists__message--error"
+          >
+            {{ errMsg }}
+          </p>
+        </template>
+      </div>
     </div>
-    <members-list :isBottom="true"></members-list>
-    <message-box></message-box>
+    <members-list :is-bottom="true" />
+    <message-box />
   </main>
 </template>
 
@@ -36,7 +44,6 @@
 import { onMounted } from 'vue';
 import { usePlaylistStore } from '@/stores/playlist.js'
 import { useMainPlaylistStore } from '../stores/mainplaylist';
-import { useGroupStore } from '../stores/group';
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import MessageBox from '../components/MessageBox.vue';

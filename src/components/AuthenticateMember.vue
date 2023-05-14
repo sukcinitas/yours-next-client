@@ -1,15 +1,19 @@
 <template>
   <div>
     <form
-      @submit.prevent="handleSubmit"
       :class="['entry-form', isExtended ? 'entry-form--extended' : '']"
+      @submit.prevent="handleSubmit"
     >
-      <button @click="toggleExtended" type="button" class="entry-form__button">
+      <button
+        type="button"
+        class="entry-form__button"
+        @click="toggleExtended"
+      >
         {{ props.name }}
       </button>
       <input
-        v-model="formData.name"
         ref="name"
+        v-model="formData.name"
         type="text"
         placeholder="Enter the group name"
         :class="[
@@ -17,10 +21,10 @@
           errors.name ? 'input--error' : '',
         ]"
         @input="resetError('name')"
-      />
+      >
       <input
-        v-model="formData.passcode"
         ref="passcode"
+        v-model="formData.passcode"
         type="password"
         placeholder="Enter the passcode"
         :class="[
@@ -28,7 +32,7 @@
           errors.passcode ? 'input--error' : '',
         ]"
         @input="resetError('passcode')"
-      />
+      >
       <button
         type="submit"
         :disabled="!formData.name || !formData.passcode"
@@ -40,7 +44,11 @@
         >
       </button>
     </form>
-    <p v-for="errorMessage, idx in errorMessages" :key="idx" class="entry-form__message--error">
+    <p
+      v-for="errorMessage, idx in errorMessages"
+      :key="idx"
+      class="entry-form__message--error"
+    >
       {{ errorMessage }}
     </p>
   </div>
@@ -50,7 +58,16 @@
 import { ref, reactive, computed } from 'vue'
 import { useGroupStore } from '@/stores/group.js'
 
-const props = defineProps(['type', 'name'])
+const props = defineProps({
+  type: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+})
 const emit = defineEmits(['authenticate'])
 const groupStore = useGroupStore()
 

@@ -1,13 +1,21 @@
 <template>
   <div class="playlist">
     <div class="playlist__details">
-      <h3 class="playlist__name">{{ props.playlist.title }}</h3>
+      <h3 class="playlist__name">
+        {{ props.playlist.title }}
+      </h3>
       <p>{{ props.playlist.items.length }} items</p>
       <p>{{ dateString(props.playlist.updatedAt) }}</p>
     </div>
-    <p v-if="errMsg" class="playlist__message--error">{{ errMsg }}</p>
+    <p
+      v-if="errMsg"
+      class="playlist__message--error"
+    >
+      {{ errMsg }}
+    </p>
     <div class="playlist__buttons">
-      <button class="playlist__button"
+      <button
+        class="playlist__button"
         @click="() => router.push({ path: `/playlist/${playlist._id}` })"
       >
         <font-awesome-icon :icon="['fas', 'chevron-right']" />
@@ -15,16 +23,16 @@
       <button
         v-if="groupStore.isModerator"
         class="playlist__button"
-        @click="toggleDeletionBox"
         title="Delete?"
+        @click="toggleDeletionBox"
       >
         <font-awesome-icon :icon="['fas', 'trash']" />
         <deletion-box
           class="deletion-box"
           :class="{ 'deletion-box--hidden': !isDeletionBoxShown}"
           @confirm="deletePlaylist(props.playlist._id)" 
-          @cancel="cancelDeletion">
-        </deletion-box>
+          @cancel="cancelDeletion"
+        />
       </button>
     </div>
   </div>
@@ -39,7 +47,11 @@ import DeletionBox from './DeletionBox.vue';
 import formatDate from '../util/formatDate';
 
 const router = useRouter()
-const props = defineProps(['playlist'])
+const props = defineProps({
+  playlist: {
+    type: Object,
+  },
+})
 const groupStore = useGroupStore()
 const playlistStore = usePlaylistStore()
 const isDeletionBoxShown = ref(false)

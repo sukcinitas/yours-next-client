@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="addMember" class="create-member-form">
+  <form
+    class="create-member-form"
+    @submit.prevent="addMember"
+  >
     <h4 class="create-member-form__heading">
       Welcome to group
       <b class="create-member-form__heading--bold">{{ group }}</b>
@@ -17,13 +20,13 @@
           placeholder=""
           :class="['create-member-form__input', errors.name ? 'input--error' : '']"
           @input="() => {if(!name) errors.name = '' }"
-        />
+        >
         <button
           class="create-member-form__button--narrow"
-          @click="checkIfMemberNameExists"
-          @keyup.enter="checkIfMemberNameExists"
           :disabled="!name"
           type="button"
+          @click="checkIfMemberNameExists"
+          @keyup.enter="checkIfMemberNameExists"
         >
           >
         </button>
@@ -38,22 +41,22 @@
         <button
           v-for="(emoji, index) in emojisFreeToSet"
           :key="index"
-          @click="chooseEmoji(emoji)"
           type="button"
           :class="[
             selectedEmoji === emoji
               ? 'create-member-form__button--selected-emoji'
               : 'create-member-form__button--emoji',
           ]"
+          @click="chooseEmoji(emoji)"
         >
           {{ emoji }}
         </button>
       </div>
       <button
+        ref="submitButton"
         type="submit"
         class="create-member-form__button--narrow"
         :disabled="!selectedEmoji || !name"
-        ref="submitButton"
       >
         >
       </button>

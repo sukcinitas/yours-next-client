@@ -41,8 +41,10 @@
         }"
       >
         {{ user === member.name ? 'you' : member.name }}
-        <span v-if="groupStore.isModerator && user !== member.name && !props.isMessages" class="members__line"
-        ></span>
+        <span
+          v-if="groupStore.isModerator && user !== member.name && !props.isMessages"
+          class="members__line"
+        />
         {{
           groupStore.isModerator && user !== member.name && !props.isMessages
             ? `double-click to make ${member.name} moderator`
@@ -58,7 +60,10 @@ import { ref, computed } from 'vue'
 import { useGroupStore } from '../stores/group';
 import { socket } from "@/socket";
 
-const props = defineProps(['isBottom', 'isMessages'])
+const props = defineProps({
+  isBottom: Boolean,
+  isMessages: Boolean,
+})
 const isTooltipDisplayed = ref(false)
 const target = ref('')
 const groupStore = useGroupStore()
