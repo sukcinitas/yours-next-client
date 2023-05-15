@@ -20,6 +20,7 @@
                  errMsg ? 'input--error' : '',
         ]"
         @input="() => errMsg = ''"
+        @keydown.enter.prevent="addPlaylist"
       >
       <button
         v-if="title"

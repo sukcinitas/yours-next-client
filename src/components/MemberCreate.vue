@@ -5,7 +5,7 @@
   >
     <h4 class="create-member-form__heading">
       Welcome to group
-      <b class="create-member-form__heading--bold">{{ group }}</b>
+      <b class="create-member-form__heading--bold">{{ groupStore.name }}</b>
     </h4>
     <template v-if="step === 0">
       <h6
@@ -20,13 +20,14 @@
           placeholder=""
           :class="['create-member-form__input', errors.name ? 'input--error' : '']"
           @input="() => {if(!name) errors.name = '' }"
+          @keydown.enter.prevent="handleMemberName"
         >
         <button
           class="create-member-form__button--narrow"
           :disabled="!name"
           type="button"
-          @click="checkIfMemberNameExists"
-          @keyup.enter="checkIfMemberNameExists"
+          @click="handleMemberName"
+          @keyup.enter="handleMemberName"
         >
           >
         </button>
@@ -39,15 +40,15 @@
       </h6>
       <div class="create-member-form__emoji-box">
         <button
-          v-for="(emoji, index) in emojisFreeToSet"
-          :key="index"
+          v-for="(emoji, index) in groupStore.emojisFreeToSet"
+          :key="emoji"
           type="button"
           :class="[
             selectedEmoji === emoji
               ? 'create-member-form__button--selected-emoji'
               : 'create-member-form__button--emoji',
           ]"
-          @click="chooseEmoji(emoji)"
+          @click="handleEmoji(emoji)"
         >
           {{ emoji }}
         </button>
@@ -94,20 +95,12 @@ const errors = reactive({
 const step = ref(0)
 const submitButton = ref(null)
 
-const group = computed(() => {
-  return groupStore.name;
-})
-
-const emojisFreeToSet = computed(() => {
-  return groupStore.emojisFreeToSet;
-})
-
 const memberNameExists = computed(() => {
   const activeMembersNames = groupStore.activeMembersNames.map(memberName => memberName.toLowerCase());
-  return activeMembersNames.indexOf(name.value.toLowerCase()) >= 0;
+  return activeMembersNames.indexOf(name.value.toLowerCase()) > -1;
 })
 
-function checkIfMemberNameExists() {
+function handleMemberName() {
   if (memberNameExists.value) {
     errors.name = 'Name is already in use!';
   } else {
@@ -116,7 +109,7 @@ function checkIfMemberNameExists() {
   }
 }
 
-function chooseEmoji(emoji) {
+function handleEmoji(emoji) {
   selectedEmoji.value = emoji;
   submitButton.value.focus();
 }
