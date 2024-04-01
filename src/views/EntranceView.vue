@@ -28,8 +28,9 @@ import AuthenticateMember from '../components/AuthenticateMember.vue';
 import MemberCreate from '../components/MemberCreate.vue';
 import RedirectionComp from '../components/RedirectionComp.vue';
 
-const isGroupAuthenticated = ref(false)
-const isProtocolHttp = location.protocol === 'http:' && process.env.NODE_ENV === 'production'
+const isGroupAuthenticated = ref(false);
+const loc = new URL(location?.href);
+const isProtocolHttp = loc?.isProtocolHttp && process.env.NODE_ENV === 'production';
 
 function authenticateGroup() {
   isGroupAuthenticated.value = true

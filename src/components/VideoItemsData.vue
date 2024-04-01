@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useGroupStore } from '../stores/group';
 import { useMainPlaylistStore } from '../stores/mainplaylist';
 import { useRoute } from 'vue-router';
