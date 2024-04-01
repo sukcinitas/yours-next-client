@@ -68,7 +68,6 @@ try {
     mainplaylistStore.setSetCount();
   }
   } catch (err) {
-    console.log(err, 'err')
     errMsg.value = err.response.data.message;
   } finally {
     loading.value = false;

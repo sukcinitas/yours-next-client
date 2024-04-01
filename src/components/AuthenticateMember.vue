@@ -128,8 +128,10 @@ async function handleSubmit() {
       return
     }
     const { message, type } = err.response.data;
-    errors[type]= message
-    [type].value.focus()
+    if (message && type) {
+      errors[type] = message
+      [type].value.focus()
+    }
   }
 }
 

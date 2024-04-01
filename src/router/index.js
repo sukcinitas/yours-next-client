@@ -49,37 +49,45 @@ router.beforeEach((to, _from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const username = sessionStorage.getItem('username');
     const userEmoji = sessionStorage.getItem('userEmoji');
-    GroupService.isLoggedIn().then((data) => {
-      if (
-        !data.group &&
-        !username &&
-        !userEmoji &&
-        !groupStore.name &&
-        !groupStore.member.name &&
-        !groupStore.member.emoji
-      ) {
+    GroupService.isLoggedIn()
+      .then((data) => {
+        if (
+          !data.group &&
+          !username &&
+          !userEmoji &&
+          !groupStore.name &&
+          !groupStore.member.name &&
+          !groupStore.member.emoji
+        ) {
+          next({ name: 'EntranceView' });
+        } else {
+          next();
+        }
+      })
+      .catch(_err => {
         next({ name: 'EntranceView' });
-      } else {
-        next();
-      }
-    });
+      });
   } else if (to.matched.some(record => record.meta.alreadyAuth)) {
     const username = sessionStorage.getItem('username');
     const userEmoji = sessionStorage.getItem('userEmoji');
-    GroupService.isLoggedIn().then((data) => {
-      if (
-        data.data.group &&
-        username &&
-        userEmoji &&
-        groupStore.name &&
-        groupStore.member.name &&
-        groupStore.member.emoji
-      ) {
-        next({ name: 'MainView' });
-      } else {
-        next();
-      }
-    });
+    GroupService.isLoggedIn()
+      .then((data) => {
+        if (
+          data.data.group &&
+          username &&
+          userEmoji &&
+          groupStore.name &&
+          groupStore.member.name &&
+          groupStore.member.emoji
+        ) {
+          next({ name: 'MainView' });
+        } else {
+          next();
+        }
+      })
+      .catch(_err => {
+        next({ name: 'EntranceView' });
+      });
   } 
   else {
     next();

@@ -1,6 +1,4 @@
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
+import router from '../router'
 
 const checkIfAuthorizationError = (err) => {
   if ('response' in err) {
